@@ -9,15 +9,28 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as OrganizersRouteImport } from './routes/organizers'
 import { Route as InternationalRouteImport } from './routes/international'
+import { Route as FurtherRouteImport } from './routes/further'
 import { Route as DonateRouteImport } from './routes/donate'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as BrochuresRouteImport } from './routes/brochures'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
+const OrganizersRoute = OrganizersRouteImport.update({
+  id: '/organizers',
+  path: '/organizers',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InternationalRoute = InternationalRouteImport.update({
   id: '/international',
   path: '/international',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FurtherRoute = FurtherRouteImport.update({
+  id: '/further',
+  path: '/further',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DonateRoute = DonateRouteImport.update({
@@ -28,6 +41,11 @@ const DonateRoute = DonateRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BrochuresRoute = BrochuresRouteImport.update({
+  id: '/brochures',
+  path: '/brochures',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -44,48 +62,99 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/brochures': typeof BrochuresRoute
   '/contact': typeof ContactRoute
   '/donate': typeof DonateRoute
+  '/further': typeof FurtherRoute
   '/international': typeof InternationalRoute
+  '/organizers': typeof OrganizersRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/brochures': typeof BrochuresRoute
   '/contact': typeof ContactRoute
   '/donate': typeof DonateRoute
+  '/further': typeof FurtherRoute
   '/international': typeof InternationalRoute
+  '/organizers': typeof OrganizersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/brochures': typeof BrochuresRoute
   '/contact': typeof ContactRoute
   '/donate': typeof DonateRoute
+  '/further': typeof FurtherRoute
   '/international': typeof InternationalRoute
+  '/organizers': typeof OrganizersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/contact' | '/donate' | '/international'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/brochures'
+    | '/contact'
+    | '/donate'
+    | '/further'
+    | '/international'
+    | '/organizers'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/contact' | '/donate' | '/international'
-  id: '__root__' | '/' | '/about' | '/contact' | '/donate' | '/international'
+  to:
+    | '/'
+    | '/about'
+    | '/brochures'
+    | '/contact'
+    | '/donate'
+    | '/further'
+    | '/international'
+    | '/organizers'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/brochures'
+    | '/contact'
+    | '/donate'
+    | '/further'
+    | '/international'
+    | '/organizers'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  BrochuresRoute: typeof BrochuresRoute
   ContactRoute: typeof ContactRoute
   DonateRoute: typeof DonateRoute
+  FurtherRoute: typeof FurtherRoute
   InternationalRoute: typeof InternationalRoute
+  OrganizersRoute: typeof OrganizersRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/organizers': {
+      id: '/organizers'
+      path: '/organizers'
+      fullPath: '/organizers'
+      preLoaderRoute: typeof OrganizersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/international': {
       id: '/international'
       path: '/international'
       fullPath: '/international'
       preLoaderRoute: typeof InternationalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/further': {
+      id: '/further'
+      path: '/further'
+      fullPath: '/further'
+      preLoaderRoute: typeof FurtherRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/donate': {
@@ -100,6 +169,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/brochures': {
+      id: '/brochures'
+      path: '/brochures'
+      fullPath: '/brochures'
+      preLoaderRoute: typeof BrochuresRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -122,10 +198,22 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  BrochuresRoute: BrochuresRoute,
   ContactRoute: ContactRoute,
   DonateRoute: DonateRoute,
+  FurtherRoute: FurtherRoute,
   InternationalRoute: InternationalRoute,
+  OrganizersRoute: OrganizersRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
