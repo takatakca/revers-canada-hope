@@ -319,6 +319,6 @@ export const translations = {
       registered: "Registered Canadian charity",
     },
   },
-} as const;
+};
 
 export type Translations = typeof translations.fr;
