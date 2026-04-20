@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import { SiteHeader } from "./SiteHeader";
 import { SiteFooter } from "./SiteFooter";
-import { FloatingCTA } from "./FloatingCTA";
 import { LangProvider } from "@/i18n/LangContext";
 
 export function SiteLayout({ children }: { children: ReactNode }) {
@@ -11,7 +10,6 @@ export function SiteLayout({ children }: { children: ReactNode }) {
         <SiteHeader />
         <main className="flex-1">{children}</main>
         <SiteFooter />
-        <FloatingCTA />
       </div>
     </LangProvider>
   );
