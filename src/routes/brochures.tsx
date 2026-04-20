@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useLang } from "@/i18n/LangContext";
 import { Hero } from "@/components/Hero";
 import { TornDivider } from "@/components/TornDivider";
-import { PagePlaceholder } from "./about";
+import { PagePlaceholder } from "@/components/PagePlaceholder";
 
 export const Route = createFileRoute("/brochures")({
   head: () => ({
