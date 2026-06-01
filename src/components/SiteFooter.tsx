@@ -1,31 +1,82 @@
 import { Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { Facebook, Instagram, Heart, BookOpen, ArrowRight } from "lucide-react";
 import { useLang } from "@/i18n/LangContext";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export function SiteFooter() {
   const { t } = useLang();
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!EMAIL_RE.test(email.trim())) {
+      toast.error(t.footer.newsletterErr);
+      return;
+    }
+    try {
+      localStorage.setItem(
+        "revers_canada_newsletter_interest",
+        JSON.stringify({
+          firstName: firstName.trim(),
+          lastName: lastName.trim(),
+          email: email.trim(),
+          savedAt: new Date().toISOString(),
+        }),
+      );
+    } catch {
+      // ignore
+    }
+    toast.success(t.footer.newsletterOk);
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+  };
+
   return (
     <footer className="bg-ink text-white">
       <div className="grid gap-0 md:grid-cols-2">
         <div className="bg-[color:var(--cream)] p-8 md:p-12 text-ink">
           <h3 className="font-display text-2xl mb-2">{t.footer.newsletter}</h3>
           <p className="mb-4 text-sm text-muted-foreground">{t.footer.newsletterD}</p>
-          <form
-            onSubmit={(e) => e.preventDefault()}
-            className="space-y-3 max-w-md"
-          >
+          <form onSubmit={handleSubscribe} className="space-y-3 max-w-md">
             <div className="grid grid-cols-2 gap-3">
-              <Input placeholder={t.footer.firstName} className="bg-white" />
-              <Input placeholder={t.footer.lastName} className="bg-white" />
+              <Input
+                placeholder={t.footer.firstName}
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                className="bg-white"
+                aria-label={t.footer.firstName}
+              />
+              <Input
+                placeholder={t.footer.lastName}
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                className="bg-white"
+                aria-label={t.footer.lastName}
+              />
             </div>
-            <Input type="email" placeholder={t.footer.emailPh} className="bg-white" />
+            <Input
+              type="email"
+              required
+              placeholder={t.footer.emailPh}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="bg-white"
+              aria-label={t.footer.emailPh}
+            />
             <Button type="submit" className="bg-ink text-white hover:bg-ink/90">
-              {t.footer.subscribe} <ArrowRight className="ml-1.5 h-4 w-4" />
+              {t.footer.subscribe} <ArrowRight className="ml-1.5 h-4 w-4" aria-hidden />
             </Button>
           </form>
         </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2">
           <Link
             to="/programs"
