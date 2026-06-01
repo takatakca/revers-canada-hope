@@ -289,8 +289,8 @@ export const translations = {
       amounts: ["25", "50", "100", "250"],
       other: "Other amount",
       coverFee: "I'll cover the transaction fee",
-      donateBtn: "Donate with Stripe",
-      monthlyBtn: "Give monthly",
+      donateBtn: "Prepare my gift",
+      monthlyBtn: "Prepare my monthly gift",
       verseT: "Your impact",
       impactList: [
         "$25 — a hot meal for a family for 5 days",
@@ -299,20 +299,25 @@ export const translations = {
         "$250 — a full week of housing and support",
       ],
       stripeNote:
-        "Payments will be processed securely through Stripe once the integration is enabled.",
+        "Secure payments will be available soon. For now, your donation intent is stored locally.",
+      intentSaved: (a: string) =>
+        `Thank you. Your $${a} donation intent has been recorded. Secure payment will be available soon.`,
+      invalidAmount: "Please choose or enter an amount greater than 0.",
     },
     contact: {
       title: "Contact us",
       lead: "A question, a partnership, or a need for help? Write to us.",
       name: "Full name",
       email: "Email",
-      subject: "Subject",
+      phone: "Phone (optional)",
+      subject: "Subject (optional)",
       message: "Message",
-      send: "Send",
-      sent: "Thank you! We'll get back to you shortly.",
+      send: "Prepare my email",
+      sent: "Thank you. Your message is ready to be sent to Revers Canada.",
+      missing: "Please check the required fields.",
       info: "Contact information",
       address: "Revers Canada · PO Box 4521, Stn Downtown, Montréal QC H2X 0A1",
-      phone: "1 (844) 555-0199",
+      phoneNum: "1 (844) 555-0199",
       mail: "info@reverscanada.org",
     },
     footer: {
@@ -323,11 +328,14 @@ export const translations = {
       lastName: "Last name",
       emailPh: "Email address",
       subscribe: "Subscribe",
+      newsletterOk: "Thank you for your interest. Your newsletter subscription request has been recorded.",
+      newsletterErr: "Please enter a valid email address.",
       rights: "All rights reserved.",
       privacy: "Privacy policy",
       registered: "Registered Canadian charity",
     },
   },
 };
+
 
 export type Translations = typeof translations.fr;
