@@ -122,8 +122,9 @@ export function SiteFooter() {
           </div>
           <div className="text-xs text-white/60">
             © {new Date().getFullYear()} Revers Canada. {t.footer.rights}{" "}
-            <a href="#" className="underline hover:text-white">{t.footer.privacy}</a>
+            <Link to="/privacy" className="underline hover:text-white">{t.footer.privacy}</Link>
           </div>
+
         </div>
       </div>
     </footer>
