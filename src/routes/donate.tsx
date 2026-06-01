@@ -35,8 +35,28 @@ function DonatePage() {
 
   const handleDonate = (e: React.FormEvent) => {
     e.preventDefault();
-    toast.info(t.donate.stripeNote);
+    const raw = other.trim() !== "" ? other : amount;
+    const value = Number(raw);
+    if (!Number.isFinite(value) || value <= 0) {
+      toast.error(t.donate.invalidAmount);
+      return;
+    }
+    try {
+      localStorage.setItem(
+        "revers_canada_donation_intent",
+        JSON.stringify({
+          amount: value,
+          frequency: type,
+          coverFee,
+          savedAt: new Date().toISOString(),
+        }),
+      );
+    } catch {
+      // ignore storage errors (private mode)
+    }
+    toast.success(t.donate.intentSaved(String(value)));
   };
+
 
   return (
     <>

@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { useLang } from "@/i18n/LangContext";
 import { Input } from "@/components/ui/input";
@@ -21,11 +22,48 @@ export const Route = createFileRoute("/contact")({
   component: ContactPage,
 });
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 function ContactPage() {
   const { t } = useLang();
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    subject: "",
+    message: "",
+  });
+
+  const update = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    setForm((f) => ({ ...f, [k]: e.target.value }));
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.name.trim() || !form.message.trim() || !EMAIL_RE.test(form.email.trim())) {
+      toast.error(t.contact.missing);
+      return;
+    }
+    const subject = form.subject.trim() || "Message via reverscanada.org";
+    const body = [
+      `${t.contact.name}: ${form.name}`,
+      `${t.contact.email}: ${form.email}`,
+      form.phone ? `${t.contact.phone}: ${form.phone}` : "",
+      "",
+      form.message,
+    ]
+      .filter(Boolean)
+      .join("\n");
+    const href = `mailto:${t.contact.mail}?subject=${encodeURIComponent(
+      subject,
+    )}&body=${encodeURIComponent(body)}`;
+    window.location.href = href;
+    toast.success(t.contact.sent);
+    setForm({ name: "", email: "", phone: "", subject: "", message: "" });
+  };
+
   return (
     <>
-      <section className="bg-ink py-16 text-white">
+      <section className="bg-ink py-16 text-white animate-fade-in">
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
           <h1 className="font-display text-5xl sm:text-6xl">{t.contact.title}</h1>
           <p className="mx-auto mt-3 max-w-2xl text-lg text-white/85">{t.contact.lead}</p>
@@ -37,35 +75,49 @@ function ContactPage() {
           <div className="space-y-4">
             <h2 className="font-display text-2xl text-ink">{t.contact.info}</h2>
             <div className="flex items-start gap-3 rounded-xl bg-white p-4 shadow-card">
-              <MapPin className="mt-0.5 h-5 w-5 text-[color:var(--teal-deep)]" />
+              <MapPin className="mt-0.5 h-5 w-5 text-[color:var(--teal-deep)]" aria-hidden />
               <span className="text-sm text-ink">{t.contact.address}</span>
             </div>
-            <a href={`tel:${t.contact.phone}`} className="flex items-center gap-3 rounded-xl bg-white p-4 shadow-card hover:shadow-soft">
-              <Phone className="h-5 w-5 text-[color:var(--teal-deep)]" />
-              <span className="text-sm text-ink">{t.contact.phone}</span>
+            <a
+              href={`tel:${t.contact.phoneNum}`}
+              className="flex items-center gap-3 rounded-xl bg-white p-4 shadow-card transition hover:shadow-soft"
+            >
+              <Phone className="h-5 w-5 text-[color:var(--teal-deep)]" aria-hidden />
+              <span className="text-sm text-ink">{t.contact.phoneNum}</span>
             </a>
-            <a href={`mailto:${t.contact.mail}`} className="flex items-center gap-3 rounded-xl bg-white p-4 shadow-card hover:shadow-soft">
-              <Mail className="h-5 w-5 text-[color:var(--teal-deep)]" />
+            <a
+              href={`mailto:${t.contact.mail}`}
+              className="flex items-center gap-3 rounded-xl bg-white p-4 shadow-card transition hover:shadow-soft"
+            >
+              <Mail className="h-5 w-5 text-[color:var(--teal-deep)]" aria-hidden />
               <span className="text-sm text-ink">{t.contact.mail}</span>
             </a>
           </div>
 
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              toast.success(t.contact.sent);
-              (e.currentTarget as HTMLFormElement).reset();
-            }}
-            className="space-y-4 rounded-3xl bg-white p-8 shadow-card"
-          >
-            <Input required placeholder={t.contact.name} />
-            <Input required type="email" placeholder={t.contact.email} />
-            <Input required placeholder={t.contact.subject} />
-            <Textarea required placeholder={t.contact.message} rows={6} />
+          <form onSubmit={handleSubmit} className="space-y-4 rounded-3xl bg-white p-8 shadow-card">
+            <Input required value={form.name} onChange={update("name")} placeholder={t.contact.name} aria-label={t.contact.name} />
+            <Input
+              required
+              type="email"
+              value={form.email}
+              onChange={update("email")}
+              placeholder={t.contact.email}
+              aria-label={t.contact.email}
+            />
+            <Input value={form.phone} onChange={update("phone")} placeholder={t.contact.phone} aria-label={t.contact.phone} />
+            <Input value={form.subject} onChange={update("subject")} placeholder={t.contact.subject} aria-label={t.contact.subject} />
+            <Textarea
+              required
+              value={form.message}
+              onChange={update("message")}
+              placeholder={t.contact.message}
+              rows={6}
+              aria-label={t.contact.message}
+            />
             <Button
               type="submit"
               size="lg"
-              className="w-full bg-gradient-to-r from-[color:var(--teal)] to-[color:var(--leaf)] text-white"
+              className="w-full bg-gradient-to-r from-[color:var(--teal)] to-[color:var(--leaf)] text-white transition hover:opacity-95"
             >
               {t.contact.send}
             </Button>

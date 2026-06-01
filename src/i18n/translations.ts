@@ -121,8 +121,8 @@ export const translations = {
       amounts: ["25", "50", "100", "250"],
       other: "Autre montant",
       coverFee: "Je couvre les frais de transaction",
-      donateBtn: "Donner par Stripe",
-      monthlyBtn: "Donner mensuellement",
+      donateBtn: "Préparer mon don",
+      monthlyBtn: "Préparer mon don mensuel",
       verseT: "Votre impact",
       impactList: [
         "25 $ — un repas chaud pour une famille pendant 5 jours",
@@ -131,20 +131,26 @@ export const translations = {
         "250 $ — une semaine complète d'hébergement et d'accompagnement",
       ],
       stripeNote:
-        "Les paiements seront traités de façon sécurisée par Stripe une fois l'intégration activée.",
+        "Le paiement sécurisé sera disponible bientôt. Pour l'instant, votre intention de don est enregistrée localement.",
+      intentSaved: (a: string) =>
+        `Merci. Votre intention de don de ${a} $ a été enregistrée. Le paiement sécurisé sera disponible bientôt.`,
+      invalidAmount: "Veuillez choisir ou saisir un montant supérieur à 0.",
     },
+
     contact: {
       title: "Nous joindre",
       lead: "Une question, un partenariat, un besoin d'aide? Écrivez-nous.",
       name: "Nom complet",
       email: "Courriel",
-      subject: "Sujet",
+      phone: "Téléphone (optionnel)",
+      subject: "Sujet (optionnel)",
       message: "Message",
-      send: "Envoyer",
-      sent: "Merci! Nous vous répondrons rapidement.",
+      send: "Préparer mon courriel",
+      sent: "Merci. Votre message est prêt à être envoyé à Revers Canada.",
+      missing: "Veuillez vérifier les champs obligatoires.",
       info: "Coordonnées",
       address: "Revers Canada · CP 4521, succ. Centre-ville, Montréal (QC) H2X 0A1",
-      phone: "1 (844) 555-0199",
+      phoneNum: "1 (844) 555-0199",
       mail: "info@reverscanada.org",
     },
     footer: {
@@ -155,10 +161,13 @@ export const translations = {
       lastName: "Nom",
       emailPh: "Adresse courriel",
       subscribe: "S'abonner",
+      newsletterOk: "Merci pour votre intérêt. Votre demande d'inscription à l'infolettre a été enregistrée.",
+      newsletterErr: "Veuillez entrer une adresse courriel valide.",
       rights: "Tous droits réservés.",
       privacy: "Politique de confidentialité",
       registered: "Organisme de bienfaisance enregistré au Canada",
     },
+
   },
   en: {
     nav: {
@@ -280,8 +289,8 @@ export const translations = {
       amounts: ["25", "50", "100", "250"],
       other: "Other amount",
       coverFee: "I'll cover the transaction fee",
-      donateBtn: "Donate with Stripe",
-      monthlyBtn: "Give monthly",
+      donateBtn: "Prepare my gift",
+      monthlyBtn: "Prepare my monthly gift",
       verseT: "Your impact",
       impactList: [
         "$25 — a hot meal for a family for 5 days",
@@ -290,20 +299,25 @@ export const translations = {
         "$250 — a full week of housing and support",
       ],
       stripeNote:
-        "Payments will be processed securely through Stripe once the integration is enabled.",
+        "Secure payments will be available soon. For now, your donation intent is stored locally.",
+      intentSaved: (a: string) =>
+        `Thank you. Your $${a} donation intent has been recorded. Secure payment will be available soon.`,
+      invalidAmount: "Please choose or enter an amount greater than 0.",
     },
     contact: {
       title: "Contact us",
       lead: "A question, a partnership, or a need for help? Write to us.",
       name: "Full name",
       email: "Email",
-      subject: "Subject",
+      phone: "Phone (optional)",
+      subject: "Subject (optional)",
       message: "Message",
-      send: "Send",
-      sent: "Thank you! We'll get back to you shortly.",
+      send: "Prepare my email",
+      sent: "Thank you. Your message is ready to be sent to Revers Canada.",
+      missing: "Please check the required fields.",
       info: "Contact information",
       address: "Revers Canada · PO Box 4521, Stn Downtown, Montréal QC H2X 0A1",
-      phone: "1 (844) 555-0199",
+      phoneNum: "1 (844) 555-0199",
       mail: "info@reverscanada.org",
     },
     footer: {
@@ -314,11 +328,14 @@ export const translations = {
       lastName: "Last name",
       emailPh: "Email address",
       subscribe: "Subscribe",
+      newsletterOk: "Thank you for your interest. Your newsletter subscription request has been recorded.",
+      newsletterErr: "Please enter a valid email address.",
       rights: "All rights reserved.",
       privacy: "Privacy policy",
       registered: "Registered Canadian charity",
     },
   },
 };
+
 
 export type Translations = typeof translations.fr;

@@ -29,7 +29,7 @@ export const Route = createFileRoute("/")({
 
 const programIcons = [Home, Utensils, Briefcase];
 
-function HomePage() {
+export function HomePage() {
   const { t } = useLang();
   const programImgs = [shelterImg, foodImg, jobsImg];
 
@@ -47,7 +47,7 @@ function HomePage() {
           />
           <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/80 to-transparent" />
         </div>
-        <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:py-40">
+        <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:py-40 animate-fade-in">
           <p className="mb-4 inline-block rounded-full border border-white/30 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-white/90">
             {t.home.heroEyebrow}
           </p>
