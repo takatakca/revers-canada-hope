@@ -29,7 +29,7 @@ export const Route = createFileRoute("/")({
 
 const programIcons = [Home, Utensils, Briefcase];
 
-function HomePage() {
+export function HomePage() {
   const { t } = useLang();
   const programImgs = [shelterImg, foodImg, jobsImg];
 

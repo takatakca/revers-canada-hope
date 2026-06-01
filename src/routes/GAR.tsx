@@ -1,8 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Route as IndexRoute } from "./index";
+import { HomePage } from "./index";
 
 // Alias route: /GAR shows the same homepage as /
 export const Route = createFileRoute("/GAR")({
-  head: IndexRoute.options.head,
-  component: IndexRoute.options.component!,
+  head: () => ({
+    meta: [
+      { title: "Revers Canada — GAR" },
+      {
+        name: "description",
+        content:
+          "Organisme de bienfaisance québécois offrant refuge, nourriture et réinsertion professionnelle aux femmes et enfants en situation d'itinérance.",
+      },
+    ],
+  }),
+  component: HomePage,
 });
