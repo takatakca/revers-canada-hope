@@ -158,9 +158,14 @@ function DonatePage() {
             <Button
               type="submit"
               size="lg"
+              disabled={submitting}
               className="mt-6 w-full bg-gradient-to-r from-[color:var(--leaf)] to-[color:var(--teal)] text-white shadow-soft hover:opacity-95"
             >
-              <Heart className="mr-2 h-4 w-4" />
+              {submitting ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden />
+              ) : (
+                <Heart className="mr-2 h-4 w-4" aria-hidden />
+              )}
               {type === "monthly" ? t.donate.monthlyBtn : t.donate.donateBtn}
             </Button>
           </form>
