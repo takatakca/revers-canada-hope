@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Heart, ShieldCheck } from "lucide-react";
+import { Heart, ShieldCheck, Loader2 } from "lucide-react";
 import { useLang } from "@/i18n/LangContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
+import { saveDonationIntent } from "@/lib/donationService";
 
 export const Route = createFileRoute("/donate")({
   head: () => ({
@@ -27,34 +28,31 @@ export const Route = createFileRoute("/donate")({
 });
 
 function DonatePage() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const [type, setType] = useState<"once" | "monthly">("once");
   const [amount, setAmount] = useState<string>("50");
   const [other, setOther] = useState("");
   const [coverFee, setCoverFee] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const handleDonate = (e: React.FormEvent) => {
     e.preventDefault();
+    if (submitting) return;
     const raw = other.trim() !== "" ? other : amount;
-    const value = Number(raw);
-    if (!Number.isFinite(value) || value <= 0) {
+    setSubmitting(true);
+    // TODO: Connect to Stripe Checkout when backend endpoint is ready.
+    const result = saveDonationIntent({
+      amount: raw,
+      frequency: type,
+      coverFee,
+      lang,
+    });
+    setSubmitting(false);
+    if (!result.ok) {
       toast.error(t.donate.invalidAmount);
       return;
     }
-    try {
-      localStorage.setItem(
-        "revers_canada_donation_intent",
-        JSON.stringify({
-          amount: value,
-          frequency: type,
-          coverFee,
-          savedAt: new Date().toISOString(),
-        }),
-      );
-    } catch {
-      // ignore storage errors (private mode)
-    }
-    toast.success(t.donate.intentSaved(String(value)));
+    toast.success(t.donate.intentSaved(String(result.intent.amount)));
   };
 
 
@@ -160,9 +158,14 @@ function DonatePage() {
             <Button
               type="submit"
               size="lg"
+              disabled={submitting}
               className="mt-6 w-full bg-gradient-to-r from-[color:var(--leaf)] to-[color:var(--teal)] text-white shadow-soft hover:opacity-95"
             >
-              <Heart className="mr-2 h-4 w-4" />
+              {submitting ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden />
+              ) : (
+                <Heart className="mr-2 h-4 w-4" aria-hidden />
+              )}
               {type === "monthly" ? t.donate.monthlyBtn : t.donate.donateBtn}
             </Button>
           </form>

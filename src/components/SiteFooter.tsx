@@ -1,37 +1,30 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Facebook, Instagram, Heart, BookOpen, ArrowRight } from "lucide-react";
+import { Facebook, Instagram, Heart, BookOpen, ArrowRight, Loader2 } from "lucide-react";
 import { useLang } from "@/i18n/LangContext";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import { saveNewsletterInterest } from "@/lib/newsletterService";
+import { FIELD_LIMITS } from "@/lib/validation";
 
 export function SiteFooter() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!EMAIL_RE.test(email.trim())) {
+    if (submitting) return;
+    setSubmitting(true);
+    // TODO: Replace local save with real provider (Brevo / Mailchimp) via server function.
+    const result = saveNewsletterInterest({ firstName, lastName, email, lang, consent: true });
+    setSubmitting(false);
+    if (!result.ok) {
       toast.error(t.footer.newsletterErr);
       return;
-    }
-    try {
-      localStorage.setItem(
-        "revers_canada_newsletter_interest",
-        JSON.stringify({
-          firstName: firstName.trim(),
-          lastName: lastName.trim(),
-          email: email.trim(),
-          savedAt: new Date().toISOString(),
-        }),
-      );
-    } catch {
-      // ignore
     }
     toast.success(t.footer.newsletterOk);
     setFirstName("");
@@ -51,6 +44,7 @@ export function SiteFooter() {
                 placeholder={t.footer.firstName}
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
+                maxLength={FIELD_LIMITS.name}
                 className="bg-white"
                 aria-label={t.footer.firstName}
               />
@@ -58,6 +52,7 @@ export function SiteFooter() {
                 placeholder={t.footer.lastName}
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
+                maxLength={FIELD_LIMITS.name}
                 className="bg-white"
                 aria-label={t.footer.lastName}
               />
@@ -65,13 +60,15 @@ export function SiteFooter() {
             <Input
               type="email"
               required
+              maxLength={FIELD_LIMITS.email}
               placeholder={t.footer.emailPh}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="bg-white"
               aria-label={t.footer.emailPh}
             />
-            <Button type="submit" className="bg-ink text-white hover:bg-ink/90">
+            <Button type="submit" disabled={submitting} className="bg-ink text-white hover:bg-ink/90">
+              {submitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden /> : null}
               {t.footer.subscribe} <ArrowRight className="ml-1.5 h-4 w-4" aria-hidden />
             </Button>
           </form>
