@@ -44,6 +44,7 @@ export function SiteFooter() {
                 placeholder={t.footer.firstName}
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
+                maxLength={FIELD_LIMITS.name}
                 className="bg-white"
                 aria-label={t.footer.firstName}
               />
@@ -51,6 +52,7 @@ export function SiteFooter() {
                 placeholder={t.footer.lastName}
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
+                maxLength={FIELD_LIMITS.name}
                 className="bg-white"
                 aria-label={t.footer.lastName}
               />
@@ -58,13 +60,15 @@ export function SiteFooter() {
             <Input
               type="email"
               required
+              maxLength={FIELD_LIMITS.email}
               placeholder={t.footer.emailPh}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="bg-white"
               aria-label={t.footer.emailPh}
             />
-            <Button type="submit" className="bg-ink text-white hover:bg-ink/90">
+            <Button type="submit" disabled={submitting} className="bg-ink text-white hover:bg-ink/90">
+              {submitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden /> : null}
               {t.footer.subscribe} <ArrowRight className="ml-1.5 h-4 w-4" aria-hidden />
             </Button>
           </form>
