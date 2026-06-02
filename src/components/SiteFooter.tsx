@@ -1,37 +1,30 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Facebook, Instagram, Heart, BookOpen, ArrowRight } from "lucide-react";
+import { Facebook, Instagram, Heart, BookOpen, ArrowRight, Loader2 } from "lucide-react";
 import { useLang } from "@/i18n/LangContext";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import { saveNewsletterInterest } from "@/lib/newsletterService";
+import { FIELD_LIMITS } from "@/lib/validation";
 
 export function SiteFooter() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!EMAIL_RE.test(email.trim())) {
+    if (submitting) return;
+    setSubmitting(true);
+    // TODO: Replace local save with real provider (Brevo / Mailchimp) via server function.
+    const result = saveNewsletterInterest({ firstName, lastName, email, lang, consent: true });
+    setSubmitting(false);
+    if (!result.ok) {
       toast.error(t.footer.newsletterErr);
       return;
-    }
-    try {
-      localStorage.setItem(
-        "revers_canada_newsletter_interest",
-        JSON.stringify({
-          firstName: firstName.trim(),
-          lastName: lastName.trim(),
-          email: email.trim(),
-          savedAt: new Date().toISOString(),
-        }),
-      );
-    } catch {
-      // ignore
     }
     toast.success(t.footer.newsletterOk);
     setFirstName("");

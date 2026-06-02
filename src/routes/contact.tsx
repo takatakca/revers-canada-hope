@@ -1,11 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin, Loader2 } from "lucide-react";
 import { useLang } from "@/i18n/LangContext";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { prepareContactSubmission } from "@/lib/contactService";
+import { FIELD_LIMITS } from "@/lib/validation";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -22,43 +24,47 @@ export const Route = createFileRoute("/contact")({
   component: ContactPage,
 });
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
 function ContactPage() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const [form, setForm] = useState({
     name: "",
     email: "",
     phone: "",
     subject: "",
     message: "",
+    website: "", // honeypot
   });
+  const [submitting, setSubmitting] = useState(false);
 
-  const update = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-    setForm((f) => ({ ...f, [k]: e.target.value }));
+  const update =
+    (k: keyof typeof form) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+      setForm((f) => ({ ...f, [k]: e.target.value }));
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name.trim() || !form.message.trim() || !EMAIL_RE.test(form.email.trim())) {
+    if (submitting) return;
+    setSubmitting(true);
+    try {
+      // TODO: Replace mailto fallback with real backend email service (POST /api/contact).
+      const result = prepareContactSubmission({ ...form, lang });
+      if (!result.ok) {
+        toast.error(t.contact.missing);
+        return;
+      }
+      if (result.mailtoHref) {
+        window.location.href = result.mailtoHref;
+        toast.success(t.contact.sent);
+        setForm({ name: "", email: "", phone: "", subject: "", message: "", website: "" });
+      } else {
+        // Honeypot hit — silent success, no mail client opened
+        setForm({ name: "", email: "", phone: "", subject: "", message: "", website: "" });
+      }
+    } catch {
       toast.error(t.contact.missing);
-      return;
+    } finally {
+      setSubmitting(false);
     }
-    const subject = form.subject.trim() || "Message via reverscanada.org";
-    const body = [
-      `${t.contact.name}: ${form.name}`,
-      `${t.contact.email}: ${form.email}`,
-      form.phone ? `${t.contact.phone}: ${form.phone}` : "",
-      "",
-      form.message,
-    ]
-      .filter(Boolean)
-      .join("\n");
-    const href = `mailto:${t.contact.mail}?subject=${encodeURIComponent(
-      subject,
-    )}&body=${encodeURIComponent(body)}`;
-    window.location.href = href;
-    toast.success(t.contact.sent);
-    setForm({ name: "", email: "", phone: "", subject: "", message: "" });
   };
 
   return (
@@ -94,20 +100,55 @@ function ContactPage() {
             </a>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4 rounded-3xl bg-white p-8 shadow-card">
-            <Input required value={form.name} onChange={update("name")} placeholder={t.contact.name} aria-label={t.contact.name} />
+          <form onSubmit={handleSubmit} className="space-y-4 rounded-3xl bg-white p-8 shadow-card" noValidate>
+            {/* Honeypot — hidden from real users, catches naive bots */}
+            <div aria-hidden="true" className="absolute left-[-9999px] h-0 w-0 overflow-hidden">
+              <label>
+                Website
+                <input
+                  type="text"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={form.website}
+                  onChange={update("website")}
+                />
+              </label>
+            </div>
+
+            <Input
+              required
+              maxLength={FIELD_LIMITS.name}
+              value={form.name}
+              onChange={update("name")}
+              placeholder={t.contact.name}
+              aria-label={t.contact.name}
+            />
             <Input
               required
               type="email"
+              maxLength={FIELD_LIMITS.email}
               value={form.email}
               onChange={update("email")}
               placeholder={t.contact.email}
               aria-label={t.contact.email}
             />
-            <Input value={form.phone} onChange={update("phone")} placeholder={t.contact.phone} aria-label={t.contact.phone} />
-            <Input value={form.subject} onChange={update("subject")} placeholder={t.contact.subject} aria-label={t.contact.subject} />
+            <Input
+              maxLength={FIELD_LIMITS.phone}
+              value={form.phone}
+              onChange={update("phone")}
+              placeholder={t.contact.phone}
+              aria-label={t.contact.phone}
+            />
+            <Input
+              maxLength={FIELD_LIMITS.subject}
+              value={form.subject}
+              onChange={update("subject")}
+              placeholder={t.contact.subject}
+              aria-label={t.contact.subject}
+            />
             <Textarea
               required
+              maxLength={FIELD_LIMITS.message}
               value={form.message}
               onChange={update("message")}
               placeholder={t.contact.message}
@@ -117,8 +158,10 @@ function ContactPage() {
             <Button
               type="submit"
               size="lg"
+              disabled={submitting}
               className="w-full bg-gradient-to-r from-[color:var(--teal)] to-[color:var(--leaf)] text-white transition hover:opacity-95"
             >
+              {submitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden /> : null}
               {t.contact.send}
             </Button>
           </form>
