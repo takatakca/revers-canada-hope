@@ -1,5 +1,6 @@
 import { sanitizeText, validateEmail, validateRequired, FIELD_LIMITS } from "./validation";
 import { safeSet, STORAGE_KEYS } from "./storage";
+import { supabase } from "@/integrations/supabase/client";
 
 export type ContactInput = {
   name: string;
@@ -15,6 +16,9 @@ export type ContactInput = {
 export type ContactSubmission = {
   ok: boolean;
   errors?: string[];
+  /** True when the record was saved to the backend database. */
+  saved?: boolean;
+  /** mailto fallback href used when the backend insert failed. */
   mailtoHref?: string;
   payload?: {
     name: string;
@@ -31,15 +35,20 @@ export type ContactSubmission = {
 const RECIPIENT = "info@reverscanada.org";
 
 /**
- * Prepare a contact submission: validates, sanitizes and builds a mailto fallback.
+ * Prepare and send a contact submission.
  *
- * TODO: Replace mailto fallback with real backend email service
- * (e.g. POST /api/contact -> Resend/SendGrid via server function).
+ * Flow:
+ * 1. Validate + sanitize input (and run the honeypot check).
+ * 2. Try to INSERT into Lovable Cloud `contacts` table.
+ * 3. If the insert fails (offline, RLS, etc.), fall back to a mailto: link
+ *    so the user can still reach us.
  */
-export function prepareContactSubmission(input: ContactInput): ContactSubmission {
-  // Honeypot — silently reject bots but pretend success
+export async function prepareContactSubmission(
+  input: ContactInput,
+): Promise<ContactSubmission> {
+  // Honeypot — silently accept bots but do nothing
   if (input.website && input.website.trim() !== "") {
-    return { ok: true };
+    return { ok: true, saved: false };
   }
 
   const errors: string[] = [];
@@ -60,6 +69,35 @@ export function prepareContactSubmission(input: ContactInput): ContactSubmission
     lang: input.lang ?? "fr",
   };
 
+  // 1) Try to persist in the backend.
+  let saved = false;
+  try {
+    const { error } = await supabase.from("contacts").insert({
+      name: payload.name,
+      email: payload.email,
+      phone: payload.phone || null,
+      subject: payload.subject || null,
+      message: payload.message,
+      language: payload.lang,
+      source: payload.source,
+      user_agent:
+        typeof navigator !== "undefined" ? navigator.userAgent.slice(0, 500) : null,
+    });
+    if (!error) saved = true;
+    else if (import.meta.env.DEV) console.warn("[contact] insert failed:", error.message);
+  } catch (err) {
+    if (import.meta.env.DEV) console.warn("[contact] insert threw:", err);
+  }
+
+  safeSet(STORAGE_KEYS.contactLast, {
+    submittedAt: payload.submittedAt,
+    source: payload.source,
+    saved,
+  });
+
+  if (saved) return { ok: true, saved: true, payload };
+
+  // 2) Fallback: build a mailto link so the user is never stuck.
   const subjectLine = payload.subject || "Message via reverscanada.org";
   const body = [
     `Name: ${payload.name}`,
@@ -77,7 +115,5 @@ export function prepareContactSubmission(input: ContactInput): ContactSubmission
     subjectLine,
   )}&body=${encodeURIComponent(body)}`;
 
-  safeSet(STORAGE_KEYS.contactLast, { submittedAt: payload.submittedAt, source: payload.source });
-
-  return { ok: true, mailtoHref, payload };
+  return { ok: true, saved: false, mailtoHref, payload };
 }
