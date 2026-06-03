@@ -35,24 +35,26 @@ function DonatePage() {
   const [coverFee, setCoverFee] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  const handleDonate = (e: React.FormEvent) => {
+  const handleDonate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (submitting) return;
     const raw = other.trim() !== "" ? other : amount;
     setSubmitting(true);
-    // TODO: Connect to Stripe Checkout when backend endpoint is ready.
-    const result = saveDonationIntent({
-      amount: raw,
-      frequency: type,
-      coverFee,
-      lang,
-    });
-    setSubmitting(false);
-    if (!result.ok) {
-      toast.error(t.donate.invalidAmount);
-      return;
+    try {
+      const result = await saveDonationIntent({
+        amount: raw,
+        frequency: type,
+        coverFee,
+        lang,
+      });
+      if (!result.ok) {
+        toast.error(t.donate.invalidAmount);
+        return;
+      }
+      toast.success(t.donate.intentSaved(String(result.intent.amount)));
+    } finally {
+      setSubmitting(false);
     }
-    toast.success(t.donate.intentSaved(String(result.intent.amount)));
   };
 
 
