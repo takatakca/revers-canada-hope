@@ -80,11 +80,24 @@ function ContactPage() {
           <div className="space-y-4">
             <h2 className="font-display text-2xl text-ink">{t.contact.info}</h2>
             <div className="flex items-start gap-3 rounded-xl bg-white p-4 shadow-card">
-              <MapPin className="mt-0.5 h-5 w-5 text-[color:var(--teal-deep)]" aria-hidden />
-              <span className="text-sm text-ink">{t.contact.address}</span>
+              <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-[color:var(--teal-deep)]" aria-hidden />
+              <div className="text-sm text-ink">
+                <div className="font-medium">REVERS CANADA</div>
+                <div>5505 Rue Irwin</div>
+                <div>LaSalle, QC H8N 1A1</div>
+                <div>Canada</div>
+                <a
+                  href="https://www.google.com/maps/search/?api=1&query=5505%20Rue%20Irwin%20LaSalle%20QC%20H8N%201A1"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 inline-block text-xs text-[color:var(--teal-deep)] underline hover:opacity-80"
+                >
+                  {t.contact.mapsLabel}
+                </a>
+              </div>
             </div>
             <a
-              href={`tel:${t.contact.phoneNum}`}
+              href="tel:5148252825"
               className="flex items-center gap-3 rounded-xl bg-white p-4 shadow-card transition hover:shadow-soft"
             >
               <Phone className="h-5 w-5 text-[color:var(--teal-deep)]" aria-hidden />
