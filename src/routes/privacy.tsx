@@ -72,24 +72,27 @@ function FrContent() {
       </Block>
       <Block title="Formulaire de contact">
         <p>
-          Lorsque vous utilisez notre formulaire de contact, vos informations sont préparées sous
-          forme de courriel envoyé via votre application courriel par défaut à
-          info@reverscanada.org. Aucune donnée n'est stockée sur un serveur de Revers Canada à
-          cette étape.
+          Lorsque vous utilisez notre formulaire de contact, vos informations (nom, courriel,
+          téléphone optionnel, sujet et message) peuvent être enregistrées dans une base de
+          données sécurisée afin d'être traitées par l'équipe de Revers Canada. Si
+          l'enregistrement échoue, votre message est préparé sous forme de courriel envoyé via
+          votre application courriel par défaut à info@reverscanada.org.
         </p>
       </Block>
       <Block title="Infolettre">
         <p>
-          Votre intention d'inscription est temporairement enregistrée dans le stockage local
-          (localStorage) de votre navigateur. L'intégration à un service d'envoi sera ajoutée
-          ultérieurement, et votre confirmation officielle vous sera transmise à ce moment.
+          Votre adresse courriel et votre langue préférée peuvent être enregistrées dans une
+          base de données sécurisée pour permettre un suivi ultérieur. Aucun courriel
+          d'infolettre n'est encore envoyé tant que notre service d'envoi (Brevo, Mailchimp ou
+          équivalent) n'est pas officiellement connecté.
         </p>
       </Block>
       <Block title="Dons">
         <p>
-          Pour le moment, votre intention de don est enregistrée localement dans votre navigateur
-          afin de préparer la transaction. Aucun paiement réel n'est traité avant l'activation
-          d'une passerelle de paiement sécurisée (Stripe).
+          Votre intention de don (montant, fréquence, devise) peut être enregistrée dans une
+          base de données sécurisée afin de préparer la transaction. Aucun paiement réel n'est
+          encore traité tant que notre passerelle de paiement sécurisée (Stripe) n'est pas
+          officiellement connectée.
         </p>
       </Block>
       <Block title="Stockage local temporaire">
@@ -135,23 +138,24 @@ function EnContent() {
       </Block>
       <Block title="Contact form">
         <p>
-          When you use our contact form, your information is prepared as an email opened via your
-          default mail client to info@reverscanada.org. No data is stored on a Revers Canada
-          server at this stage.
+          When you use our contact form, your information (name, email, optional phone, subject
+          and message) may be stored in a secure database so the Revers Canada team can review
+          it. If storage fails, your message is prepared as an email opened via your default
+          mail client to info@reverscanada.org.
         </p>
       </Block>
       <Block title="Newsletter">
         <p>
-          Your subscription intent is temporarily stored in your browser's localStorage. A real
-          mailing-service integration will be added later, at which point your official
-          confirmation will be sent.
+          Your email and preferred language may be stored in a secure database so we can follow
+          up later. No newsletter email is sent yet — our mailing provider (Brevo, Mailchimp or
+          similar) is not officially connected at this stage.
         </p>
       </Block>
       <Block title="Donations">
         <p>
-          For now, your donation intent is stored locally in your browser to prepare the
-          transaction. No real payment is processed until a secure payment gateway (Stripe) is
-          enabled.
+          Your donation intent (amount, frequency, currency) may be stored in a secure database
+          to prepare the transaction. No real payment is processed yet — our secure payment
+          gateway (Stripe) is not officially connected at this stage.
         </p>
       </Block>
       <Block title="Temporary local storage">
