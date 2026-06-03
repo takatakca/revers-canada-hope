@@ -15,21 +15,27 @@ export function SiteFooter() {
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     if (submitting) return;
     setSubmitting(true);
-    // TODO: Replace local save with real provider (Brevo / Mailchimp) via server function.
-    const result = saveNewsletterInterest({ firstName, lastName, email, lang, consent: true });
-    setSubmitting(false);
-    if (!result.ok) {
-      toast.error(t.footer.newsletterErr);
-      return;
+    try {
+      const result = await saveNewsletterInterest({ firstName, lastName, email, lang, consent: true });
+      if (!result.ok) {
+        toast.error(t.footer.newsletterErr);
+        return;
+      }
+      if (result.alreadySubscribed) {
+        toast(t.footer.newsletterAlready);
+      } else {
+        toast.success(t.footer.newsletterOk);
+      }
+      setFirstName("");
+      setLastName("");
+      setEmail("");
+    } finally {
+      setSubmitting(false);
     }
-    toast.success(t.footer.newsletterOk);
-    setFirstName("");
-    setLastName("");
-    setEmail("");
   };
 
   return (

@@ -41,25 +41,24 @@ function ContactPage() {
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
       setForm((f) => ({ ...f, [k]: e.target.value }));
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (submitting) return;
     setSubmitting(true);
     try {
-      // TODO: Replace mailto fallback with real backend email service (POST /api/contact).
-      const result = prepareContactSubmission({ ...form, lang });
+      const result = await prepareContactSubmission({ ...form, lang });
       if (!result.ok) {
         toast.error(t.contact.missing);
         return;
       }
-      if (result.mailtoHref) {
-        window.location.href = result.mailtoHref;
+      if (result.saved) {
         toast.success(t.contact.sent);
-        setForm({ name: "", email: "", phone: "", subject: "", message: "", website: "" });
-      } else {
-        // Honeypot hit — silent success, no mail client opened
-        setForm({ name: "", email: "", phone: "", subject: "", message: "", website: "" });
+      } else if (result.mailtoHref) {
+        // Backend insert failed — fall back to mailto so the user is never stuck.
+        window.location.href = result.mailtoHref;
+        toast.success(t.contact.sentFallback);
       }
+      setForm({ name: "", email: "", phone: "", subject: "", message: "", website: "" });
     } catch {
       toast.error(t.contact.missing);
     } finally {
