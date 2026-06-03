@@ -76,7 +76,7 @@ function FrContent() {
           téléphone optionnel, sujet et message) peuvent être enregistrées dans une base de
           données sécurisée afin d'être traitées par l'équipe de Revers Canada. Si
           l'enregistrement échoue, votre message est préparé sous forme de courriel envoyé via
-          votre application courriel par défaut à info@reverscanada.org.
+          votre application courriel par défaut à reverscanada@gmail.com.
         </p>
       </Block>
       <Block title="Infolettre">
@@ -111,10 +111,12 @@ function FrContent() {
       </Block>
       <Block title="Contact">
         <p>
-          Pour toute question concernant cette politique :{" "}
-          <a className="underline" href="mailto:info@reverscanada.org">
-            info@reverscanada.org
-          </a>
+          REVERS CANADA<br />
+          5505 Rue Irwin<br />
+          LaSalle, QC H8N 1A1, Canada<br />
+          <a className="underline" href="mailto:reverscanada@gmail.com">reverscanada@gmail.com</a>
+          {" · "}
+          <a className="underline" href="tel:5148252825">514-825-2825</a>
         </p>
       </Block>
     </>
@@ -141,7 +143,7 @@ function EnContent() {
           When you use our contact form, your information (name, email, optional phone, subject
           and message) may be stored in a secure database so the Revers Canada team can review
           it. If storage fails, your message is prepared as an email opened via your default
-          mail client to info@reverscanada.org.
+          mail client to reverscanada@gmail.com.
         </p>
       </Block>
       <Block title="Newsletter">
@@ -172,10 +174,12 @@ function EnContent() {
       </Block>
       <Block title="Contact">
         <p>
-          For any question regarding this policy:{" "}
-          <a className="underline" href="mailto:info@reverscanada.org">
-            info@reverscanada.org
-          </a>
+          REVERS CANADA<br />
+          5505 Rue Irwin<br />
+          LaSalle, QC H8N 1A1, Canada<br />
+          <a className="underline" href="mailto:reverscanada@gmail.com">reverscanada@gmail.com</a>
+          {" · "}
+          <a className="underline" href="tel:5148252825">514-825-2825</a>
         </p>
       </Block>
     </>

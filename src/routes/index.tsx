@@ -10,17 +10,17 @@ import jobsImg from "@/assets/program-jobs.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Revers Canada — Refuge & retour à l'emploi pour les familles du Québec" },
+      { title: "REVERS CANADA | Espoir, soutien et communauté à LaSalle" },
       {
         name: "description",
         content:
-          "Organisme de bienfaisance québécois offrant refuge, nourriture et réinsertion professionnelle aux femmes et enfants en situation d'itinérance.",
+          "REVERS CANADA est une initiative située à LaSalle, Québec, dédiée à l'espoir, au soutien communautaire et à l'accompagnement des personnes et familles dans le besoin.",
       },
-      { property: "og:title", content: "Revers Canada — Redonner espoir aux familles" },
+      { property: "og:title", content: "REVERS CANADA | Espoir, soutien et communauté à LaSalle" },
       {
         property: "og:description",
         content:
-          "Refuge, sécurité alimentaire et retour à l'emploi pour les mères et enfants du Québec.",
+          "REVERS CANADA est une initiative située à LaSalle, Québec, dédiée à l'espoir, au soutien communautaire et à l'accompagnement des personnes et familles dans le besoin.",
       },
     ],
   }),

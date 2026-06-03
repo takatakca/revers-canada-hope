@@ -109,25 +109,36 @@ export function SiteFooter() {
       </div>
 
       <div className="border-t border-white/10 px-4 py-8 sm:px-6">
-        <div className="mx-auto flex max-w-7xl flex-col items-center gap-4 text-center md:flex-row md:justify-between md:text-left">
+        <div className="mx-auto flex max-w-7xl flex-col items-center gap-6 text-center md:flex-row md:items-start md:justify-between md:text-left">
           <div>
             <div className="font-display text-xl">REVERS<span className="text-[color:var(--leaf)]">CANADA</span></div>
             <p className="mt-1 text-sm text-white/70">{t.footer.tagline}</p>
             <p className="mt-1 text-xs text-white/50">{t.footer.registered}</p>
           </div>
-          <div className="flex items-center gap-4">
-            <a href="#" aria-label="Facebook" className="text-white/70 hover:text-white">
-              <Facebook className="h-5 w-5" />
-            </a>
-            <a href="#" aria-label="Instagram" className="text-white/70 hover:text-white">
-              <Instagram className="h-5 w-5" />
-            </a>
-          </div>
-          <div className="text-xs text-white/60">
-            © {new Date().getFullYear()} Revers Canada. {t.footer.rights}{" "}
-            <Link to="/privacy" className="underline hover:text-white">{t.footer.privacy}</Link>
-          </div>
 
+          <address className="not-italic text-sm text-white/80 leading-relaxed">
+            5505 Rue Irwin<br />
+            LaSalle, QC H8N 1A1<br />
+            Canada<br />
+            <a href="tel:5148252825" className="hover:text-white underline-offset-2 hover:underline">514-825-2825</a>
+            <span className="mx-1 text-white/40">·</span>
+            <a href="mailto:reverscanada@gmail.com" className="hover:text-white underline-offset-2 hover:underline">reverscanada@gmail.com</a>
+          </address>
+
+          <div className="flex flex-col items-center gap-3 md:items-end">
+            <div className="flex items-center gap-4">
+              <a href="#" aria-label="Facebook" className="text-white/70 hover:text-white">
+                <Facebook className="h-5 w-5" />
+              </a>
+              <a href="#" aria-label="Instagram" className="text-white/70 hover:text-white">
+                <Instagram className="h-5 w-5" />
+              </a>
+            </div>
+            <div className="text-xs text-white/60">
+              © {new Date().getFullYear()} Revers Canada. {t.footer.rights}{" "}
+              <Link to="/privacy" className="underline hover:text-white">{t.footer.privacy}</Link>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

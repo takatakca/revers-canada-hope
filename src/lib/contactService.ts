@@ -32,7 +32,7 @@ export type ContactSubmission = {
   };
 };
 
-const RECIPIENT = "info@reverscanada.org";
+const RECIPIENT = "reverscanada@gmail.com";
 
 /**
  * Prepare and send a contact submission.
@@ -98,7 +98,9 @@ export async function prepareContactSubmission(
   if (saved) return { ok: true, saved: true, payload };
 
   // 2) Fallback: build a mailto link so the user is never stuck.
-  const subjectLine = payload.subject || "Message via reverscanada.org";
+  const subjectLine = payload.subject
+    ? `Demande de contact - REVERS CANADA — ${payload.subject}`
+    : "Demande de contact - REVERS CANADA";
   const body = [
     `Name: ${payload.name}`,
     `Email: ${payload.email}`,
