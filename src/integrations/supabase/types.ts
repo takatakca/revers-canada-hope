@@ -14,7 +14,132 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      contacts: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          language: string
+          message: string
+          name: string
+          phone: string | null
+          source: string
+          status: string
+          subject: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          language?: string
+          message: string
+          name: string
+          phone?: string | null
+          source?: string
+          status?: string
+          subject?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          language?: string
+          message?: string
+          name?: string
+          phone?: string | null
+          source?: string
+          status?: string
+          subject?: string | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
+      donation_intents: {
+        Row: {
+          amount_cents: number
+          created_at: string
+          currency: string
+          donor_email: string | null
+          donor_name: string | null
+          frequency: string
+          id: string
+          language: string
+          source: string
+          status: string
+          stripe_checkout_session_id: string | null
+          stripe_payment_intent_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount_cents: number
+          created_at?: string
+          currency?: string
+          donor_email?: string | null
+          donor_name?: string | null
+          frequency?: string
+          id?: string
+          language?: string
+          source?: string
+          status?: string
+          stripe_checkout_session_id?: string | null
+          stripe_payment_intent_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount_cents?: number
+          created_at?: string
+          currency?: string
+          donor_email?: string | null
+          donor_name?: string | null
+          frequency?: string
+          id?: string
+          language?: string
+          source?: string
+          status?: string
+          stripe_checkout_session_id?: string | null
+          stripe_payment_intent_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      newsletter_subscribers: {
+        Row: {
+          consent: boolean
+          created_at: string
+          email: string
+          id: string
+          language: string
+          provider: string | null
+          source: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          consent?: boolean
+          created_at?: string
+          email: string
+          id?: string
+          language?: string
+          provider?: string | null
+          source?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          consent?: boolean
+          created_at?: string
+          email?: string
+          id?: string
+          language?: string
+          provider?: string | null
+          source?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
