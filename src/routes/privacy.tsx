@@ -174,10 +174,12 @@ function EnContent() {
       </Block>
       <Block title="Contact">
         <p>
-          For any question regarding this policy:{" "}
-          <a className="underline" href="mailto:info@reverscanada.org">
-            info@reverscanada.org
-          </a>
+          REVERS CANADA<br />
+          5505 Rue Irwin<br />
+          LaSalle, QC H8N 1A1, Canada<br />
+          <a className="underline" href="mailto:reverscanada@gmail.com">reverscanada@gmail.com</a>
+          {" · "}
+          <a className="underline" href="tel:5148252825">514-825-2825</a>
         </p>
       </Block>
     </>
