@@ -17,6 +17,9 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as GARRouteImport } from './routes/GAR'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DonateSuccessRouteImport } from './routes/donate.success'
+import { Route as DonateCancelledRouteImport } from './routes/donate.cancelled'
+import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/stripe-webhook'
 
 const ProgramsRoute = ProgramsRouteImport.update({
   id: '/programs',
@@ -58,26 +61,47 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DonateSuccessRoute = DonateSuccessRouteImport.update({
+  id: '/success',
+  path: '/success',
+  getParentRoute: () => DonateRoute,
+} as any)
+const DonateCancelledRoute = DonateCancelledRouteImport.update({
+  id: '/cancelled',
+  path: '/cancelled',
+  getParentRoute: () => DonateRoute,
+} as any)
+const ApiPublicStripeWebhookRoute = ApiPublicStripeWebhookRouteImport.update({
+  id: '/api/public/stripe-webhook',
+  path: '/api/public/stripe-webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/GAR': typeof GARRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
-  '/donate': typeof DonateRoute
+  '/donate': typeof DonateRouteWithChildren
   '/international': typeof InternationalRoute
   '/privacy': typeof PrivacyRoute
   '/programs': typeof ProgramsRoute
+  '/donate/cancelled': typeof DonateCancelledRoute
+  '/donate/success': typeof DonateSuccessRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/GAR': typeof GARRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
-  '/donate': typeof DonateRoute
+  '/donate': typeof DonateRouteWithChildren
   '/international': typeof InternationalRoute
   '/privacy': typeof PrivacyRoute
   '/programs': typeof ProgramsRoute
+  '/donate/cancelled': typeof DonateCancelledRoute
+  '/donate/success': typeof DonateSuccessRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -85,10 +109,13 @@ export interface FileRoutesById {
   '/GAR': typeof GARRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
-  '/donate': typeof DonateRoute
+  '/donate': typeof DonateRouteWithChildren
   '/international': typeof InternationalRoute
   '/privacy': typeof PrivacyRoute
   '/programs': typeof ProgramsRoute
+  '/donate/cancelled': typeof DonateCancelledRoute
+  '/donate/success': typeof DonateSuccessRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -101,6 +128,9 @@ export interface FileRouteTypes {
     | '/international'
     | '/privacy'
     | '/programs'
+    | '/donate/cancelled'
+    | '/donate/success'
+    | '/api/public/stripe-webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -111,6 +141,9 @@ export interface FileRouteTypes {
     | '/international'
     | '/privacy'
     | '/programs'
+    | '/donate/cancelled'
+    | '/donate/success'
+    | '/api/public/stripe-webhook'
   id:
     | '__root__'
     | '/'
@@ -121,6 +154,9 @@ export interface FileRouteTypes {
     | '/international'
     | '/privacy'
     | '/programs'
+    | '/donate/cancelled'
+    | '/donate/success'
+    | '/api/public/stripe-webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -128,10 +164,11 @@ export interface RootRouteChildren {
   GARRoute: typeof GARRoute
   AboutRoute: typeof AboutRoute
   ContactRoute: typeof ContactRoute
-  DonateRoute: typeof DonateRoute
+  DonateRoute: typeof DonateRouteWithChildren
   InternationalRoute: typeof InternationalRoute
   PrivacyRoute: typeof PrivacyRoute
   ProgramsRoute: typeof ProgramsRoute
+  ApiPublicStripeWebhookRoute: typeof ApiPublicStripeWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -192,19 +229,63 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/donate/success': {
+      id: '/donate/success'
+      path: '/success'
+      fullPath: '/donate/success'
+      preLoaderRoute: typeof DonateSuccessRouteImport
+      parentRoute: typeof DonateRoute
+    }
+    '/donate/cancelled': {
+      id: '/donate/cancelled'
+      path: '/cancelled'
+      fullPath: '/donate/cancelled'
+      preLoaderRoute: typeof DonateCancelledRouteImport
+      parentRoute: typeof DonateRoute
+    }
+    '/api/public/stripe-webhook': {
+      id: '/api/public/stripe-webhook'
+      path: '/api/public/stripe-webhook'
+      fullPath: '/api/public/stripe-webhook'
+      preLoaderRoute: typeof ApiPublicStripeWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
+
+interface DonateRouteChildren {
+  DonateCancelledRoute: typeof DonateCancelledRoute
+  DonateSuccessRoute: typeof DonateSuccessRoute
+}
+
+const DonateRouteChildren: DonateRouteChildren = {
+  DonateCancelledRoute: DonateCancelledRoute,
+  DonateSuccessRoute: DonateSuccessRoute,
+}
+
+const DonateRouteWithChildren =
+  DonateRoute._addFileChildren(DonateRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   GARRoute: GARRoute,
   AboutRoute: AboutRoute,
   ContactRoute: ContactRoute,
-  DonateRoute: DonateRoute,
+  DonateRoute: DonateRouteWithChildren,
   InternationalRoute: InternationalRoute,
   PrivacyRoute: PrivacyRoute,
   ProgramsRoute: ProgramsRoute,
+  ApiPublicStripeWebhookRoute: ApiPublicStripeWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
