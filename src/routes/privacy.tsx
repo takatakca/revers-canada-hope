@@ -87,12 +87,17 @@ function FrContent() {
           équivalent) n'est pas officiellement connecté.
         </p>
       </Block>
-      <Block title="Dons">
+      <Block title="Dons et paiements">
         <p>
-          Votre intention de don (montant, fréquence, devise) peut être enregistrée dans une
-          base de données sécurisée afin de préparer la transaction. Aucun paiement réel n'est
-          encore traité tant que notre passerelle de paiement sécurisée (Stripe) n'est pas
-          officiellement connectée.
+          Votre intention de don (montant, fréquence, devise) est enregistrée dans une base de
+          données sécurisée. Les paiements sont traités de manière sécurisée par Stripe (mode
+          test ou production). REVERS CANADA ne collecte ni ne stocke aucune donnée de carte
+          bancaire — celles-ci sont saisies directement sur les pages sécurisées de Stripe.
+          Après un paiement, nous pouvons conserver le statut du paiement, l'identifiant
+          Stripe, et l'adresse courriel transmise par Stripe.
+        </p>
+        <p className="font-semibold text-ink">
+          Ce courriel ou cette confirmation ne constitue pas un reçu fiscal officiel.
         </p>
       </Block>
       <Block title="Stockage local temporaire">
