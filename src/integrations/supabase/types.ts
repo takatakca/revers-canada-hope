@@ -66,9 +66,11 @@ export type Database = {
           frequency: string
           id: string
           language: string
+          paid_at: string | null
           source: string
           status: string
           stripe_checkout_session_id: string | null
+          stripe_customer_id: string | null
           stripe_payment_intent_id: string | null
           updated_at: string
         }
@@ -81,9 +83,11 @@ export type Database = {
           frequency?: string
           id?: string
           language?: string
+          paid_at?: string | null
           source?: string
           status?: string
           stripe_checkout_session_id?: string | null
+          stripe_customer_id?: string | null
           stripe_payment_intent_id?: string | null
           updated_at?: string
         }
@@ -96,9 +100,11 @@ export type Database = {
           frequency?: string
           id?: string
           language?: string
+          paid_at?: string | null
           source?: string
           status?: string
           stripe_checkout_session_id?: string | null
+          stripe_customer_id?: string | null
           stripe_payment_intent_id?: string | null
           updated_at?: string
         }

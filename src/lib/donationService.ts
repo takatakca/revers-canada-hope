@@ -22,13 +22,14 @@ export type DonationIntent = {
 };
 
 export type DonationResult =
-  | { ok: true; intent: DonationIntent; saved: boolean }
+  | { ok: true; intent: DonationIntent; saved: boolean; intentId?: string }
   | { ok: false; error: "invalid_amount" | "storage_failed" };
 
 /**
  * Persist a donation intent in the backend (with localStorage fallback).
  *
- * NOTE: No real payment is taken here. Stripe Checkout is wired in a later phase.
+ * NOTE: No real payment is taken here. Stripe Checkout is created in a separate
+ * server function once we have the persisted intentId.
  */
 export async function saveDonationIntent(input: DonationInput): Promise<DonationResult> {
   if (!validateDonationAmount(input.amount)) return { ok: false, error: "invalid_amount" };
@@ -48,18 +49,22 @@ export async function saveDonationIntent(input: DonationInput): Promise<Donation
 
   // 1) Try backend insert.
   try {
-    const { error } = await supabase.from("donation_intents").insert({
-      amount_cents: amountCents,
-      currency: "CAD",
-      frequency: dbFrequency,
-      language: intent.lang,
-      source: intent.source,
-    });
-    if (!error) {
+    const { data, error } = await supabase
+      .from("donation_intents")
+      .insert({
+        amount_cents: amountCents,
+        currency: "CAD",
+        frequency: dbFrequency,
+        language: intent.lang,
+        source: intent.source,
+      })
+      .select("id")
+      .single();
+    if (!error && data) {
       safeSet(STORAGE_KEYS.donation, intent);
-      return { ok: true, intent, saved: true };
+      return { ok: true, intent, saved: true, intentId: data.id };
     }
-    if (import.meta.env.DEV) console.warn("[donation] insert failed:", error.message);
+    if (import.meta.env.DEV) console.warn("[donation] insert failed:", error?.message);
   } catch (err) {
     if (import.meta.env.DEV) console.warn("[donation] insert threw:", err);
   }

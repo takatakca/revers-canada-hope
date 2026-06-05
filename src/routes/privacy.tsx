@@ -87,12 +87,17 @@ function FrContent() {
           équivalent) n'est pas officiellement connecté.
         </p>
       </Block>
-      <Block title="Dons">
+      <Block title="Dons et paiements">
         <p>
-          Votre intention de don (montant, fréquence, devise) peut être enregistrée dans une
-          base de données sécurisée afin de préparer la transaction. Aucun paiement réel n'est
-          encore traité tant que notre passerelle de paiement sécurisée (Stripe) n'est pas
-          officiellement connectée.
+          Votre intention de don (montant, fréquence, devise) est enregistrée dans une base de
+          données sécurisée. Les paiements sont traités de manière sécurisée par Stripe (mode
+          test ou production). REVERS CANADA ne collecte ni ne stocke aucune donnée de carte
+          bancaire — celles-ci sont saisies directement sur les pages sécurisées de Stripe.
+          Après un paiement, nous pouvons conserver le statut du paiement, l'identifiant
+          Stripe, et l'adresse courriel transmise par Stripe.
+        </p>
+        <p className="font-semibold text-ink">
+          Ce courriel ou cette confirmation ne constitue pas un reçu fiscal officiel.
         </p>
       </Block>
       <Block title="Stockage local temporaire">
@@ -153,11 +158,16 @@ function EnContent() {
           similar) is not officially connected at this stage.
         </p>
       </Block>
-      <Block title="Donations">
+      <Block title="Donations and payments">
         <p>
-          Your donation intent (amount, frequency, currency) may be stored in a secure database
-          to prepare the transaction. No real payment is processed yet — our secure payment
-          gateway (Stripe) is not officially connected at this stage.
+          Your donation intent (amount, frequency, currency) is stored in a secure database.
+          Payments are processed securely by Stripe (test or production mode). REVERS CANADA
+          does not collect or store any credit card data — card details are entered directly
+          on Stripe's secure pages. After a payment, we may keep the payment status, the
+          Stripe identifier, and the email address provided to Stripe.
+        </p>
+        <p className="font-semibold text-ink">
+          This email or confirmation does not constitute an official tax receipt.
         </p>
       </Block>
       <Block title="Temporary local storage">
