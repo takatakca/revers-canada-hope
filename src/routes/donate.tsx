@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Heart, ShieldCheck, Loader2 } from "lucide-react";
 import { useLang } from "@/i18n/LangContext";
 import { Button } from "@/components/ui/button";
@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { saveDonationIntent } from "@/lib/donationService";
+import { useServerFn } from "@tanstack/react-start";
+import { createDonationCheckout, isStripeConfigured } from "@/lib/checkout.functions";
 
 export const Route = createFileRoute("/donate")({
   head: () => ({
@@ -34,6 +36,14 @@ function DonatePage() {
   const [other, setOther] = useState("");
   const [coverFee, setCoverFee] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [stripeReady, setStripeReady] = useState(false);
+
+  const checkConfig = useServerFn(isStripeConfigured);
+  const createCheckout = useServerFn(createDonationCheckout);
+
+  useEffect(() => {
+    checkConfig().then((r) => setStripeReady(Boolean(r?.configured))).catch(() => {});
+  }, [checkConfig]);
 
   const handleDonate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,6 +61,31 @@ function DonatePage() {
         toast.error(t.donate.invalidAmount);
         return;
       }
+
+      // If Stripe is configured AND we have a DB id, try Checkout.
+      if (stripeReady && result.intentId) {
+        toast.loading(t.donate.preparing, { id: "checkout" });
+        try {
+          const checkout = await createCheckout({
+            data: { donation_intent_id: result.intentId },
+          });
+          if (checkout.ok && checkout.checkout_url) {
+            toast.success(t.donate.redirecting, { id: "checkout" });
+            window.location.href = checkout.checkout_url;
+            return;
+          }
+          toast.dismiss("checkout");
+          toast.error(t.donate.stripeUnavailable);
+          return;
+        } catch (err) {
+          toast.dismiss("checkout");
+          if (import.meta.env.DEV) console.warn("[donate] checkout failed:", err);
+          toast.error(t.donate.stripeUnavailable);
+          return;
+        }
+      }
+
+      // Fallback: just confirm intent saved.
       toast.success(t.donate.intentSaved(String(result.intent.amount)));
     } finally {
       setSubmitting(false);
