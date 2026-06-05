@@ -122,7 +122,13 @@ export const translations = {
       other: "Autre montant",
       coverFee: "Je couvre les frais de transaction",
       donateBtn: "Préparer mon don",
+      donateBtnSecure: "Faire mon don sécurisé",
       monthlyBtn: "Préparer mon don mensuel",
+      monthlyBtnSecure: "Faire mon don mensuel sécurisé",
+      preparing: "Préparation du paiement sécurisé…",
+      redirecting: "Redirection vers le paiement sécurisé…",
+      stripeUnavailable:
+        "Le paiement sécurisé n'est pas disponible pour le moment. Votre intention de don a été enregistrée.",
       verseT: "Votre impact",
       impactList: [
         "25 $ — un repas chaud pour une famille pendant 5 jours",
@@ -131,9 +137,9 @@ export const translations = {
         "250 $ — une semaine complète d'hébergement et d'accompagnement",
       ],
       stripeNote:
-        "Le paiement sécurisé sera disponible bientôt. Pour l'instant, votre intention de don est enregistrée localement.",
+        "Les paiements sont traités de manière sécurisée par Stripe. REVERS CANADA ne stocke aucune donnée de carte bancaire.",
       intentSaved: (a: string) =>
-        `Merci. Votre intention de don de ${a} $ a été enregistrée. Le paiement sécurisé sera disponible bientôt.`,
+        `Merci. Votre intention de don de ${a} $ a été enregistrée.`,
       invalidAmount: "Veuillez choisir ou saisir un montant supérieur à 0.",
     },
 
@@ -293,7 +299,13 @@ export const translations = {
       other: "Other amount",
       coverFee: "I'll cover the transaction fee",
       donateBtn: "Prepare my gift",
+      donateBtnSecure: "Make my secure donation",
       monthlyBtn: "Prepare my monthly gift",
+      monthlyBtnSecure: "Make my secure monthly donation",
+      preparing: "Preparing secure payment…",
+      redirecting: "Redirecting to secure payment…",
+      stripeUnavailable:
+        "Secure payment is unavailable right now. Your donation intent has been saved.",
       verseT: "Your impact",
       impactList: [
         "$25 — a hot meal for a family for 5 days",
@@ -302,9 +314,9 @@ export const translations = {
         "$250 — a full week of housing and support",
       ],
       stripeNote:
-        "Secure payments will be available soon. For now, your donation intent is stored locally.",
+        "Payments are processed securely by Stripe. REVERS CANADA does not store any credit card data.",
       intentSaved: (a: string) =>
-        `Thank you. Your $${a} donation intent has been recorded. Secure payment will be available soon.`,
+        `Thank you. Your $${a} donation intent has been recorded.`,
       invalidAmount: "Please choose or enter an amount greater than 0.",
     },
     contact: {
