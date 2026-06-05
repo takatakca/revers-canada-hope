@@ -203,7 +203,9 @@ function DonatePage() {
               ) : (
                 <Heart className="mr-2 h-4 w-4" aria-hidden />
               )}
-              {type === "monthly" ? t.donate.monthlyBtn : t.donate.donateBtn}
+              {type === "monthly"
+                ? stripeReady ? t.donate.monthlyBtnSecure : t.donate.monthlyBtn
+                : stripeReady ? t.donate.donateBtnSecure : t.donate.donateBtn}
             </Button>
           </form>
         </div>
