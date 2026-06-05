@@ -158,11 +158,16 @@ function EnContent() {
           similar) is not officially connected at this stage.
         </p>
       </Block>
-      <Block title="Donations">
+      <Block title="Donations and payments">
         <p>
-          Your donation intent (amount, frequency, currency) may be stored in a secure database
-          to prepare the transaction. No real payment is processed yet — our secure payment
-          gateway (Stripe) is not officially connected at this stage.
+          Your donation intent (amount, frequency, currency) is stored in a secure database.
+          Payments are processed securely by Stripe (test or production mode). REVERS CANADA
+          does not collect or store any credit card data — card details are entered directly
+          on Stripe's secure pages. After a payment, we may keep the payment status, the
+          Stripe identifier, and the email address provided to Stripe.
+        </p>
+        <p className="font-semibold text-ink">
+          This email or confirmation does not constitute an official tax receipt.
         </p>
       </Block>
       <Block title="Temporary local storage">
