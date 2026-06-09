@@ -63,7 +63,7 @@ export const translations = {
       values: ["Dignité", "Écoute", "Action concrète", "Transparence"],
       taxT: "Reçu fiscal",
       taxD:
-        "Revers Canada émet des reçus officiels pour fins d'impôt pour tout don de 20 $ et plus. Votre générosité est déductible.",
+        "Une confirmation de don vous est envoyée par courriel. Cette confirmation ne constitue pas un reçu fiscal officiel : seuls les reçus officiels émis ultérieurement par REVERS CANADA peuvent être utilisés à des fins d'impôt.",
     },
     programs: {
       title: "Nos programmes",
@@ -115,7 +115,7 @@ export const translations = {
     donate: {
       title: "Faire un don",
       lead:
-        "Votre don finance directement nos refuges, nos cuisines et nos programmes de retour à l'emploi au Québec. Reçu fiscal officiel pour tout don de 20 $ et plus.",
+        "Votre don finance directement nos refuges, nos cuisines et nos programmes de retour à l'emploi au Québec. La confirmation envoyée par courriel ne constitue pas un reçu fiscal officiel.",
       onceT: "Don ponctuel",
       monthlyT: "Don mensuel",
       amounts: ["25", "50", "100", "250"],
@@ -240,7 +240,7 @@ export const translations = {
       values: ["Dignity", "Listening", "Concrete action", "Transparency"],
       taxT: "Tax receipts",
       taxD:
-        "Revers Canada issues official tax receipts for any donation of $20 or more. Your generosity is tax-deductible.",
+        "A donation confirmation is sent by email. This confirmation does not constitute an official tax receipt: only official receipts later issued by REVERS CANADA can be used for tax purposes.",
     },
     programs: {
       title: "Our programs",
@@ -292,7 +292,7 @@ export const translations = {
     donate: {
       title: "Make a donation",
       lead:
-        "Your gift directly funds our shelters, kitchens and back-to-work programs in Québec. Official tax receipt for any donation of $20 or more.",
+        "Your gift directly funds our shelters, kitchens and back-to-work programs in Québec. The email confirmation does not constitute an official tax receipt.",
       onceT: "One-time gift",
       monthlyT: "Monthly gift",
       amounts: ["25", "50", "100", "250"],

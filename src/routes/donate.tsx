@@ -22,7 +22,7 @@ export const Route = createFileRoute("/donate")({
       { property: "og:title", content: "Faire un don — Revers Canada" },
       {
         property: "og:description",
-        content: "Don sécurisé par Stripe. Reçu fiscal pour tout don de 20 $ et plus.",
+        content: "Don sécurisé par Stripe. Aucune donnée de carte n'est stockée par REVERS CANADA.",
       },
     ],
   }),
