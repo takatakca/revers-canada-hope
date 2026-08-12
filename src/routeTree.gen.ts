@@ -9,18 +9,36 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RevpereRouteImport } from './routes/revpere'
+import { Route as RessourcesRouteImport } from './routes/ressources'
 import { Route as ProgramsRouteImport } from './routes/programs'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as PartenairesRouteImport } from './routes/partenaires'
+import { Route as MissionRouteImport } from './routes/mission'
 import { Route as InternationalRouteImport } from './routes/international'
+import { Route as HabitationRouteImport } from './routes/habitation'
 import { Route as DonateRouteImport } from './routes/donate'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CommunauteRouteImport } from './routes/communaute'
+import { Route as AlimentaireRouteImport } from './routes/alimentaire'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as GARRouteImport } from './routes/GAR'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PiliersPilierRouteImport } from './routes/piliers.$pilier'
 import { Route as DonateSuccessRouteImport } from './routes/donate.success'
 import { Route as DonateCancelledRouteImport } from './routes/donate.cancelled'
 import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/stripe-webhook'
 
+const RevpereRoute = RevpereRouteImport.update({
+  id: '/revpere',
+  path: '/revpere',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RessourcesRoute = RessourcesRouteImport.update({
+  id: '/ressources',
+  path: '/ressources',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProgramsRoute = ProgramsRouteImport.update({
   id: '/programs',
   path: '/programs',
@@ -31,9 +49,24 @@ const PrivacyRoute = PrivacyRouteImport.update({
   path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PartenairesRoute = PartenairesRouteImport.update({
+  id: '/partenaires',
+  path: '/partenaires',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MissionRoute = MissionRouteImport.update({
+  id: '/mission',
+  path: '/mission',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InternationalRoute = InternationalRouteImport.update({
   id: '/international',
   path: '/international',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HabitationRoute = HabitationRouteImport.update({
+  id: '/habitation',
+  path: '/habitation',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DonateRoute = DonateRouteImport.update({
@@ -44,6 +77,16 @@ const DonateRoute = DonateRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommunauteRoute = CommunauteRouteImport.update({
+  id: '/communaute',
+  path: '/communaute',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AlimentaireRoute = AlimentaireRouteImport.update({
+  id: '/alimentaire',
+  path: '/alimentaire',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -59,6 +102,11 @@ const GARRoute = GARRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PiliersPilierRoute = PiliersPilierRouteImport.update({
+  id: '/piliers/$pilier',
+  path: '/piliers/$pilier',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DonateSuccessRoute = DonateSuccessRouteImport.update({
@@ -81,26 +129,42 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/GAR': typeof GARRoute
   '/about': typeof AboutRoute
+  '/alimentaire': typeof AlimentaireRoute
+  '/communaute': typeof CommunauteRoute
   '/contact': typeof ContactRoute
   '/donate': typeof DonateRouteWithChildren
+  '/habitation': typeof HabitationRoute
   '/international': typeof InternationalRoute
+  '/mission': typeof MissionRoute
+  '/partenaires': typeof PartenairesRoute
   '/privacy': typeof PrivacyRoute
   '/programs': typeof ProgramsRoute
+  '/ressources': typeof RessourcesRoute
+  '/revpere': typeof RevpereRoute
   '/donate/cancelled': typeof DonateCancelledRoute
   '/donate/success': typeof DonateSuccessRoute
+  '/piliers/$pilier': typeof PiliersPilierRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/GAR': typeof GARRoute
   '/about': typeof AboutRoute
+  '/alimentaire': typeof AlimentaireRoute
+  '/communaute': typeof CommunauteRoute
   '/contact': typeof ContactRoute
   '/donate': typeof DonateRouteWithChildren
+  '/habitation': typeof HabitationRoute
   '/international': typeof InternationalRoute
+  '/mission': typeof MissionRoute
+  '/partenaires': typeof PartenairesRoute
   '/privacy': typeof PrivacyRoute
   '/programs': typeof ProgramsRoute
+  '/ressources': typeof RessourcesRoute
+  '/revpere': typeof RevpereRoute
   '/donate/cancelled': typeof DonateCancelledRoute
   '/donate/success': typeof DonateSuccessRoute
+  '/piliers/$pilier': typeof PiliersPilierRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
 }
 export interface FileRoutesById {
@@ -108,13 +172,21 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/GAR': typeof GARRoute
   '/about': typeof AboutRoute
+  '/alimentaire': typeof AlimentaireRoute
+  '/communaute': typeof CommunauteRoute
   '/contact': typeof ContactRoute
   '/donate': typeof DonateRouteWithChildren
+  '/habitation': typeof HabitationRoute
   '/international': typeof InternationalRoute
+  '/mission': typeof MissionRoute
+  '/partenaires': typeof PartenairesRoute
   '/privacy': typeof PrivacyRoute
   '/programs': typeof ProgramsRoute
+  '/ressources': typeof RessourcesRoute
+  '/revpere': typeof RevpereRoute
   '/donate/cancelled': typeof DonateCancelledRoute
   '/donate/success': typeof DonateSuccessRoute
+  '/piliers/$pilier': typeof PiliersPilierRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
 }
 export interface FileRouteTypes {
@@ -123,39 +195,63 @@ export interface FileRouteTypes {
     | '/'
     | '/GAR'
     | '/about'
+    | '/alimentaire'
+    | '/communaute'
     | '/contact'
     | '/donate'
+    | '/habitation'
     | '/international'
+    | '/mission'
+    | '/partenaires'
     | '/privacy'
     | '/programs'
+    | '/ressources'
+    | '/revpere'
     | '/donate/cancelled'
     | '/donate/success'
+    | '/piliers/$pilier'
     | '/api/public/stripe-webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/GAR'
     | '/about'
+    | '/alimentaire'
+    | '/communaute'
     | '/contact'
     | '/donate'
+    | '/habitation'
     | '/international'
+    | '/mission'
+    | '/partenaires'
     | '/privacy'
     | '/programs'
+    | '/ressources'
+    | '/revpere'
     | '/donate/cancelled'
     | '/donate/success'
+    | '/piliers/$pilier'
     | '/api/public/stripe-webhook'
   id:
     | '__root__'
     | '/'
     | '/GAR'
     | '/about'
+    | '/alimentaire'
+    | '/communaute'
     | '/contact'
     | '/donate'
+    | '/habitation'
     | '/international'
+    | '/mission'
+    | '/partenaires'
     | '/privacy'
     | '/programs'
+    | '/ressources'
+    | '/revpere'
     | '/donate/cancelled'
     | '/donate/success'
+    | '/piliers/$pilier'
     | '/api/public/stripe-webhook'
   fileRoutesById: FileRoutesById
 }
@@ -163,16 +259,38 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   GARRoute: typeof GARRoute
   AboutRoute: typeof AboutRoute
+  AlimentaireRoute: typeof AlimentaireRoute
+  CommunauteRoute: typeof CommunauteRoute
   ContactRoute: typeof ContactRoute
   DonateRoute: typeof DonateRouteWithChildren
+  HabitationRoute: typeof HabitationRoute
   InternationalRoute: typeof InternationalRoute
+  MissionRoute: typeof MissionRoute
+  PartenairesRoute: typeof PartenairesRoute
   PrivacyRoute: typeof PrivacyRoute
   ProgramsRoute: typeof ProgramsRoute
+  RessourcesRoute: typeof RessourcesRoute
+  RevpereRoute: typeof RevpereRoute
+  PiliersPilierRoute: typeof PiliersPilierRoute
   ApiPublicStripeWebhookRoute: typeof ApiPublicStripeWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/revpere': {
+      id: '/revpere'
+      path: '/revpere'
+      fullPath: '/revpere'
+      preLoaderRoute: typeof RevpereRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ressources': {
+      id: '/ressources'
+      path: '/ressources'
+      fullPath: '/ressources'
+      preLoaderRoute: typeof RessourcesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/programs': {
       id: '/programs'
       path: '/programs'
@@ -187,11 +305,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/partenaires': {
+      id: '/partenaires'
+      path: '/partenaires'
+      fullPath: '/partenaires'
+      preLoaderRoute: typeof PartenairesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mission': {
+      id: '/mission'
+      path: '/mission'
+      fullPath: '/mission'
+      preLoaderRoute: typeof MissionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/international': {
       id: '/international'
       path: '/international'
       fullPath: '/international'
       preLoaderRoute: typeof InternationalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/habitation': {
+      id: '/habitation'
+      path: '/habitation'
+      fullPath: '/habitation'
+      preLoaderRoute: typeof HabitationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/donate': {
@@ -206,6 +345,20 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/communaute': {
+      id: '/communaute'
+      path: '/communaute'
+      fullPath: '/communaute'
+      preLoaderRoute: typeof CommunauteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/alimentaire': {
+      id: '/alimentaire'
+      path: '/alimentaire'
+      fullPath: '/alimentaire'
+      preLoaderRoute: typeof AlimentaireRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -227,6 +380,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/piliers/$pilier': {
+      id: '/piliers/$pilier'
+      path: '/piliers/$pilier'
+      fullPath: '/piliers/$pilier'
+      preLoaderRoute: typeof PiliersPilierRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/donate/success': {
@@ -270,11 +430,19 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   GARRoute: GARRoute,
   AboutRoute: AboutRoute,
+  AlimentaireRoute: AlimentaireRoute,
+  CommunauteRoute: CommunauteRoute,
   ContactRoute: ContactRoute,
   DonateRoute: DonateRouteWithChildren,
+  HabitationRoute: HabitationRoute,
   InternationalRoute: InternationalRoute,
+  MissionRoute: MissionRoute,
+  PartenairesRoute: PartenairesRoute,
   PrivacyRoute: PrivacyRoute,
   ProgramsRoute: ProgramsRoute,
+  RessourcesRoute: RessourcesRoute,
+  RevpereRoute: RevpereRoute,
+  PiliersPilierRoute: PiliersPilierRoute,
   ApiPublicStripeWebhookRoute: ApiPublicStripeWebhookRoute,
 }
 export const routeTree = rootRouteImport

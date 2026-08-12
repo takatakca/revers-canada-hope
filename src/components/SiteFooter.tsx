@@ -82,11 +82,11 @@ export function SiteFooter() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2">
           <Link
-            to="/programs"
+            to="/revpere"
             className="group relative flex items-center justify-center bg-gradient-to-br from-[color:var(--teal)] to-[color:var(--teal-deep)] p-10 text-center text-white transition hover:brightness-110"
           >
             <span className="font-display text-3xl tracking-wider">
-              <BookOpen className="mx-auto mb-2 h-7 w-7" /> {t.nav.programs}
+              <BookOpen className="mx-auto mb-2 h-7 w-7" /> {t.brand.program}
             </span>
           </Link>
           <Link
@@ -98,13 +98,66 @@ export function SiteFooter() {
             </span>
           </Link>
           <Link
-            to="/international"
+            to="/ressources"
             className="col-span-full relative flex items-center justify-center bg-gradient-to-br from-[color:var(--teal-deep)] to-[color:var(--leaf)] p-10 text-center text-white transition hover:brightness-110"
           >
-            <span className="font-display text-3xl tracking-wider">
-              {t.nav.international}
-            </span>
+            <span className="font-display text-3xl tracking-wider">{t.nav.resources}</span>
           </Link>
+        </div>
+      </div>
+
+      <div className="border-t border-white/10 px-4 py-12 sm:px-6">
+        <div className="mx-auto grid max-w-7xl gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-white/45">
+              {t.footer.colProgram}
+            </div>
+            <ul className="mt-3 space-y-2 text-sm text-white/75">
+              <li><Link to="/revpere" className="hover:text-white">{t.nav.pillars}</Link></li>
+              <li><Link to="/piliers/$pilier" params={{ pilier: "emploi" }} className="hover:text-white">{t.nav.emploi}</Link></li>
+              <li><Link to="/piliers/$pilier" params={{ pilier: "numerique" }} className="hover:text-white">{t.nav.numerique}</Link></li>
+              <li><Link to="/piliers/$pilier" params={{ pilier: "web" }} className="hover:text-white">{t.nav.web}</Link></li>
+              <li><Link to="/piliers/$pilier" params={{ pilier: "distance" }} className="hover:text-white">{t.nav.distance}</Link></li>
+              <li><Link to="/piliers/$pilier" params={{ pilier: "ia" }} className="hover:text-white">{t.nav.ia}</Link></li>
+            </ul>
+          </div>
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-white/45">
+              {t.footer.colOrg}
+            </div>
+            <ul className="mt-3 space-y-2 text-sm text-white/75">
+              <li><Link to="/mission" className="hover:text-white">{t.nav.mission}</Link></li>
+              <li><Link to="/about" className="hover:text-white">{t.nav.about}</Link></li>
+              <li><Link to="/programs" className="hover:text-white">{t.nav.programs}</Link></li>
+              <li><Link to="/habitation" className="hover:text-white">{t.nav.housing}</Link></li>
+              <li><Link to="/alimentaire" className="hover:text-white">{t.nav.food}</Link></li>
+              <li><Link to="/international" className="hover:text-white">{t.nav.international}</Link></li>
+            </ul>
+          </div>
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-white/45">
+              {t.footer.colSupport}
+            </div>
+            <ul className="mt-3 space-y-2 text-sm text-white/75">
+              <li><Link to="/donate" className="hover:text-white">{t.nav.donate}</Link></li>
+              <li><Link to="/partenaires" className="hover:text-white">{t.nav.partners}</Link></li>
+              <li><Link to="/communaute" className="hover:text-white">{t.nav.community}</Link></li>
+              <li><Link to="/ressources" className="hover:text-white">{t.nav.resources}</Link></li>
+              <li><Link to="/privacy" className="hover:text-white">{t.footer.privacy}</Link></li>
+            </ul>
+          </div>
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-white/45">
+              {t.footer.colContact}
+            </div>
+            <address className="mt-3 not-italic text-sm leading-relaxed text-white/75">
+              5505 Rue Irwin<br />
+              LaSalle, QC H8N 1A1<br />
+              Canada<br />
+              <a href="tel:5148252825" className="hover:text-white">514-825-2825</a><br />
+              <a href="mailto:reverscanada@gmail.com" className="hover:text-white">reverscanada@gmail.com</a>
+            </address>
+          </div>
         </div>
       </div>
 
