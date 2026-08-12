@@ -219,7 +219,7 @@ export function HomePage() {
               return (
                 <Reveal key={e.t} delay={i * 70}>
                   <Link
-                    to={e.to}
+                    to={e.to as "/revpere"}
                     className="group flex h-full gap-5 rounded-2xl bg-white p-7 shadow-card transition hover:-translate-y-1 hover:shadow-soft"
                   >
                     <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[color:var(--cream)] text-[color:var(--teal-deep)]">
