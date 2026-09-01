@@ -1,81 +1,96 @@
-import { Link } from "@tanstack/react-router";
-import { useState } from "react";
-import { Menu, X, Globe, Heart, ChevronDown } from "lucide-react";
+import { Link, useRouterState } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { Menu, X } from "lucide-react";
 import { useLang } from "@/i18n/LangContext";
-import { Button } from "@/components/ui/button";
+
+const PILLARS = ["emploi", "numerique", "web", "distance", "ia"] as const;
 
 export function SiteHeader() {
   const { lang, setLang, t } = useLang();
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const overlay = pathname === "/" || pathname === "/GAR";
 
-  const pillarLinks = [
-    { to: "/piliers/emploi", label: t.nav.emploi },
-    { to: "/piliers/numerique", label: t.nav.numerique },
-    { to: "/piliers/web", label: t.nav.web },
-    { to: "/piliers/distance", label: t.nav.distance },
-    { to: "/piliers/ia", label: t.nav.ia },
-  ] as const;
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  const solid = scrolled || !overlay;
+
+  const pillarLabel: Record<(typeof PILLARS)[number], string> = {
+    emploi: t.nav.emploi,
+    numerique: t.nav.numerique,
+    web: t.nav.web,
+    distance: t.nav.distance,
+    ia: t.nav.ia,
+  };
 
   const mainLinks = [
-    { to: "/mission", label: t.nav.mission },
-    { to: "/programs", label: t.nav.programs },
     { to: "/ressources", label: t.nav.resources },
     { to: "/communaute", label: t.nav.community },
-    { to: "/international", label: t.nav.international },
+    { to: "/mission", label: "REVERS CANADA" },
     { to: "/partenaires", label: t.nav.partners },
-    { to: "/contact", label: t.nav.contact },
   ] as const;
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-ink/95 text-white backdrop-blur supports-[backdrop-filter]:bg-ink/85">
-      <div className="hidden border-b border-white/10 lg:block">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-1.5 text-[11px] uppercase tracking-[0.18em] text-white/55">
-          <span>{t.footer.registered}</span>
-          <div className="flex items-center gap-5">
-            <a href="tel:5148252825" className="transition hover:text-white">514-825-2825</a>
-            <button
-              onClick={() => setLang(lang === "fr" ? "en" : "fr")}
-              className="inline-flex items-center gap-1.5 transition hover:text-white"
-              aria-label="Toggle language"
-            >
-              <Globe className="h-3 w-3" />
-              {lang === "fr" ? "English" : "Français"}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-3.5 sm:px-6">
-        <Link to="/" className="flex flex-col leading-none">
-          <span className="font-display text-2xl tracking-wide">
+    <header
+      className={[
+        "fixed inset-x-0 top-0 z-50 text-white transition-[background-color,height,border-color,backdrop-filter] duration-[280ms]",
+        solid
+          ? "border-b border-white/12 bg-ink/95 backdrop-blur-md"
+          : "border-b border-transparent bg-transparent",
+      ].join(" ")}
+    >
+      <div
+        className={[
+          "mx-auto flex max-w-[110rem] items-center justify-between gap-8 px-5 transition-all duration-[280ms] sm:px-8",
+          solid ? "h-[68px]" : "h-[96px]",
+        ].join(" ")}
+      >
+        <Link to="/" className="flex items-baseline gap-3 leading-none">
+          <span
+            className={[
+              "font-display tracking-[0.02em] transition-all duration-[280ms]",
+              solid ? "text-[19px]" : "text-[23px]",
+            ].join(" ")}
+          >
             REVERS<span className="text-[color:var(--leaf)]">CANADA</span>
           </span>
-          <span className="mt-1 text-[10px] font-semibold uppercase tracking-[0.28em] text-white/50">
-            {t.brand.programTag}
+          <span className="hidden text-[10px] font-semibold uppercase tracking-[0.3em] text-white/45 sm:inline">
+            RêvPÈRE
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-6 xl:flex">
+        <nav className="hidden items-center gap-9 lg:flex">
           <div className="group relative">
             <Link
               to="/revpere"
-              className="flex items-center gap-1 text-xs font-semibold uppercase tracking-[0.14em] text-white/80 transition hover:text-white"
+              className="text-[12px] font-semibold uppercase tracking-[0.16em] text-white/85 transition hover:text-white"
               activeProps={{ className: "text-white" }}
             >
-              {t.brand.program} <ChevronDown className="h-3.5 w-3.5" />
+              RêvPÈRE
             </Link>
-            <div className="invisible absolute left-1/2 top-full z-50 w-64 -translate-x-1/2 pt-4 opacity-0 transition group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
-              <div className="overflow-hidden rounded-xl border border-white/10 bg-ink shadow-soft">
-                <div className="border-b border-white/10 px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-white/45">
-                  {t.nav.pillars}
-                </div>
-                {pillarLinks.map((p) => (
+            <div className="invisible absolute left-0 top-full z-50 w-60 pt-5 opacity-0 transition duration-200 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+              <div className="border-t-2 border-[color:var(--leaf)] bg-ink/98 backdrop-blur">
+                {PILLARS.map((p, i) => (
                   <Link
-                    key={p.to}
-                    to={p.to}
-                    className="block px-4 py-2.5 text-sm text-white/80 transition hover:bg-white/10 hover:text-white"
+                    key={p}
+                    to="/piliers/$pilier"
+                    params={{ pilier: p }}
+                    className="flex items-baseline gap-3 border-b border-white/8 px-5 py-3 text-sm text-white/75 transition hover:bg-white/8 hover:text-white"
                   >
-                    {p.label}
+                    <span className="font-display text-xs text-white/35">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    {pillarLabel[p]}
                   </Link>
                 ))}
               </div>
@@ -86,7 +101,7 @@ export function SiteHeader() {
             <Link
               key={l.to}
               to={l.to}
-              className="text-xs font-semibold uppercase tracking-[0.14em] text-white/70 transition hover:text-white"
+              className="text-[12px] font-semibold uppercase tracking-[0.16em] text-white/70 transition hover:text-white"
               activeProps={{ className: "text-white" }}
             >
               {l.label}
@@ -94,22 +109,28 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-5">
           <button
             onClick={() => setLang(lang === "fr" ? "en" : "fr")}
-            className="inline-flex items-center gap-1.5 rounded-full border border-white/20 px-3 py-1.5 text-xs font-semibold uppercase text-white/90 transition hover:bg-white/10 lg:hidden"
+            className="text-[12px] font-semibold uppercase tracking-[0.16em] text-white/60 transition hover:text-white"
             aria-label="Toggle language"
           >
-            <Globe className="h-3.5 w-3.5" />
-            {lang === "fr" ? "EN" : "FR"}
+            {lang === "fr" ? "FR / en" : "fr / EN"}
           </button>
-          <Link to="/donate" className="hidden sm:block">
-            <Button className="bg-gradient-to-r from-[color:var(--teal)] to-[color:var(--leaf)] text-white shadow-soft hover:opacity-95">
-              <Heart className="mr-1.5 h-4 w-4" /> {t.nav.donateCta}
-            </Button>
+          <Link
+            to="/contact"
+            className="hidden text-[12px] font-semibold uppercase tracking-[0.16em] text-white/70 transition hover:text-white md:inline"
+          >
+            {t.nav.contact}
+          </Link>
+          <Link
+            to="/revpere"
+            className="hidden bg-[color:var(--leaf)] px-6 py-3 text-[12px] font-semibold uppercase tracking-[0.16em] text-white transition hover:bg-[color:var(--teal-deep)] sm:inline-block"
+          >
+            {lang === "fr" ? "Commencer" : "Get started"}
           </Link>
           <button
-            className="rounded-md p-2 text-white xl:hidden"
+            className="-mr-2 p-2 text-white lg:hidden"
             onClick={() => setOpen((v) => !v)}
             aria-label="Menu"
             aria-expanded={open}
@@ -120,56 +141,56 @@ export function SiteHeader() {
       </div>
 
       {open && (
-        <div className="border-t border-white/10 bg-ink xl:hidden">
-          <div className="max-h-[75vh] overflow-y-auto px-4 py-4">
-            <div className="mb-2 text-[10px] uppercase tracking-[0.22em] text-white/40">
-              {t.brand.program}
+        <div className="max-h-[calc(100vh-68px)] overflow-y-auto border-t border-white/12 bg-ink lg:hidden">
+          <div className="px-5 py-6">
+            <div className="text-[10px] font-semibold uppercase tracking-[0.3em] text-white/40">
+              RêvPÈRE
             </div>
             <Link
               to="/revpere"
-              onClick={() => setOpen(false)}
-              className="block rounded-md px-3 py-2 text-sm font-semibold uppercase tracking-wider text-white hover:bg-white/10"
+              className="mt-3 block border-b border-white/10 py-3 font-display text-2xl"
             >
               {t.nav.pillars}
             </Link>
-            {pillarLinks.map((p) => (
+            {PILLARS.map((p, i) => (
               <Link
-                key={p.to}
-                to={p.to}
-                onClick={() => setOpen(false)}
-                className="block rounded-md px-6 py-2 text-sm text-white/75 hover:bg-white/10 hover:text-white"
+                key={p}
+                to="/piliers/$pilier"
+                params={{ pilier: p }}
+                className="flex items-baseline gap-4 border-b border-white/8 py-3 text-base text-white/75"
               >
-                {p.label}
+                <span className="font-display text-xs text-white/35">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                {pillarLabel[p]}
               </Link>
             ))}
 
-            <div className="mb-2 mt-4 text-[10px] uppercase tracking-[0.22em] text-white/40">
-              {t.footer.colOrg}
+            <div className="mt-8 text-[10px] font-semibold uppercase tracking-[0.3em] text-white/40">
+              REVERS CANADA
             </div>
-            {mainLinks.map((l) => (
+            {[...mainLinks, { to: "/contact", label: t.nav.contact } as const].map((l) => (
               <Link
                 key={l.to}
                 to={l.to}
-                onClick={() => setOpen(false)}
-                className="block rounded-md px-3 py-2 text-sm font-semibold uppercase tracking-wider text-white/90 hover:bg-white/10"
+                className="block border-b border-white/10 py-3 font-display text-2xl"
               >
                 {l.label}
               </Link>
             ))}
 
-            <div className="mt-4 flex items-center gap-2">
-              <button
-                onClick={() => setLang(lang === "fr" ? "en" : "fr")}
-                className="inline-flex items-center gap-1.5 rounded-full border border-white/20 px-3 py-1.5 text-xs font-semibold uppercase"
-              >
-                <Globe className="h-3.5 w-3.5" /> {lang === "fr" ? "English" : "Français"}
-              </button>
-              <Link to="/donate" onClick={() => setOpen(false)} className="flex-1">
-                <Button className="w-full bg-gradient-to-r from-[color:var(--teal)] to-[color:var(--leaf)] text-white">
-                  <Heart className="mr-1.5 h-4 w-4" /> {t.nav.donateCta}
-                </Button>
-              </Link>
-            </div>
+            <Link
+              to="/revpere"
+              className="mt-8 block bg-[color:var(--leaf)] px-6 py-4 text-center text-[13px] font-semibold uppercase tracking-[0.16em] text-white"
+            >
+              {lang === "fr" ? "Commencer" : "Get started"}
+            </Link>
+            <Link
+              to="/donate"
+              className="mt-3 block border border-white/25 px-6 py-4 text-center text-[13px] font-semibold uppercase tracking-[0.16em] text-white/85"
+            >
+              {t.nav.donateCta}
+            </Link>
           </div>
         </div>
       )}
