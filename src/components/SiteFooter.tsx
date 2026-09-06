@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Facebook, Instagram, Heart, BookOpen, ArrowRight, Loader2 } from "lucide-react";
+import { ArrowRight, Facebook, Instagram, Loader2 } from "lucide-react";
 import { useLang } from "@/i18n/LangContext";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -15,8 +15,8 @@ export function SiteFooter() {
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  const handleSubscribe = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubscribe = async (event: React.FormEvent) => {
+    event.preventDefault();
     if (submitting) return;
     setSubmitting(true);
     try {
@@ -25,11 +25,9 @@ export function SiteFooter() {
         toast.error(t.footer.newsletterErr);
         return;
       }
-      if (result.alreadySubscribed) {
-        toast(t.footer.newsletterAlready);
-      } else {
-        toast.success(t.footer.newsletterOk);
-      }
+      toast[result.alreadySubscribed ? "message" : "success"](
+        result.alreadySubscribed ? t.footer.newsletterAlready : t.footer.newsletterOk,
+      );
       setFirstName("");
       setLastName("");
       setEmail("");
@@ -38,162 +36,95 @@ export function SiteFooter() {
     }
   };
 
+  const programLinks = [
+    [t.nav.emploi, "emploi"],
+    [t.nav.numerique, "numerique"],
+    [t.nav.web, "web"],
+    [t.nav.distance, "distance"],
+    [t.nav.ia, "ia"],
+  ] as const;
+
   return (
-    <footer className="bg-ink text-white">
-      <div className="grid gap-0 md:grid-cols-2">
-        <div className="bg-[color:var(--cream)] p-8 md:p-12 text-ink">
-          <h3 className="font-display text-2xl mb-2">{t.footer.newsletter}</h3>
-          <p className="mb-4 text-sm text-muted-foreground">{t.footer.newsletterD}</p>
-          <form onSubmit={handleSubscribe} className="space-y-3 max-w-md">
-            <div className="grid grid-cols-2 gap-3">
-              <Input
-                placeholder={t.footer.firstName}
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                maxLength={FIELD_LIMITS.name}
-                className="bg-white"
-                aria-label={t.footer.firstName}
-              />
-              <Input
-                placeholder={t.footer.lastName}
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-                maxLength={FIELD_LIMITS.name}
-                className="bg-white"
-                aria-label={t.footer.lastName}
-              />
-            </div>
-            <Input
-              type="email"
-              required
-              maxLength={FIELD_LIMITS.email}
-              placeholder={t.footer.emailPh}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="bg-white"
-              aria-label={t.footer.emailPh}
-            />
-            <Button type="submit" disabled={submitting} className="bg-ink text-white hover:bg-ink/90">
-              {submitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden /> : null}
-              {t.footer.subscribe} <ArrowRight className="ml-1.5 h-4 w-4" aria-hidden />
-            </Button>
-          </form>
+    <footer className="bg-ink text-primary-foreground">
+      <div className="home-shell px-5 pb-14 pt-20 sm:px-8 lg:px-0 lg:pt-28">
+        <div className="grid gap-12 border-b border-primary-foreground/15 pb-16 lg:grid-cols-12">
+          <div className="lg:col-span-5">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-leaf">{t.brand.program}</p>
+            <p className="mt-5 max-w-xl font-display text-4xl leading-[1.02] sm:text-5xl">
+              Emploi. Web.<br />IA. Autonomie.
+            </p>
+          </div>
+          <div className="lg:col-span-5 lg:col-start-8">
+            <h2 className="text-2xl text-primary-foreground">{t.footer.newsletter}</h2>
+            <p className="mt-3 max-w-md text-sm leading-6 text-primary-foreground/60">{t.footer.newsletterD}</p>
+            <form onSubmit={handleSubscribe} className="mt-7">
+              <div className="grid gap-px bg-primary-foreground/20 sm:grid-cols-2">
+                <Input value={firstName} onChange={(event) => setFirstName(event.target.value)} maxLength={FIELD_LIMITS.name} placeholder={t.footer.firstName} aria-label={t.footer.firstName} className="h-12 rounded-none border-0 bg-ink text-primary-foreground placeholder:text-primary-foreground/45 focus-visible:ring-leaf" />
+                <Input value={lastName} onChange={(event) => setLastName(event.target.value)} maxLength={FIELD_LIMITS.name} placeholder={t.footer.lastName} aria-label={t.footer.lastName} className="h-12 rounded-none border-0 bg-ink text-primary-foreground placeholder:text-primary-foreground/45 focus-visible:ring-leaf" />
+              </div>
+              <div className="mt-px flex bg-primary-foreground/20">
+                <Input type="email" required value={email} onChange={(event) => setEmail(event.target.value)} maxLength={FIELD_LIMITS.email} placeholder={t.footer.emailPh} aria-label={t.footer.emailPh} className="h-12 rounded-none border-0 bg-ink text-primary-foreground placeholder:text-primary-foreground/45 focus-visible:ring-leaf" />
+                <Button type="submit" size="icon" disabled={submitting} className="h-12 w-12 shrink-0 rounded-none bg-leaf text-ink hover:bg-leaf/90" aria-label={t.footer.subscribe}>
+                  {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
+                </Button>
+              </div>
+            </form>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2">
-          <Link
-            to="/revpere"
-            className="group relative flex items-center justify-center bg-gradient-to-br from-[color:var(--teal)] to-[color:var(--teal-deep)] p-10 text-center text-white transition hover:brightness-110"
-          >
-            <span className="font-display text-3xl tracking-wider">
-              <BookOpen className="mx-auto mb-2 h-7 w-7" /> {t.brand.program}
-            </span>
-          </Link>
-          <Link
-            to="/donate"
-            className="group relative flex items-center justify-center bg-gradient-to-br from-[color:var(--leaf)] to-[color:var(--teal-deep)] p-10 text-center text-white transition hover:brightness-110"
-          >
-            <span className="font-display text-3xl tracking-wider">
-              <Heart className="mx-auto mb-2 h-7 w-7" /> {t.nav.donateCta}
-            </span>
-          </Link>
-          <Link
-            to="/ressources"
-            className="col-span-full relative flex items-center justify-center bg-gradient-to-br from-[color:var(--teal-deep)] to-[color:var(--leaf)] p-10 text-center text-white transition hover:brightness-110"
-          >
-            <span className="font-display text-3xl tracking-wider">{t.nav.resources}</span>
-          </Link>
-        </div>
-      </div>
-
-      <div className="border-t border-white/10 px-4 py-12 sm:px-6">
-        <div className="mx-auto grid max-w-7xl gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-10 border-b border-primary-foreground/15 py-14 sm:grid-cols-2 lg:grid-cols-5">
+          <FooterColumn title="RêvPÈRE">
+            <li><Link to="/revpere">{t.nav.pillars}</Link></li>
+            {programLinks.map(([label, slug]) => <li key={slug}><Link to="/piliers/$pilier" params={{ pilier: slug }}>{label}</Link></li>)}
+          </FooterColumn>
+          <FooterColumn title={t.footer.colSupport}>
+            <li><Link to="/ressources">{t.nav.resources}</Link></li>
+            <li><Link to="/communaute">{t.nav.community}</Link></li>
+            <li><Link to="/partenaires">{t.nav.partners}</Link></li>
+            <li><Link to="/donate">{t.nav.donate}</Link></li>
+          </FooterColumn>
+          <FooterColumn title="REVERS CANADA">
+            <li><Link to="/habitation">{t.nav.housing}</Link></li>
+            <li><Link to="/alimentaire">{t.nav.food}</Link></li>
+            <li><Link to="/international">{t.nav.international}</Link></li>
+          </FooterColumn>
+          <FooterColumn title={t.footer.colOrg}>
+            <li><Link to="/mission">{t.nav.mission}</Link></li>
+            <li><Link to="/about">{t.nav.about}</Link></li>
+            <li><Link to="/contact">{t.nav.contact}</Link></li>
+            <li><Link to="/privacy">{t.footer.privacy}</Link></li>
+          </FooterColumn>
           <div>
-            <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-white/45">
-              {t.footer.colProgram}
-            </div>
-            <ul className="mt-3 space-y-2 text-sm text-white/75">
-              <li><Link to="/revpere" className="hover:text-white">{t.nav.pillars}</Link></li>
-              <li><Link to="/piliers/$pilier" params={{ pilier: "emploi" }} className="hover:text-white">{t.nav.emploi}</Link></li>
-              <li><Link to="/piliers/$pilier" params={{ pilier: "numerique" }} className="hover:text-white">{t.nav.numerique}</Link></li>
-              <li><Link to="/piliers/$pilier" params={{ pilier: "web" }} className="hover:text-white">{t.nav.web}</Link></li>
-              <li><Link to="/piliers/$pilier" params={{ pilier: "distance" }} className="hover:text-white">{t.nav.distance}</Link></li>
-              <li><Link to="/piliers/$pilier" params={{ pilier: "ia" }} className="hover:text-white">{t.nav.ia}</Link></li>
-            </ul>
-          </div>
-          <div>
-            <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-white/45">
-              {t.footer.colOrg}
-            </div>
-            <ul className="mt-3 space-y-2 text-sm text-white/75">
-              <li><Link to="/mission" className="hover:text-white">{t.nav.mission}</Link></li>
-              <li><Link to="/about" className="hover:text-white">{t.nav.about}</Link></li>
-              <li><Link to="/programs" className="hover:text-white">{t.nav.programs}</Link></li>
-              <li><Link to="/habitation" className="hover:text-white">{t.nav.housing}</Link></li>
-              <li><Link to="/alimentaire" className="hover:text-white">{t.nav.food}</Link></li>
-              <li><Link to="/international" className="hover:text-white">{t.nav.international}</Link></li>
-            </ul>
-          </div>
-          <div>
-            <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-white/45">
-              {t.footer.colSupport}
-            </div>
-            <ul className="mt-3 space-y-2 text-sm text-white/75">
-              <li><Link to="/donate" className="hover:text-white">{t.nav.donate}</Link></li>
-              <li><Link to="/partenaires" className="hover:text-white">{t.nav.partners}</Link></li>
-              <li><Link to="/communaute" className="hover:text-white">{t.nav.community}</Link></li>
-              <li><Link to="/ressources" className="hover:text-white">{t.nav.resources}</Link></li>
-              <li><Link to="/privacy" className="hover:text-white">{t.footer.privacy}</Link></li>
-            </ul>
-          </div>
-          <div>
-            <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-white/45">
-              {t.footer.colContact}
-            </div>
-            <address className="mt-3 not-italic text-sm leading-relaxed text-white/75">
-              5505 Rue Irwin<br />
-              LaSalle, QC H8N 1A1<br />
-              Canada<br />
-              <a href="tel:5148252825" className="hover:text-white">514-825-2825</a><br />
-              <a href="mailto:reverscanada@gmail.com" className="hover:text-white">reverscanada@gmail.com</a>
+            <h3 className="text-[10px] font-bold uppercase tracking-[0.18em] text-primary-foreground/40">{t.footer.colContact}</h3>
+            <address className="mt-5 not-italic text-sm leading-7 text-primary-foreground/70">
+              5505 Rue Irwin<br />LaSalle, QC H8N 1A1<br />Canada<br />
+              <a href="tel:5148252825">514-825-2825</a><br />
+              <a href="mailto:reverscanada@gmail.com" className="break-all">reverscanada@gmail.com</a>
             </address>
           </div>
         </div>
-      </div>
 
-      <div className="border-t border-white/10 px-4 py-8 sm:px-6">
-        <div className="mx-auto flex max-w-7xl flex-col items-center gap-6 text-center md:flex-row md:items-start md:justify-between md:text-left">
+        <div className="flex flex-col gap-8 pt-10 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <div className="font-display text-xl">REVERS<span className="text-[color:var(--leaf)]">CANADA</span></div>
-            <p className="mt-1 text-sm text-white/70">{t.footer.tagline}</p>
-            <p className="mt-1 text-xs text-white/50">{t.footer.registered}</p>
+            <div className="font-display text-3xl">REVERS<span className="text-leaf">CANADA</span></div>
+            <p className="mt-2 text-xs text-primary-foreground/45">{t.footer.registered}</p>
           </div>
-
-          <address className="not-italic text-sm text-white/80 leading-relaxed">
-            5505 Rue Irwin<br />
-            LaSalle, QC H8N 1A1<br />
-            Canada<br />
-            <a href="tel:5148252825" className="hover:text-white underline-offset-2 hover:underline">514-825-2825</a>
-            <span className="mx-1 text-white/40">·</span>
-            <a href="mailto:reverscanada@gmail.com" className="hover:text-white underline-offset-2 hover:underline">reverscanada@gmail.com</a>
-          </address>
-
-          <div className="flex flex-col items-center gap-3 md:items-end">
-            <div className="flex items-center gap-4">
-              <a href="#" aria-label="Facebook" className="text-white/70 hover:text-white">
-                <Facebook className="h-5 w-5" />
-              </a>
-              <a href="#" aria-label="Instagram" className="text-white/70 hover:text-white">
-                <Instagram className="h-5 w-5" />
-              </a>
-            </div>
-            <div className="text-xs text-white/60">
-              © {new Date().getFullYear()} Revers Canada. {t.footer.rights}{" "}
-              <Link to="/privacy" className="underline hover:text-white">{t.footer.privacy}</Link>
-            </div>
+          <div className="flex items-center gap-5">
+            <a href="#" aria-label="Facebook" className="text-primary-foreground/55 transition hover:text-leaf"><Facebook className="h-5 w-5" /></a>
+            <a href="#" aria-label="Instagram" className="text-primary-foreground/55 transition hover:text-leaf"><Instagram className="h-5 w-5" /></a>
           </div>
+          <p className="text-xs text-primary-foreground/45">© {new Date().getFullYear()} Revers Canada. {t.footer.rights}</p>
         </div>
       </div>
     </footer>
+  );
+}
+
+function FooterColumn({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <h3 className="text-[10px] font-bold uppercase tracking-[0.18em] text-primary-foreground/40">{title}</h3>
+      <ul className="mt-5 space-y-3 text-sm text-primary-foreground/70 [&_a]:transition [&_a:hover]:text-leaf">{children}</ul>
+    </div>
   );
 }
