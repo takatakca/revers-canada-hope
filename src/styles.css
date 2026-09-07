@@ -113,8 +113,8 @@
 
 .editorial-title {
   font-family: var(--font-display);
-  font-size: clamp(3rem, 6vw, 6.5rem);
-  line-height: 0.92;
+  font-size: clamp(2.9rem, 5.4vw, 5.6rem);
+  line-height: 1.02;
   letter-spacing: 0;
 }
 
@@ -199,8 +199,8 @@
 }
 
 @media (max-width: 639px) {
-  .section-space { padding-block: 4.5rem; }
-  .editorial-title { font-size: 3.4rem; }
+  .section-space { padding-block: 4rem; }
+  .editorial-title { font-size: 2.8rem; }
   .signature-band li:nth-last-child(-n + 2) { border-bottom: 0; }
 }
 
