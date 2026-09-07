@@ -87,7 +87,7 @@ export function HomePage() {
             <p className="hero-step text-[11px] font-bold uppercase tracking-[0.18em] text-leaf">
               {copy.hero.eyebrow}
             </p>
-            <h1 className="hero-step mt-6 text-[clamp(3.4rem,6vw,6.9rem)] leading-[0.9] text-primary-foreground">
+            <h1 className="hero-step mt-6 text-[clamp(3rem,5.2vw,5.8rem)] leading-[1.03] text-primary-foreground">
               {copy.hero.titleA}<br />
               <span className="text-leaf">{copy.hero.titleB}</span>
             </h1>
