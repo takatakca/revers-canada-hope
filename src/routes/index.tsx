@@ -325,7 +325,7 @@ export function HomePage() {
       <section className="bg-leaf py-16 text-ink sm:py-20">
         <Reveal className="home-shell flex flex-col gap-9 px-5 sm:px-8 lg:flex-row lg:items-end lg:justify-between lg:px-0">
           <div>
-            <h2 className="max-w-4xl text-4xl leading-[0.98] text-ink sm:text-6xl">{copy.final.title}</h2>
+            <h2 className="max-w-4xl text-4xl leading-[1.04] text-ink sm:text-6xl">{copy.final.title}</h2>
             <p className="mt-6 max-w-2xl leading-7 text-ink/75">{copy.final.body}</p>
           </div>
           <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
