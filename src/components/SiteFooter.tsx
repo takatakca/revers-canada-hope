@@ -95,7 +95,7 @@ export function SiteFooter() {
             <li><Link to="/privacy">{t.footer.privacy}</Link></li>
           </FooterColumn>
           <div>
-            <h3 className="text-[10px] font-bold uppercase tracking-[0.18em] text-primary-foreground/40">{t.footer.colContact}</h3>
+            <h3 className="font-sans text-[10px] font-bold uppercase tracking-[0.18em] text-primary-foreground/40">{t.footer.colContact}</h3>
             <address className="mt-5 not-italic text-sm leading-7 text-primary-foreground/70">
               5505 Rue Irwin<br />LaSalle, QC H8N 1A1<br />Canada<br />
               <a href="tel:5148252825">514-825-2825</a><br />
@@ -123,7 +123,7 @@ export function SiteFooter() {
 function FooterColumn({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div>
-      <h3 className="text-[10px] font-bold uppercase tracking-[0.18em] text-primary-foreground/40">{title}</h3>
+      <h3 className="font-sans text-[10px] font-bold uppercase tracking-[0.18em] text-primary-foreground/40">{title}</h3>
       <ul className="mt-5 space-y-3 text-sm text-primary-foreground/70 [&_a]:transition [&_a:hover]:text-leaf">{children}</ul>
     </div>
   );
