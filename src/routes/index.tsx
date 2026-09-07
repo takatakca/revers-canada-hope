@@ -87,7 +87,7 @@ export function HomePage() {
             <p className="hero-step text-[11px] font-bold uppercase tracking-[0.18em] text-leaf">
               {copy.hero.eyebrow}
             </p>
-            <h1 className="hero-step mt-6 text-[clamp(3.4rem,6vw,6.9rem)] leading-[0.9] text-primary-foreground">
+            <h1 className="hero-step mt-6 text-[clamp(3rem,5.2vw,5.8rem)] leading-[1.03] text-primary-foreground">
               {copy.hero.titleA}<br />
               <span className="text-leaf">{copy.hero.titleB}</span>
             </h1>
@@ -215,7 +215,7 @@ export function HomePage() {
               <Reveal key={chapter.n} delay={index * 90} className="border-b border-primary-foreground/20 py-9 md:border-b-0 md:border-r md:px-8 md:first:pl-0 md:last:border-r-0">
                 <li>
                   <span className="text-sm font-bold text-leaf">{chapter.n}</span>
-                  <h3 className="mt-10 text-3xl uppercase text-primary-foreground">{chapter.title}</h3>
+                  <h3 className="mt-5 text-3xl uppercase leading-[1.05] text-primary-foreground">{chapter.title}</h3>
                   {chapter.items.length > 0 ? (
                     <p className="mt-5 text-sm leading-7 text-primary-foreground/65">{chapter.items.join(" · ")}</p>
                   ) : (
@@ -229,19 +229,23 @@ export function HomePage() {
       </section>
 
       <section className="section-space bg-teal-deep text-primary-foreground">
-        <div className="home-shell px-5 text-center sm:px-8 lg:px-0">
-          <Reveal>
-            <h2 className="editorial-title mx-auto max-w-4xl text-primary-foreground">{copy.resources.titleA}<br /><span className="text-leaf">{copy.resources.titleB}</span></h2>
-            <form action="/ressources" className="mx-auto mt-10 flex max-w-3xl border-b border-primary-foreground/55 pb-3 text-left">
-              <Input name="q" aria-label={copy.resources.placeholder} placeholder={copy.resources.placeholder} className="h-14 rounded-none border-0 bg-transparent px-0 text-lg text-primary-foreground placeholder:text-primary-foreground/55 focus-visible:ring-0" />
-              <Button type="submit" size="icon" className="h-14 w-14 shrink-0 rounded-none bg-leaf text-ink hover:bg-leaf/90" aria-label={copy.resources.cta}>
-                <Search className="h-5 w-5" />
-              </Button>
-            </form>
-            <div className="mx-auto mt-7 flex max-w-3xl flex-wrap justify-center gap-x-6 gap-y-3 text-sm text-primary-foreground/75">
-              {copy.resources.examples.map((example) => <span key={example}>{example}</span>)}
+        <div className="home-shell px-5 sm:px-8 lg:px-0">
+          <Reveal className="grid gap-10 lg:grid-cols-12">
+            <div className="lg:col-span-5">
+              <h2 className="editorial-title max-w-xl text-primary-foreground">{copy.resources.titleA}<br /><span className="text-leaf">{copy.resources.titleB}</span></h2>
             </div>
-            <p className="mx-auto mt-9 max-w-2xl text-sm leading-6 text-primary-foreground/60">{copy.resources.note}</p>
+            <div className="lg:col-span-6 lg:col-start-7 lg:pt-4">
+              <form action="/ressources" className="flex border-b border-primary-foreground/55 pb-2">
+                <Input name="q" aria-label={copy.resources.placeholder} placeholder={copy.resources.placeholder} className="h-14 rounded-none border-0 bg-transparent px-0 text-lg text-primary-foreground placeholder:text-primary-foreground/55 focus-visible:ring-0" />
+                <Button type="submit" size="icon" className="h-14 w-14 shrink-0 rounded-none bg-leaf text-ink hover:bg-leaf/90" aria-label={copy.resources.cta}>
+                  <Search className="h-5 w-5" />
+                </Button>
+              </form>
+              <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-primary-foreground/75">
+                {copy.resources.examples.map((example) => <li key={example}>— {example}</li>)}
+              </ul>
+              <p className="mt-8 max-w-xl text-sm leading-6 text-primary-foreground/60">{copy.resources.note}</p>
+            </div>
           </Reveal>
         </div>
       </section>
@@ -321,7 +325,7 @@ export function HomePage() {
       <section className="bg-leaf py-16 text-ink sm:py-20">
         <Reveal className="home-shell flex flex-col gap-9 px-5 sm:px-8 lg:flex-row lg:items-end lg:justify-between lg:px-0">
           <div>
-            <h2 className="max-w-4xl text-4xl leading-[0.98] text-ink sm:text-6xl">{copy.final.title}</h2>
+            <h2 className="max-w-4xl text-4xl leading-[1.04] text-ink sm:text-6xl">{copy.final.title}</h2>
             <p className="mt-6 max-w-2xl leading-7 text-ink/75">{copy.final.body}</p>
           </div>
           <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
