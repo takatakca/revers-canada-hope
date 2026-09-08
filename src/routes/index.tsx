@@ -186,20 +186,32 @@ export function HomePage() {
           <div className="mt-16 grid gap-12 lg:grid-cols-12 lg:gap-16">
             <aside className="hidden lg:col-span-3 lg:block">
               <ol className="sticky top-28 border-t border-ink/20">
-                {copy.pillars.map((pillar) => (
-                  <li key={pillar.key}>
-                    <a href={`#pillar-${pillar.key}`} className="group flex items-center gap-4 border-b border-ink/20 py-5 text-ink/55 transition-colors hover:text-teal-deep">
-                      <span className="text-xs tabular-nums">{pillar.n}</span>
-                      <span className="font-bold uppercase tracking-[0.1em]">{pillar.nav}</span>
-                    </a>
-                  </li>
-                ))}
+                {copy.pillars.map((pillar) => {
+                  const active = activePillar === pillar.key;
+                  return (
+                    <li key={pillar.key}>
+                      <a
+                        href={`#pillar-${pillar.key}`}
+                        aria-current={active ? "true" : undefined}
+                        className={[
+                          "flex items-center gap-4 border-b border-ink/20 py-5 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-deep",
+                          active
+                            ? "border-l-2 border-l-leaf pl-4 text-ink"
+                            : "text-ink/50 hover:text-teal-deep",
+                        ].join(" ")}
+                      >
+                        <span className="text-xs tabular-nums">{pillar.n}</span>
+                        <span className="font-bold uppercase tracking-[0.1em]">{pillar.nav}</span>
+                      </a>
+                    </li>
+                  );
+                })}
               </ol>
             </aside>
 
             <div className="lg:col-span-9">
               {copy.pillars.map((pillar, index) => (
-                <article id={`pillar-${pillar.key}`} key={pillar.key} className="pillar-chapter scroll-mt-28 border-t border-ink/20 py-12 first:pt-0 lg:py-20">
+                <article id={`pillar-${pillar.key}`} key={pillar.key} className="pillar-chapter scroll-mt-28 border-t border-ink/20 py-12 first:pt-0 last:pb-0 lg:py-16 lg:first:pt-0 lg:last:pb-0">
                   <Reveal>
                     <div className="grid gap-8 md:grid-cols-2 md:items-center">
                       <div className={index % 2 === 1 ? "md:order-2" : ""}>
