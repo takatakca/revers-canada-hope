@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, ArrowUpRight, Heart, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -45,6 +46,26 @@ const pillarSlugs = ["emploi", "numerique", "web", "distance", "ia"] as const;
 export function HomePage() {
   const { lang } = useLang();
   const copy = homeCopy[lang];
+  const [activePillar, setActivePillar] = useState<string>(pillarSlugs[0]);
+
+  useEffect(() => {
+    if (typeof IntersectionObserver === "undefined") return;
+    const nodes = pillarSlugs
+      .map((slug) => document.getElementById(`pillar-${slug}`))
+      .filter((node): node is HTMLElement => Boolean(node));
+    if (nodes.length === 0) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((entry) => entry.isIntersecting);
+        if (visible.length === 0) return;
+        const top = visible.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+        setActivePillar(top.target.id.replace("pillar-", ""));
+      },
+      { rootMargin: "-30% 0px -55% 0px", threshold: 0 },
+    );
+    nodes.forEach((node) => io.observe(node));
+    return () => io.disconnect();
+  }, []);
 
   const streams = [
     {
