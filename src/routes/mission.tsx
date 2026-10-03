@@ -1,8 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
+import { createFileRoute } from "@tanstack/react-router";
 import { useLang } from "@/i18n/LangContext";
-import { Button } from "@/components/ui/button";
-import { Reveal } from "@/components/Reveal";
+import { EditorialHero, EditorialList, EditorialCta } from "@/components/Editorial";
 
 export const Route = createFileRoute("/mission")({
   head: () => ({
@@ -30,49 +28,26 @@ function MissionPage() {
   const { t } = useLang();
   return (
     <>
-      <section className="bg-ink py-20 text-white sm:py-24">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <h1 className="font-display text-4xl sm:text-6xl">{t.mission.title}</h1>
-          <p className="mt-5 max-w-3xl text-lg text-white/80">{t.mission.lead}</p>
+      <EditorialHero label="REVERS CANADA" title={t.mission.title} lead={t.mission.lead} />
+      <section className="section-space bg-background">
+        <div className="home-shell px-5 sm:px-8 lg:px-0">
+          <EditorialList items={t.mission.blocks} cols={3} />
         </div>
       </section>
-
-      <section className="bg-background py-16 sm:py-20">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <div className="grid gap-5 md:grid-cols-3">
-            {t.mission.blocks.map((b, i) => (
-              <Reveal key={b.t} delay={i * 80}>
-                <div className="h-full rounded-2xl border border-border bg-card p-7">
-                  <h2 className="font-display text-2xl text-ink">{b.t}</h2>
-                  <p className="mt-3 text-sm text-muted-foreground">{b.d}</p>
-                </div>
-              </Reveal>
+      <section className="section-space bg-cream">
+        <div className="home-shell grid gap-10 px-5 sm:px-8 lg:grid-cols-12 lg:px-0">
+          <h2 className="editorial-title text-ink lg:col-span-4">{t.mission.valuesT}</h2>
+          <ul className="border-t border-ink/20 lg:col-span-7 lg:col-start-6">
+            {t.mission.values.map((v) => (
+              <li key={v.t} className="grid gap-2 border-b border-ink/20 py-6 sm:grid-cols-3">
+                <span className="font-display text-2xl text-teal-deep">{v.t}</span>
+                <span className="text-sm leading-6 text-ink/75 sm:col-span-2">{v.d}</span>
+              </li>
             ))}
-          </div>
-
-          <h2 className="mt-16 font-display text-3xl text-ink">{t.mission.valuesT}</h2>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {t.mission.values.map((v, i) => (
-              <Reveal key={v.t} delay={i * 60}>
-                <div className="h-full rounded-2xl bg-[color:var(--cream)] p-6">
-                  <div className="font-display text-xl text-[color:var(--teal-deep)]">{v.t}</div>
-                  <p className="mt-2 text-sm text-ink/75">{v.d}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-
-          <div className="mt-14 rounded-3xl bg-gradient-hero px-6 py-10 text-white sm:px-10">
-            <h2 className="font-display text-3xl">{t.mission.ctaT}</h2>
-            <p className="mt-3 text-white/85">{t.mission.ctaD}</p>
-            <Link to="/contact" className="mt-6 inline-block">
-              <Button className="bg-white text-[color:var(--teal-deep)] hover:bg-white/90">
-                {t.nav.contact} <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-          </div>
+          </ul>
         </div>
       </section>
+      <EditorialCta title={t.mission.ctaT} body={t.mission.ctaD} cta={t.nav.contact} />
     </>
   );
 }
