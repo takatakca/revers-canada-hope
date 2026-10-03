@@ -1,8 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Briefcase, Laptop, MonitorSmartphone, Globe2, Cpu } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { useLang } from "@/i18n/LangContext";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/Reveal";
+import employmentImage from "@/assets/home/pillar-emploi.jpg";
+import digitalImage from "@/assets/home/pillar-numerique.jpg";
+import webImage from "@/assets/home/pillar-web.jpg";
+import remoteImage from "@/assets/home/pillar-teletravail.jpg";
+import aiImage from "@/assets/home/pillar-ia.jpg";
 
 export const Route = createFileRoute("/revpere")({
   head: () => ({
@@ -26,7 +31,7 @@ export const Route = createFileRoute("/revpere")({
   component: RevpereHub,
 });
 
-const icons = [Briefcase, Laptop, MonitorSmartphone, Globe2, Cpu];
+const images = [employmentImage, digitalImage, webImage, remoteImage, aiImage];
 const slugs = ["emploi", "numerique", "web", "distance", "ia"] as const;
 
 function RevpereHub() {
@@ -35,59 +40,56 @@ function RevpereHub() {
 
   return (
     <>
-      <section className="bg-ink py-20 text-white sm:py-24">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/55">
-            {t.brand.umbrella}
+      <section className="bg-ink pb-16 pt-24 text-primary-foreground sm:pb-20 sm:pt-28">
+        <div className="home-shell grid gap-8 px-5 sm:px-8 lg:grid-cols-12 lg:px-0">
+          <div className="lg:col-span-7">
+            <p className="editorial-label text-leaf">{t.brand.umbrella}</p>
+            <h1 className="editorial-title mt-5 text-primary-foreground">{t.pillarsHub.title}</h1>
+          </div>
+          <p className="max-w-xl text-lg leading-8 text-primary-foreground/75 lg:col-span-4 lg:col-start-9 lg:self-end">
+            {t.pillarsHub.lead}
           </p>
-          <h1 className="mt-4 font-display text-4xl sm:text-6xl">{t.pillarsHub.title}</h1>
-          <p className="mt-5 max-w-2xl text-lg text-white/80">{t.pillarsHub.lead}</p>
         </div>
       </section>
 
-      <section className="bg-background py-16 sm:py-20">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {pillars.map((p, i) => {
-              const Icon = icons[i];
-              return (
-                <Reveal key={p.name} delay={i * 70}>
-                  <Link
-                    to="/piliers/$pilier"
-                    params={{ pilier: slugs[i] }}
-                    className="group flex h-full flex-col rounded-2xl border border-border bg-card p-7 transition hover:-translate-y-1 hover:shadow-card"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[color:var(--cream)] text-[color:var(--teal-deep)]">
-                        <Icon className="h-5 w-5" />
-                      </span>
-                      <span className="font-display text-2xl text-ink/15">{p.n}</span>
-                    </div>
-                    <h2 className="mt-5 font-display text-2xl text-ink">{p.name}</h2>
-                    <p className="mt-2 flex-1 text-sm text-muted-foreground">{p.lead}</p>
-                    <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-[color:var(--teal-deep)]">
-                      {t.pillarsHub.cta}
-                      <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
-                    </span>
-                  </Link>
-                </Reveal>
-              );
-            })}
-          </div>
+      <section className="section-space bg-background">
+        <div className="home-shell px-5 sm:px-8 lg:px-0">
+          {pillars.map((p, i) => (
+            <Reveal key={p.name}>
+              <Link
+                to="/piliers/$pilier"
+                params={{ pilier: slugs[i] }}
+                className="group grid gap-6 border-t border-ink/20 py-10 md:grid-cols-12 md:items-center last:border-b"
+              >
+                <span className="font-display text-5xl text-leaf md:col-span-1">{p.n}</span>
+                <div className="md:col-span-3">
+                  <img src={images[i]} alt="" width={1024} height={1280} loading="lazy" className="aspect-[16/10] w-full object-cover transition duration-500 group-hover:scale-[1.015]" />
+                </div>
+                <div className="md:col-span-6 md:px-6">
+                  <h2 className="text-3xl leading-tight text-ink sm:text-4xl">{p.name}</h2>
+                  <p className="mt-3 max-w-xl text-sm leading-6 text-muted-foreground">{p.lead}</p>
+                </div>
+                <span className="inline-flex items-center gap-2 text-sm font-semibold text-teal-deep md:col-span-2 md:justify-end">
+                  {t.pillarsHub.cta}<ArrowUpRight className="h-4 w-4" />
+                </span>
+              </Link>
+            </Reveal>
+          ))}
 
-          <div className="mt-10 rounded-2xl border border-border bg-[color:var(--cream)] p-6 text-sm text-ink/80">
-            {t.pillarsHub.note}
-          </div>
-
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link to="/contact">
-              <Button className="bg-gradient-to-r from-[color:var(--teal)] to-[color:var(--leaf)] text-white">
-                {t.nav.start} <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-            <Link to="/ressources">
-              <Button variant="outline">{t.nav.resources}</Button>
-            </Link>
+          <div className="mt-12 grid gap-8 lg:grid-cols-12">
+            <p className="border-l border-leaf pl-5 text-base leading-7 text-ink/80 lg:col-span-6">{t.pillarsHub.note}</p>
+            <div className="flex flex-col gap-3 sm:flex-row lg:col-span-5 lg:col-start-8 lg:justify-end">
+              <Link to="/contact">
+                <Button size="lg" className="w-full rounded-none bg-ink text-primary-foreground hover:bg-ink/90 sm:w-auto">
+                  {t.nav.start}<ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+              <Link to="/ressources">
+                <Button size="lg" variant="outline" className="w-full rounded-none border-ink bg-transparent text-ink hover:bg-ink/10 sm:w-auto">
+                  {t.nav.resources}
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </section>

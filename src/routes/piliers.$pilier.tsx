@@ -63,52 +63,54 @@ function PillarPage() {
 
   return (
     <>
-      <section className="bg-ink py-20 text-white sm:py-24">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <Link to="/revpere" className="text-xs font-semibold uppercase tracking-[0.24em] text-white/60 hover:text-white">
+      <section className="bg-ink pb-16 pt-24 text-primary-foreground sm:pb-20 sm:pt-28">
+        <div className="home-shell px-5 sm:px-8 lg:px-0">
+          <Link to="/revpere" className="editorial-label text-leaf hover:text-primary-foreground">
             {t.brand.program} · {t.nav.pillars}
           </Link>
-          <div className="mt-6 flex items-baseline gap-4">
-            <span className="font-display text-5xl text-white/20">{p.n}</span>
-            <h1 className="font-display text-4xl sm:text-5xl">{p.title}</h1>
+          <div className="mt-6 grid gap-8 lg:grid-cols-12">
+            <div className="lg:col-span-8">
+              <span className="font-display text-7xl text-leaf sm:text-8xl">{p.n}</span>
+              <h1 className="editorial-title mt-3 text-primary-foreground">{p.title}</h1>
+            </div>
+            <p className="max-w-xl text-lg leading-8 text-primary-foreground/75 lg:col-span-4 lg:self-end">{p.lead}</p>
           </div>
-          <p className="mt-5 max-w-2xl text-lg text-white/80">{p.lead}</p>
         </div>
       </section>
 
-      <section className="bg-background py-16 sm:py-20">
-        <div className="mx-auto grid max-w-5xl gap-6 px-4 sm:px-6 md:grid-cols-2">
+      <section className="section-space bg-background">
+        <div className="home-shell px-5 sm:px-8 lg:px-0">
           {p.sections.map((s, i) => (
-            <Reveal key={s.t} delay={i * 90}>
-              <div className="h-full rounded-2xl border border-border bg-card p-7">
-                <h2 className="font-display text-2xl text-ink">{s.t}</h2>
-                <ul className="mt-4 space-y-3">
+            <Reveal key={s.t}>
+              <div className="grid gap-6 border-t border-ink/20 py-10 lg:grid-cols-12">
+                <div className="lg:col-span-4">
+                  <span className="text-xs font-bold tabular-nums text-teal-deep">{String(i + 1).padStart(2, "0")}</span>
+                  <h2 className="mt-3 text-3xl leading-tight text-ink">{s.t}</h2>
+                </div>
+                <ul className="grid gap-x-8 gap-y-3 text-base text-ink/80 sm:grid-cols-2 lg:col-span-7 lg:col-start-6">
                   {s.items.map((it) => (
-                    <li key={it} className="flex gap-3 text-sm text-muted-foreground">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-[color:var(--leaf)]" aria-hidden />
-                      {it}
-                    </li>
+                    <li key={it} className="border-b border-ink/10 pb-3">— {it}</li>
                   ))}
                 </ul>
               </div>
             </Reveal>
           ))}
-        </div>
 
-        <div className="mx-auto mt-12 flex max-w-5xl flex-wrap items-center gap-3 px-4 sm:px-6">
-          <Link to="/contact">
-            <Button className="bg-gradient-to-r from-[color:var(--teal)] to-[color:var(--leaf)] text-white">
-              {t.nav.start} <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </Link>
-          <Link to="/revpere">
-            <Button variant="outline">{t.nav.pillars}</Button>
-          </Link>
-          <Link to="/donate">
-            <Button variant="ghost">
-              <Heart className="mr-2 h-4 w-4" /> {t.nav.donateCta}
-            </Button>
-          </Link>
+          <div className="mt-6 flex flex-col gap-3 border-t border-ink/20 pt-10 sm:flex-row">
+            <Link to="/contact">
+              <Button size="lg" className="w-full rounded-none bg-ink text-primary-foreground hover:bg-ink/90 sm:w-auto">
+                {t.nav.start}<ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+            <Link to="/revpere">
+              <Button size="lg" variant="outline" className="w-full rounded-none border-ink bg-transparent text-ink hover:bg-ink/10 sm:w-auto">
+                {t.nav.pillars}
+              </Button>
+            </Link>
+            <Link to="/donate" className="inline-flex items-center gap-2 self-start border-b border-teal-deep pb-1 text-sm font-semibold text-teal-deep sm:self-center sm:ml-4">
+              <Heart className="h-4 w-4" />{t.nav.donateCta}
+            </Link>
+          </div>
         </div>
       </section>
     </>

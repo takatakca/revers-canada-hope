@@ -30,43 +30,43 @@ function CommunityPage() {
   const { t } = useLang();
   return (
     <>
-      <section className="relative isolate overflow-hidden bg-ink py-20 text-white sm:py-24">
-        <img
-          src={communityImg}
-          alt=""
-          width={1600}
-          height={912}
-          className="absolute inset-0 h-full w-full object-cover opacity-30"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/85 to-ink/40" />
-        <div className="relative mx-auto max-w-5xl px-4 sm:px-6">
-          <h1 className="font-display text-4xl sm:text-6xl">{t.community.title}</h1>
-          <p className="mt-5 max-w-2xl text-lg text-white/85">{t.community.lead}</p>
+      <section className="bg-ink text-primary-foreground">
+        <div className="home-shell grid lg:grid-cols-12">
+          <div className="flex flex-col justify-end px-5 pb-14 pt-28 sm:px-8 lg:col-span-5 lg:px-0 lg:pr-12">
+            <h1 className="editorial-title text-primary-foreground">{t.community.title}</h1>
+            <p className="mt-6 max-w-xl text-lg leading-8 text-primary-foreground/75">{t.community.lead}</p>
+          </div>
+          <div className="relative min-h-[360px] lg:col-span-7 lg:min-h-[560px]">
+            <img src={communityImg} alt="" width={1600} height={912} className="absolute inset-0 h-full w-full object-cover" />
+          </div>
         </div>
       </section>
 
-      <section className="bg-background py-16 sm:py-20">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <div className="grid gap-5 md:grid-cols-2">
+      <section className="section-space bg-background">
+        <div className="home-shell px-5 sm:px-8 lg:px-0">
+          <div className="grid border-t border-ink/20 md:grid-cols-2">
             {t.community.items.map((c, i) => (
-              <Reveal key={c.t} delay={i * 70}>
-                <div className="h-full rounded-2xl border border-border bg-card p-7">
-                  <h2 className="font-display text-2xl text-ink">{c.t}</h2>
-                  <p className="mt-3 text-sm text-muted-foreground">{c.d}</p>
-                </div>
+              <Reveal key={c.t} className="border-b border-ink/20 py-9 md:odd:pr-10 md:even:border-l md:even:pl-10">
+                <span className="text-xs font-bold tabular-nums text-teal-deep">{String(i + 1).padStart(2, "0")}</span>
+                <h2 className="mt-3 text-3xl leading-tight text-ink">{c.t}</h2>
+                <p className="mt-3 max-w-md text-sm leading-6 text-muted-foreground">{c.d}</p>
               </Reveal>
             ))}
           </div>
+        </div>
+      </section>
 
-          <div className="mt-12 rounded-3xl bg-[color:var(--cream)] px-6 py-10 sm:px-10">
-            <h2 className="font-display text-3xl text-ink">{t.community.volunteerT}</h2>
-            <p className="mt-3 text-muted-foreground">{t.community.volunteerD}</p>
-            <Link to="/contact" className="mt-6 inline-block">
-              <Button className="bg-gradient-to-r from-[color:var(--teal)] to-[color:var(--leaf)] text-white">
-                {t.community.volunteerCta} <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
+      <section className="bg-leaf py-16 text-ink sm:py-20">
+        <div className="home-shell flex flex-col gap-8 px-5 sm:px-8 lg:flex-row lg:items-end lg:justify-between lg:px-0">
+          <div>
+            <h2 className="max-w-3xl text-4xl leading-[1.04] sm:text-5xl">{t.community.volunteerT}</h2>
+            <p className="mt-5 max-w-2xl leading-7 text-ink/75">{t.community.volunteerD}</p>
           </div>
+          <Link to="/contact">
+            <Button size="lg" className="rounded-none bg-ink text-primary-foreground hover:bg-ink/90">
+              {t.community.volunteerCta}<ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
         </div>
       </section>
     </>
