@@ -39,7 +39,7 @@ function HousingPage() {
           </Link>
         </div>
       </section>
-      <EditorialCta title={t.housing.noteT} body="" cta={t.nav.contact} />
+      <EditorialCta title="Un logement stable peut changer une vie." body="Vous avez un logement, un immeuble ou une ressource à offrir? Écrivez-nous." cta={t.nav.contact} />
     </>
   );
 }
