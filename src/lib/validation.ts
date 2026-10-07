@@ -20,9 +20,8 @@ export function validateDonationAmount(amount: unknown): boolean {
 /** Strip control chars and clamp length. Prevents accidental HTML/script injection in text payloads. */
 export function sanitizeText(input: string, maxLength = 1000): string {
   if (typeof input !== "string") return "";
-  // eslint-disable-next-line no-control-regex
   return input
-    .replace(/[\u0000-\u001F\u007F]/g, " ")
+    .replace(/[\u0000-\u001F\u007F]/g, " ") // eslint-disable-line no-control-regex
     .trim()
     .slice(0, maxLength);
 }
