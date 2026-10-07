@@ -9,23 +9,30 @@ import { toast } from "sonner";
 import { saveDonationIntent } from "@/lib/donationService";
 import { useServerFn } from "@tanstack/react-start";
 import { createDonationCheckout, isStripeConfigured } from "@/lib/checkout.functions";
+import { seoHead } from "@/seo/head";
 
 export const Route = createFileRoute("/donate")({
-  head: () => ({
-    meta: [
-      { title: "Faire un don — Revers Canada" },
-      {
-        name: "description",
-        content:
-          "Soutenez les femmes et enfants du Québec avec un don ponctuel ou mensuel sécurisé par Stripe. Reçu fiscal officiel.",
-      },
-      { property: "og:title", content: "Faire un don — Revers Canada" },
-      {
-        property: "og:description",
-        content: "Don sécurisé par Stripe. Aucune donnée de carte n'est stockée par REVERS CANADA.",
-      },
-    ],
-  }),
+  head: ({ matches }) => {
+    // Canonical only on /donate itself, not on the noindex /donate/success and /donate/cancelled.
+    const isLeaf = matches[matches.length - 1]?.routeId === "/donate";
+    const seo = seoHead({
+      title: "Faire un don — Revers Canada",
+      description:
+        "Soutenez les femmes et enfants du Québec avec un don ponctuel ou mensuel sécurisé par Stripe. Reçu fiscal officiel.",
+      path: isLeaf ? "/donate" : undefined,
+    });
+    return {
+      meta: [
+        ...seo.meta,
+        {
+          property: "og:description",
+          content:
+            "Don sécurisé par Stripe. Aucune donnée de carte n'est stockée par REVERS CANADA.",
+        },
+      ],
+      links: seo.links,
+    };
+  },
   component: DonatePage,
 });
 

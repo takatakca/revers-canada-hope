@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { SITE } from "@/site.config";
 
 const InputSchema = z.object({
   donation_intent_id: z.string().uuid(),
@@ -35,10 +36,7 @@ export const createDonationCheckout = createServerFn({ method: "POST" })
     if (!intent.amount_cents || intent.amount_cents <= 0) return { ok: false, error: "invalid_amount" };
 
     // 2) Build URLs
-    const siteUrl =
-      process.env.VITE_PUBLIC_SITE_URL ||
-      process.env.PUBLIC_SITE_URL ||
-      "https://revers-canada-hope.lovable.app";
+    const siteUrl = process.env.VITE_PUBLIC_SITE_URL || process.env.PUBLIC_SITE_URL || SITE.url;
 
     // 3) Create Stripe Checkout session
     try {

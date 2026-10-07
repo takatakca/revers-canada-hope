@@ -4,25 +4,27 @@ import { useLang } from "@/i18n/LangContext";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/Reveal";
 import communityImg from "@/assets/revpere-community-father-child.jpg";
+import { seoHead } from "@/seo/head";
 
 export const Route = createFileRoute("/communaute")({
-  head: () => ({
-    meta: [
-      { title: "Communauté RêvPÈRE — groupes de pairs et mentorat | REVERS CANADA" },
-      {
-        name: "description",
-        content:
-          "Groupes de pairs, mentorat, ateliers pratiques et moments père-enfant : la communauté RêvPÈRE de REVERS CANADA à Montréal.",
-      },
-      { property: "og:title", content: "Communauté RêvPÈRE — groupes de pairs et mentorat | REVERS CANADA" },
-      {
-        property: "og:description",
-        content: "La formation ouvre des portes, la communauté empêche de retomber.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () => {
+    const seo = seoHead({
+      title: "Communauté RêvPÈRE — groupes de pairs et mentorat | REVERS CANADA",
+      description:
+        "Groupes de pairs, mentorat, ateliers pratiques et moments père-enfant : la communauté RêvPÈRE de REVERS CANADA à Montréal.",
+      path: "/communaute",
+    });
+    return {
+      meta: [
+        ...seo.meta,
+        {
+          property: "og:description",
+          content: "La formation ouvre des portes, la communauté empêche de retomber.",
+        },
+      ],
+      links: seo.links,
+    };
+  },
   component: CommunityPage,
 });
 

@@ -1,24 +1,28 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Check, Heart } from "lucide-react";
 import { useLang } from "@/i18n/LangContext";
+import { seoHead } from "@/seo/head";
 
 export const Route = createFileRoute("/about")({
-  head: () => ({
-    meta: [
-      { title: "À propos — Revers Canada" },
-      {
-        name: "description",
-        content:
-          "Revers Canada est un organisme de bienfaisance enregistré au Québec, dédié à la réinsertion des femmes et enfants en situation d'itinérance.",
-      },
-      { property: "og:title", content: "À propos — Revers Canada" },
-      {
-        property: "og:description",
-        content:
-          "Notre mission, notre vision et nos valeurs au service des familles québécoises.",
-      },
-    ],
-  }),
+  head: () => {
+    const seo = seoHead({
+      title: "À propos — Revers Canada",
+      description:
+        "Revers Canada est un organisme de bienfaisance enregistré au Québec, dédié à la réinsertion des femmes et enfants en situation d'itinérance.",
+      path: "/about",
+    });
+    return {
+      meta: [
+        ...seo.meta,
+        {
+          property: "og:description",
+          content:
+            "Notre mission, notre vision et nos valeurs au service des familles québécoises.",
+        },
+      ],
+      links: seo.links,
+    };
+  },
   component: AboutPage,
 });
 

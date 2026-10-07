@@ -16,7 +16,7 @@ export type NewsletterResult = {
   saved?: boolean;
   /** Already-subscribed flag — UI should show a friendly "already on the list" message. */
   alreadySubscribed?: boolean;
-  error?: "invalid_email" | "storage_failed";
+  error?: "invalid_email" | "consent_required" | "storage_failed";
 };
 
 /**
@@ -29,18 +29,24 @@ export async function saveNewsletterInterest(
   input: NewsletterInput,
 ): Promise<NewsletterResult> {
   if (!validateEmail(input.email)) return { ok: false, error: "invalid_email" };
+  // CASL / Law 25: express consent only (unticked box ticked by the visitor). Never assumed.
+  if (input.consent !== true) return { ok: false, error: "consent_required" };
 
+  const now = new Date().toISOString();
   const payload = {
     email: sanitizeText(input.email, FIELD_LIMITS.email).toLowerCase(),
     firstName: sanitizeText(input.firstName ?? "", FIELD_LIMITS.name),
     lastName: sanitizeText(input.lastName ?? "", FIELD_LIMITS.name),
     lang: input.lang ?? "fr",
-    consent: Boolean(input.consent ?? true),
+    consent: true,
+    consentAt: now,
     source: "REVERS_CANADA_GAR" as const,
-    savedAt: new Date().toISOString(),
+    savedAt: now,
   };
 
   // 1) Try backend insert.
+  // Consent date in the database = `created_at` (default now()): the insert policy only accepts
+  // rows with consent = true, so a row is created only at the moment consent is given.
   try {
     const { error } = await supabase.from("newsletter_subscribers").insert({
       email: payload.email,

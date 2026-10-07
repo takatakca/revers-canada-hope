@@ -5,24 +5,28 @@ import shelterImg from "@/assets/program-shelter.jpg";
 import foodImg from "@/assets/program-food.jpg";
 import jobsImg from "@/assets/program-jobs.jpg";
 import { Heart } from "lucide-react";
+import { seoHead } from "@/seo/head";
 
 export const Route = createFileRoute("/programs")({
-  head: () => ({
-    meta: [
-      { title: "Nos programmes — Revers Canada" },
-      {
-        name: "description",
-        content:
-          "Refuge, sécurité alimentaire et retour à l'emploi : trois piliers pour reconstruire des vies au Québec.",
-      },
-      { property: "og:title", content: "Nos programmes — Revers Canada" },
-      {
-        property: "og:description",
-        content:
-          "Hébergement, alimentation et réinsertion professionnelle pour les femmes et enfants du Québec.",
-      },
-    ],
-  }),
+  head: () => {
+    const seo = seoHead({
+      title: "Nos programmes — Revers Canada",
+      description:
+        "Refuge, sécurité alimentaire et retour à l'emploi : trois piliers pour reconstruire des vies au Québec.",
+      path: "/programs",
+    });
+    return {
+      meta: [
+        ...seo.meta,
+        {
+          property: "og:description",
+          content:
+            "Hébergement, alimentation et réinsertion professionnelle pour les femmes et enfants du Québec.",
+        },
+      ],
+      links: seo.links,
+    };
+  },
   component: ProgramsPage,
 });
 

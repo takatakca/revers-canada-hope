@@ -4,6 +4,7 @@ import { useLang } from "@/i18n/LangContext";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/Reveal";
 import type { PillarKey } from "@/i18n/translations";
+import { seoHead } from "@/seo/head";
 
 const SLUGS = ["emploi", "numerique", "web", "distance", "ia"] as const;
 
@@ -40,17 +41,14 @@ export const Route = createFileRoute("/piliers/$pilier")({
     if (!SLUGS.includes(params.pilier as (typeof SLUGS)[number])) throw notFound();
   },
   head: ({ params }) => {
+    const known = SLUGS.includes(params.pilier as (typeof SLUGS)[number]);
     const m = META[params.pilier as PillarKey] ?? META.emploi;
-    return {
-      meta: [
-        { title: m.title },
-        { name: "description", content: m.description },
-        { property: "og:title", content: m.title },
-        { property: "og:description", content: m.description },
-        { property: "og:type", content: "article" },
-        { name: "twitter:card", content: "summary_large_image" },
-      ],
-    };
+    return seoHead({
+      title: m.title,
+      description: m.description,
+      path: known ? `/piliers/${params.pilier}` : undefined,
+      type: "article",
+    });
   },
   component: PillarPage,
 });

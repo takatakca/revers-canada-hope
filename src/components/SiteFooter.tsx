@@ -4,25 +4,43 @@ import { ArrowRight, Facebook, Instagram, Loader2 } from "lucide-react";
 import { useLang } from "@/i18n/LangContext";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { saveNewsletterInterest } from "@/lib/newsletterService";
 import { FIELD_LIMITS } from "@/lib/validation";
+import { ManageCookiesLink } from "@/consent/ManageCookiesLink";
+
+// TODO(owner): real Facebook / Instagram page URLs. Links whose href is "#" are not rendered.
+const SOCIAL_LINKS = [
+  { label: "Facebook", href: "#", Icon: Facebook },
+  { label: "Instagram", href: "#", Icon: Instagram },
+].filter((link) => link.href !== "#");
 
 export function SiteFooter() {
   const { t, lang } = useLang();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  // CASL: newsletter consent box is unticked by default.
+  const [consent, setConsent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubscribe = async (event: React.FormEvent) => {
     event.preventDefault();
     if (submitting) return;
+    if (!consent) {
+      toast.error(t.footer.newsletterConsentRequired);
+      return;
+    }
     setSubmitting(true);
     try {
-      const result = await saveNewsletterInterest({ firstName, lastName, email, lang, consent: true });
+      const result = await saveNewsletterInterest({ firstName, lastName, email, lang, consent });
       if (!result.ok) {
-        toast.error(t.footer.newsletterErr);
+        toast.error(
+          result.error === "consent_required"
+            ? t.footer.newsletterConsentRequired
+            : t.footer.newsletterErr,
+        );
         return;
       }
       toast[result.alreadySubscribed ? "message" : "success"](
@@ -31,6 +49,7 @@ export function SiteFooter() {
       setFirstName("");
       setLastName("");
       setEmail("");
+      setConsent(false);
     } finally {
       setSubmitting(false);
     }
@@ -68,6 +87,15 @@ export function SiteFooter() {
                   {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
                 </Button>
               </div>
+              <label className="mt-4 flex max-w-md cursor-pointer items-start gap-3 text-xs leading-5 text-primary-foreground/70">
+                <Checkbox
+                  checked={consent}
+                  onCheckedChange={(value) => setConsent(value === true)}
+                  aria-required="true"
+                  className="mt-0.5 border-leaf data-[state=checked]:bg-leaf data-[state=checked]:text-ink"
+                />
+                <span>{t.footer.newsletterConsent}</span>
+              </label>
             </form>
           </div>
         </div>
@@ -109,11 +137,24 @@ export function SiteFooter() {
             <div className="font-display text-3xl">REVERS<span className="text-leaf">CANADA</span></div>
             <p className="mt-2 text-xs text-primary-foreground/45">{t.footer.registered}</p>
           </div>
-          <div className="flex items-center gap-5">
-            <a href="#" aria-label="Facebook" className="text-primary-foreground/55 transition hover:text-leaf"><Facebook className="h-5 w-5" /></a>
-            <a href="#" aria-label="Instagram" className="text-primary-foreground/55 transition hover:text-leaf"><Instagram className="h-5 w-5" /></a>
-          </div>
-          <p className="text-xs text-primary-foreground/45">© {new Date().getFullYear()} Revers Canada. {t.footer.rights}</p>
+          {SOCIAL_LINKS.length > 0 ? (
+            <div className="flex items-center gap-5">
+              {SOCIAL_LINKS.map(({ label, href, Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  aria-label={label}
+                  className="text-primary-foreground/55 transition hover:text-leaf"
+                >
+                  <Icon className="h-5 w-5" />
+                </a>
+              ))}
+            </div>
+          ) : null}
+          <p className="text-xs text-primary-foreground/45">
+            © {new Date().getFullYear()} Revers Canada. {t.footer.rights}{" "}
+            <ManageCookiesLink className="ml-2 underline-offset-2 hover:underline" />
+          </p>
         </div>
       </div>
     </footer>

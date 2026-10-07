@@ -1,26 +1,28 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useLang } from "@/i18n/LangContext";
 import { EditorialHero, EditorialList, EditorialCta } from "@/components/Editorial";
+import { seoHead } from "@/seo/head";
 
 export const Route = createFileRoute("/mission")({
-  head: () => ({
-    meta: [
-      { title: "Notre mission | REVERS CANADA" },
-      {
-        name: "description",
-        content:
-          "REVERS CANADA accompagne les personnes en rupture vers l'autonomie économique et sociale à Montréal, avec le programme RêvPÈRE comme initiative principale.",
-      },
-      { property: "og:title", content: "Notre mission | REVERS CANADA" },
-      {
-        property: "og:description",
-        content:
-          "Accueillir, évaluer, orienter, former et suivre : le modèle de REVERS CANADA à Montréal.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () => {
+    const seo = seoHead({
+      title: "Notre mission | REVERS CANADA",
+      description:
+        "REVERS CANADA accompagne les personnes en rupture vers l'autonomie économique et sociale à Montréal, avec le programme RêvPÈRE comme initiative principale.",
+      path: "/mission",
+    });
+    return {
+      meta: [
+        ...seo.meta,
+        {
+          property: "og:description",
+          content:
+            "Accueillir, évaluer, orienter, former et suivre : le modèle de REVERS CANADA à Montréal.",
+        },
+      ],
+      links: seo.links,
+    };
+  },
   component: MissionPage,
 });
 

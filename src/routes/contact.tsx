@@ -8,19 +8,24 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { prepareContactSubmission } from "@/lib/contactService";
 import { FIELD_LIMITS } from "@/lib/validation";
+import { seoHead } from "@/seo/head";
 
 export const Route = createFileRoute("/contact")({
-  head: () => ({
-    meta: [
-      { title: "Nous joindre — Revers Canada" },
-      {
-        name: "description",
-        content: "Contactez Revers Canada pour un partenariat, une question ou un besoin d'aide.",
-      },
-      { property: "og:title", content: "Contact — Revers Canada" },
-      { property: "og:description", content: "Écrivez-nous, nous vous répondrons rapidement." },
-    ],
-  }),
+  head: () => {
+    const seo = seoHead({
+      title: "Nous joindre — Revers Canada",
+      description: "Contactez Revers Canada pour un partenariat, une question ou un besoin d'aide.",
+      path: "/contact",
+    });
+    return {
+      meta: [
+        ...seo.meta,
+        { property: "og:title", content: "Contact — Revers Canada" },
+        { property: "og:description", content: "Écrivez-nous, nous vous répondrons rapidement." },
+      ],
+      links: seo.links,
+    };
+  },
   component: ContactPage,
 });
 

@@ -18,25 +18,27 @@ import parkImage from "@/assets/home/community-park.jpg";
 import housingImage from "@/assets/revers-housing.jpg";
 import foodImage from "@/assets/home/stream-food.jpg";
 import internationalImage from "@/assets/help-international.jpg";
+import { seoHead } from "@/seo/head";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "REVERS CANADA — RêvPÈRE : emploi et autonomie" },
-      {
-        name: "description",
-        content:
-          "RêvPÈRE accompagne les pères de Montréal vers l'emploi, l'autonomie numérique, le Web, le télétravail et l'intelligence artificielle.",
-      },
-      { property: "og:title", content: "REVERS CANADA — RêvPÈRE : emploi et autonomie" },
-      {
-        property: "og:description",
-        content: "Aider un père à se remettre debout, c'est aussi aider ses enfants à avancer.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () => {
+    const seo = seoHead({
+      title: "REVERS CANADA — RêvPÈRE : emploi et autonomie",
+      description:
+        "RêvPÈRE accompagne les pères de Montréal vers l'emploi, l'autonomie numérique, le Web, le télétravail et l'intelligence artificielle.",
+      path: "/",
+    });
+    return {
+      meta: [
+        ...seo.meta,
+        {
+          property: "og:description",
+          content: "Aider un père à se remettre debout, c'est aussi aider ses enfants à avancer.",
+        },
+      ],
+      links: seo.links,
+    };
+  },
   component: HomePage,
 });
 

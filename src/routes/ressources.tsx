@@ -2,25 +2,28 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useLang } from "@/i18n/LangContext";
 import { Reveal } from "@/components/Reveal";
 import { EditorialHero, EditorialNote, EditorialCta } from "@/components/Editorial";
+import { seoHead } from "@/seo/head";
 
 export const Route = createFileRoute("/ressources")({
-  head: () => ({
-    meta: [
-      { title: "Bottin de ressources pour les pères — Montréal | REVERS CANADA" },
-      {
-        name: "description",
-        content:
-          "Répertoire des ressources montréalaises pour les pères : hébergement, alimentation, santé mentale, emploi, droit familial. Maintenu par REVERS CANADA.",
-      },
-      { property: "og:title", content: "Bottin de ressources pour les pères — Montréal | REVERS CANADA" },
-      {
-        property: "og:description",
-        content: "Trouver la bonne porte est souvent le plus difficile. Voici les ressources montréalaises regroupées par besoin.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () => {
+    const seo = seoHead({
+      title: "Bottin de ressources pour les pères — Montréal | REVERS CANADA",
+      description:
+        "Répertoire des ressources montréalaises pour les pères : hébergement, alimentation, santé mentale, emploi, droit familial. Maintenu par REVERS CANADA.",
+      path: "/ressources",
+    });
+    return {
+      meta: [
+        ...seo.meta,
+        {
+          property: "og:description",
+          content:
+            "Trouver la bonne porte est souvent le plus difficile. Voici les ressources montréalaises regroupées par besoin.",
+        },
+      ],
+      links: seo.links,
+    };
+  },
   component: ResourcesPage,
 });
 

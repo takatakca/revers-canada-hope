@@ -1,22 +1,23 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useLang } from "@/i18n/LangContext";
+import { seoHead } from "@/seo/head";
 
 export const Route = createFileRoute("/privacy")({
-  head: () => ({
-    meta: [
-      { title: "Politique de confidentialité — Revers Canada" },
-      {
-        name: "description",
-        content:
-          "Politique de confidentialité de Revers Canada : informations collectées, formulaire de contact, infolettre, dons et stockage local.",
-      },
-      { property: "og:title", content: "Politique de confidentialité — Revers Canada" },
-      {
-        property: "og:description",
-        content: "Comment Revers Canada traite vos informations.",
-      },
-    ],
-  }),
+  head: () => {
+    const seo = seoHead({
+      title: "Politique de confidentialité — Revers Canada",
+      description:
+        "Politique de confidentialité de Revers Canada : informations collectées, formulaire de contact, infolettre, dons et stockage local.",
+      path: "/privacy",
+    });
+    return {
+      meta: [
+        ...seo.meta,
+        { property: "og:description", content: "Comment Revers Canada traite vos informations." },
+      ],
+      links: seo.links,
+    };
+  },
   component: PrivacyPage,
 });
 

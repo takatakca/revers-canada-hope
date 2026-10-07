@@ -566,6 +566,9 @@ export const translations = {
       newsletterOk: "Merci pour votre intérêt. Votre demande d'inscription à l'infolettre a été enregistrée.",
       newsletterAlready: "Cette adresse est déjà enregistrée pour l'infolettre.",
       newsletterErr: "Veuillez entrer une adresse courriel valide.",
+      newsletterConsent:
+        "J'accepte de recevoir des nouvelles de REVERS CANADA par courriel. Je peux me désabonner en tout temps.",
+      newsletterConsentRequired: "Veuillez cocher la case pour accepter de recevoir l'infolettre.",
       rights: "Tous droits réservés.",
       privacy: "Politique de confidentialité",
       registered: "Organisme communautaire — Montréal, Québec",
@@ -1135,6 +1138,9 @@ export const translations = {
       newsletterOk: "Thank you for your interest. Your newsletter subscription request has been recorded.",
       newsletterAlready: "This address is already signed up for the newsletter.",
       newsletterErr: "Please enter a valid email address.",
+      newsletterConsent:
+        "I agree to receive news from REVERS CANADA by email. I can unsubscribe at any time.",
+      newsletterConsentRequired: "Please tick the box to agree to receive the newsletter.",
       rights: "All rights reserved.",
       privacy: "Privacy policy",
       registered: "Community organization — Montréal, Québec",

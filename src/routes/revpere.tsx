@@ -8,26 +8,28 @@ import digitalImage from "@/assets/home/pillar-numerique.jpg";
 import webImage from "@/assets/home/pillar-web.jpg";
 import remoteImage from "@/assets/home/pillar-teletravail.jpg";
 import aiImage from "@/assets/home/pillar-ia.jpg";
+import { seoHead } from "@/seo/head";
 
 export const Route = createFileRoute("/revpere")({
-  head: () => ({
-    meta: [
-      { title: "RêvPÈRE — les 5 piliers | REVERS CANADA" },
-      {
-        name: "description",
-        content:
-          "RêvPÈRE : emploi, compétences numériques, web, travail à distance et intelligence artificielle. Le programme de REVERS CANADA pour l'autonomie des pères.",
-      },
-      { property: "og:title", content: "RêvPÈRE — les 5 piliers | REVERS CANADA" },
-      {
-        property: "og:description",
-        content:
-          "Cinq modules concrets pour ramener les pères vers un travail durable : emploi, numérique, web, télétravail et IA.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () => {
+    const seo = seoHead({
+      title: "RêvPÈRE — les 5 piliers | REVERS CANADA",
+      description:
+        "RêvPÈRE : emploi, compétences numériques, web, travail à distance et intelligence artificielle. Le programme de REVERS CANADA pour l'autonomie des pères.",
+      path: "/revpere",
+    });
+    return {
+      meta: [
+        ...seo.meta,
+        {
+          property: "og:description",
+          content:
+            "Cinq modules concrets pour ramener les pères vers un travail durable : emploi, numérique, web, télétravail et IA.",
+        },
+      ],
+      links: seo.links,
+    };
+  },
   component: RevpereHub,
 });
 

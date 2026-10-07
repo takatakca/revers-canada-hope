@@ -2,25 +2,27 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useLang } from "@/i18n/LangContext";
 import { EditorialHero, EditorialList, EditorialNote, EditorialCta } from "@/components/Editorial";
 import foodImg from "@/assets/home/stream-food.jpg";
+import { seoHead } from "@/seo/head";
 
 export const Route = createFileRoute("/alimentaire")({
-  head: () => ({
-    meta: [
-      { title: "Aide et sécurité alimentaire | REVERS CANADA" },
-      {
-        name: "description",
-        content:
-          "Dépannage alimentaire, cuisines collectives et autonomie alimentaire : le volet alimentaire de REVERS CANADA à Montréal.",
-      },
-      { property: "og:title", content: "Aide et sécurité alimentaire | REVERS CANADA" },
-      {
-        property: "og:description",
-        content: "Manger correctement n'est pas un luxe : c'est la base d'un retour à l'emploi.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () => {
+    const seo = seoHead({
+      title: "Aide et sécurité alimentaire | REVERS CANADA",
+      description:
+        "Dépannage alimentaire, cuisines collectives et autonomie alimentaire : le volet alimentaire de REVERS CANADA à Montréal.",
+      path: "/alimentaire",
+    });
+    return {
+      meta: [
+        ...seo.meta,
+        {
+          property: "og:description",
+          content: "Manger correctement n'est pas un luxe : c'est la base d'un retour à l'emploi.",
+        },
+      ],
+      links: seo.links,
+    };
+  },
   component: FoodPage,
 });
 

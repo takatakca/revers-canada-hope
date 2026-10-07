@@ -3,25 +3,28 @@ import { ArrowRight } from "lucide-react";
 import { useLang } from "@/i18n/LangContext";
 import { EditorialHero, EditorialList, EditorialNote, EditorialCta } from "@/components/Editorial";
 import housingImg from "@/assets/revers-housing.jpg";
+import { seoHead } from "@/seo/head";
 
 export const Route = createFileRoute("/habitation")({
-  head: () => ({
-    meta: [
-      { title: "Habitation communautaire — logement et maintien | REVERS CANADA" },
-      {
-        name: "description",
-        content:
-          "Recherche de logement abordable, logement transitoire, maintien en logement et droits des locataires : le volet habitation de REVERS CANADA.",
-      },
-      { property: "og:title", content: "Habitation communautaire — logement et maintien | REVERS CANADA" },
-      {
-        property: "og:description",
-        content: "Sans logement stable, aucun parcours d'emploi ne tient. Nous accompagnons chaque étape.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () => {
+    const seo = seoHead({
+      title: "Habitation communautaire — logement et maintien | REVERS CANADA",
+      description:
+        "Recherche de logement abordable, logement transitoire, maintien en logement et droits des locataires : le volet habitation de REVERS CANADA.",
+      path: "/habitation",
+    });
+    return {
+      meta: [
+        ...seo.meta,
+        {
+          property: "og:description",
+          content:
+            "Sans logement stable, aucun parcours d'emploi ne tient. Nous accompagnons chaque étape.",
+        },
+      ],
+      links: seo.links,
+    };
+  },
   component: HousingPage,
 });
 

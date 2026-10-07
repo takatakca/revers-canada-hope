@@ -1,25 +1,28 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useLang } from "@/i18n/LangContext";
 import { EditorialHero, EditorialList, EditorialCta } from "@/components/Editorial";
+import { seoHead } from "@/seo/head";
 
 export const Route = createFileRoute("/partenaires")({
-  head: () => ({
-    meta: [
-      { title: "Partenaires et employeurs | REVERS CANADA" },
-      {
-        name: "description",
-        content:
-          "Organismes, employeurs, formateurs et donateurs : rejoignez le réseau RêvPÈRE de REVERS CANADA pour ramener les pères vers l'emploi.",
-      },
-      { property: "og:title", content: "Partenaires et employeurs | REVERS CANADA" },
-      {
-        property: "og:description",
-        content: "RêvPÈRE fonctionne en réseau : zéro doublon, zéro personne perdue entre deux services.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () => {
+    const seo = seoHead({
+      title: "Partenaires et employeurs | REVERS CANADA",
+      description:
+        "Organismes, employeurs, formateurs et donateurs : rejoignez le réseau RêvPÈRE de REVERS CANADA pour ramener les pères vers l'emploi.",
+      path: "/partenaires",
+    });
+    return {
+      meta: [
+        ...seo.meta,
+        {
+          property: "og:description",
+          content:
+            "RêvPÈRE fonctionne en réseau : zéro doublon, zéro personne perdue entre deux services.",
+        },
+      ],
+      links: seo.links,
+    };
+  },
   component: PartnersPage,
 });
 

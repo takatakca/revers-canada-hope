@@ -4,25 +4,29 @@ import intlImg from "@/assets/help-international.jpg";
 import animalsImg from "@/assets/help-animals.jpg";
 import { EditorialHero, EditorialNote } from "@/components/Editorial";
 import { Reveal } from "@/components/Reveal";
+import { seoHead } from "@/seo/head";
 
 export const Route = createFileRoute("/international")({
-  head: () => ({
-    meta: [
-      { title: "Aide internationale — Dons matériels — Revers Canada" },
-      {
-        name: "description",
-        content:
-          "Déposez vêtements, nourriture, médicaments et fournitures vétérinaires dans nos points de collecte. Aucun don monétaire pour ce programme.",
-      },
-      { property: "og:title", content: "Aide internationale — Revers Canada" },
-      {
-        property: "og:description",
-        content: "Programme de dons matériels (vêtements, nourriture, soins vétérinaires) pour les communautés à l'étranger.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () => {
+    const seo = seoHead({
+      title: "Aide internationale — Dons matériels — Revers Canada",
+      description:
+        "Déposez vêtements, nourriture, médicaments et fournitures vétérinaires dans nos points de collecte. Aucun don monétaire pour ce programme.",
+      path: "/international",
+    });
+    return {
+      meta: [
+        ...seo.meta,
+        { property: "og:title", content: "Aide internationale — Revers Canada" },
+        {
+          property: "og:description",
+          content:
+            "Programme de dons matériels (vêtements, nourriture, soins vétérinaires) pour les communautés à l'étranger.",
+        },
+      ],
+      links: seo.links,
+    };
+  },
   component: IntlPage,
 });
 
