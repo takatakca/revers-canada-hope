@@ -14,8 +14,7 @@ export const Route = createFileRoute("/about")({
       { property: "og:title", content: "À propos — Revers Canada" },
       {
         property: "og:description",
-        content:
-          "Notre mission, notre vision et nos valeurs au service des familles québécoises.",
+        content: "Notre mission, notre vision et nos valeurs au service des familles québécoises.",
       },
     ],
   }),

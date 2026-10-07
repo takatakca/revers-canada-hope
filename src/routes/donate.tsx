@@ -42,7 +42,9 @@ function DonatePage() {
   const createCheckout = useServerFn(createDonationCheckout);
 
   useEffect(() => {
-    checkConfig().then((r) => setStripeReady(Boolean(r?.configured))).catch(() => {});
+    checkConfig()
+      .then((r) => setStripeReady(Boolean(r?.configured)))
+      .catch(() => {});
   }, [checkConfig]);
 
   const handleDonate = async (e: React.FormEvent) => {
@@ -92,7 +94,6 @@ function DonatePage() {
     }
   };
 
-
   return (
     <>
       <section className="bg-gradient-hero py-16 text-white">
@@ -127,10 +128,12 @@ function DonatePage() {
           {/* FORM */}
           <form onSubmit={handleDonate} className="rounded-3xl bg-white p-6 shadow-card sm:p-8">
             <div className="grid grid-cols-2 overflow-hidden rounded-xl border border-border">
-              {([
-                { k: "once", l: t.donate.onceT },
-                { k: "monthly", l: t.donate.monthlyT },
-              ] as const).map((tab) => (
+              {(
+                [
+                  { k: "once", l: t.donate.onceT },
+                  { k: "monthly", l: t.donate.monthlyT },
+                ] as const
+              ).map((tab) => (
                 <button
                   key={tab.k}
                   type="button"
@@ -185,10 +188,7 @@ function DonatePage() {
             </div>
 
             <label className="mt-5 flex items-center gap-2 text-sm text-ink">
-              <Checkbox
-                checked={coverFee}
-                onCheckedChange={(v) => setCoverFee(Boolean(v))}
-              />
+              <Checkbox checked={coverFee} onCheckedChange={(v) => setCoverFee(Boolean(v))} />
               {t.donate.coverFee}
             </label>
 
@@ -204,8 +204,12 @@ function DonatePage() {
                 <Heart className="mr-2 h-4 w-4" aria-hidden />
               )}
               {type === "monthly"
-                ? stripeReady ? t.donate.monthlyBtnSecure : t.donate.monthlyBtn
-                : stripeReady ? t.donate.donateBtnSecure : t.donate.donateBtn}
+                ? stripeReady
+                  ? t.donate.monthlyBtnSecure
+                  : t.donate.monthlyBtn
+                : stripeReady
+                  ? t.donate.donateBtnSecure
+                  : t.donate.donateBtn}
             </Button>
           </form>
         </div>

@@ -17,7 +17,8 @@ export const Route = createFileRoute("/international")({
       { property: "og:title", content: "Aide internationale — Revers Canada" },
       {
         property: "og:description",
-        content: "Programme de dons matériels (vêtements, nourriture, soins vétérinaires) pour les communautés à l'étranger.",
+        content:
+          "Programme de dons matériels (vêtements, nourriture, soins vétérinaires) pour les communautés à l'étranger.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -43,14 +44,23 @@ function IntlPage() {
               <ul className="mt-8 border-t border-ink/20">
                 {i.accept.map((item, n) => (
                   <li key={item} className="flex gap-5 border-b border-ink/20 py-5">
-                    <span className="text-xs font-bold tabular-nums text-teal-deep">{String(n + 1).padStart(2, "0")}</span>
+                    <span className="text-xs font-bold tabular-nums text-teal-deep">
+                      {String(n + 1).padStart(2, "0")}
+                    </span>
                     <span className="text-ink">{item}</span>
                   </li>
                 ))}
               </ul>
             </div>
             <div className="lg:col-span-5 lg:col-start-8">
-              <img src={animalsImg} alt="" width={1280} height={896} loading="lazy" className="h-full min-h-[300px] w-full object-cover" />
+              <img
+                src={animalsImg}
+                alt=""
+                width={1280}
+                height={896}
+                loading="lazy"
+                className="h-full min-h-[300px] w-full object-cover"
+              />
             </div>
           </div>
 
@@ -60,7 +70,9 @@ function IntlPage() {
               <Reveal key={d.city} className="border-b border-ink/20 py-8 md:pr-10">
                 <h3 className="text-3xl text-ink">{d.city}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{d.addr}</p>
-                <p className="mt-3 text-xs font-semibold uppercase tracking-wider text-teal-deep">{d.hours}</p>
+                <p className="mt-3 text-xs font-semibold uppercase tracking-wider text-teal-deep">
+                  {d.hours}
+                </p>
               </Reveal>
             ))}
           </div>

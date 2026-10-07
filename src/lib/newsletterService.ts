@@ -25,9 +25,7 @@ export type NewsletterResult = {
  * NOTE: A real mailing provider (Brevo / Mailchimp / etc.) is NOT yet wired up.
  * Status stays `pending` until that integration is added.
  */
-export async function saveNewsletterInterest(
-  input: NewsletterInput,
-): Promise<NewsletterResult> {
+export async function saveNewsletterInterest(input: NewsletterInput): Promise<NewsletterResult> {
   if (!validateEmail(input.email)) return { ok: false, error: "invalid_email" };
 
   const payload = {

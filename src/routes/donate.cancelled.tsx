@@ -4,10 +4,7 @@ import { useLang } from "@/i18n/LangContext";
 
 export const Route = createFileRoute("/donate/cancelled")({
   head: () => ({
-    meta: [
-      { title: "Paiement annulé — Revers Canada" },
-      { name: "robots", content: "noindex" },
-    ],
+    meta: [{ title: "Paiement annulé — Revers Canada" }, { name: "robots", content: "noindex" }],
   }),
   component: CancelledPage,
 });

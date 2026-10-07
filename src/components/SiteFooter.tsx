@@ -20,7 +20,13 @@ export function SiteFooter() {
     if (submitting) return;
     setSubmitting(true);
     try {
-      const result = await saveNewsletterInterest({ firstName, lastName, email, lang, consent: true });
+      const result = await saveNewsletterInterest({
+        firstName,
+        lastName,
+        email,
+        lang,
+        consent: true,
+      });
       if (!result.ok) {
         toast.error(t.footer.newsletterErr);
         return;
@@ -49,23 +55,62 @@ export function SiteFooter() {
       <div className="home-shell px-5 pb-14 pt-20 sm:px-8 lg:px-0 lg:pt-28">
         <div className="grid gap-12 border-b border-primary-foreground/15 pb-16 lg:grid-cols-12">
           <div className="lg:col-span-5">
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-leaf">{t.brand.program}</p>
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-leaf">
+              {t.brand.program}
+            </p>
             <p className="mt-5 max-w-xl font-display text-4xl leading-[1.02] sm:text-5xl">
-              Emploi. Web.<br />IA. Autonomie.
+              Emploi. Web.
+              <br />
+              IA. Autonomie.
             </p>
           </div>
           <div className="lg:col-span-5 lg:col-start-8">
             <h2 className="text-2xl text-primary-foreground">{t.footer.newsletter}</h2>
-            <p className="mt-3 max-w-md text-sm leading-6 text-primary-foreground/60">{t.footer.newsletterD}</p>
+            <p className="mt-3 max-w-md text-sm leading-6 text-primary-foreground/60">
+              {t.footer.newsletterD}
+            </p>
             <form onSubmit={handleSubscribe} className="mt-7">
               <div className="grid gap-px bg-primary-foreground/20 sm:grid-cols-2">
-                <Input value={firstName} onChange={(event) => setFirstName(event.target.value)} maxLength={FIELD_LIMITS.name} placeholder={t.footer.firstName} aria-label={t.footer.firstName} className="h-12 rounded-none border-0 bg-ink text-primary-foreground placeholder:text-primary-foreground/45 focus-visible:ring-leaf" />
-                <Input value={lastName} onChange={(event) => setLastName(event.target.value)} maxLength={FIELD_LIMITS.name} placeholder={t.footer.lastName} aria-label={t.footer.lastName} className="h-12 rounded-none border-0 bg-ink text-primary-foreground placeholder:text-primary-foreground/45 focus-visible:ring-leaf" />
+                <Input
+                  value={firstName}
+                  onChange={(event) => setFirstName(event.target.value)}
+                  maxLength={FIELD_LIMITS.name}
+                  placeholder={t.footer.firstName}
+                  aria-label={t.footer.firstName}
+                  className="h-12 rounded-none border-0 bg-ink text-primary-foreground placeholder:text-primary-foreground/45 focus-visible:ring-leaf"
+                />
+                <Input
+                  value={lastName}
+                  onChange={(event) => setLastName(event.target.value)}
+                  maxLength={FIELD_LIMITS.name}
+                  placeholder={t.footer.lastName}
+                  aria-label={t.footer.lastName}
+                  className="h-12 rounded-none border-0 bg-ink text-primary-foreground placeholder:text-primary-foreground/45 focus-visible:ring-leaf"
+                />
               </div>
               <div className="mt-px flex bg-primary-foreground/20">
-                <Input type="email" required value={email} onChange={(event) => setEmail(event.target.value)} maxLength={FIELD_LIMITS.email} placeholder={t.footer.emailPh} aria-label={t.footer.emailPh} className="h-12 rounded-none border-0 bg-ink text-primary-foreground placeholder:text-primary-foreground/45 focus-visible:ring-leaf" />
-                <Button type="submit" size="icon" disabled={submitting} className="h-12 w-12 shrink-0 rounded-none bg-leaf text-ink hover:bg-leaf/90" aria-label={t.footer.subscribe}>
-                  {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
+                <Input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  maxLength={FIELD_LIMITS.email}
+                  placeholder={t.footer.emailPh}
+                  aria-label={t.footer.emailPh}
+                  className="h-12 rounded-none border-0 bg-ink text-primary-foreground placeholder:text-primary-foreground/45 focus-visible:ring-leaf"
+                />
+                <Button
+                  type="submit"
+                  size="icon"
+                  disabled={submitting}
+                  className="h-12 w-12 shrink-0 rounded-none bg-leaf text-ink hover:bg-leaf/90"
+                  aria-label={t.footer.subscribe}
+                >
+                  {submitting ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <ArrowRight className="h-4 w-4" />
+                  )}
                 </Button>
               </div>
             </form>
@@ -74,46 +119,102 @@ export function SiteFooter() {
 
         <div className="grid gap-10 border-b border-primary-foreground/15 py-14 sm:grid-cols-2 lg:grid-cols-5">
           <FooterColumn title="RêvPÈRE">
-            <li><Link to="/revpere">{t.nav.pillars}</Link></li>
-            {programLinks.map(([label, slug]) => <li key={slug}><Link to="/piliers/$pilier" params={{ pilier: slug }}>{label}</Link></li>)}
+            <li>
+              <Link to="/revpere">{t.nav.pillars}</Link>
+            </li>
+            {programLinks.map(([label, slug]) => (
+              <li key={slug}>
+                <Link to="/piliers/$pilier" params={{ pilier: slug }}>
+                  {label}
+                </Link>
+              </li>
+            ))}
           </FooterColumn>
           <FooterColumn title={t.footer.colSupport}>
-            <li><Link to="/ressources">{t.nav.resources}</Link></li>
-            <li><Link to="/communaute">{t.nav.community}</Link></li>
-            <li><Link to="/partenaires">{t.nav.partners}</Link></li>
-            <li><Link to="/donate">{t.nav.donate}</Link></li>
+            <li>
+              <Link to="/ressources">{t.nav.resources}</Link>
+            </li>
+            <li>
+              <Link to="/communaute">{t.nav.community}</Link>
+            </li>
+            <li>
+              <Link to="/partenaires">{t.nav.partners}</Link>
+            </li>
+            <li>
+              <Link to="/donate">{t.nav.donate}</Link>
+            </li>
           </FooterColumn>
           <FooterColumn title="REVERS CANADA">
-            <li><Link to="/habitation">{t.nav.housing}</Link></li>
-            <li><Link to="/alimentaire">{t.nav.food}</Link></li>
-            <li><Link to="/international">{t.nav.international}</Link></li>
+            <li>
+              <Link to="/habitation">{t.nav.housing}</Link>
+            </li>
+            <li>
+              <Link to="/alimentaire">{t.nav.food}</Link>
+            </li>
+            <li>
+              <Link to="/international">{t.nav.international}</Link>
+            </li>
           </FooterColumn>
           <FooterColumn title={t.footer.colOrg}>
-            <li><Link to="/mission">{t.nav.mission}</Link></li>
-            <li><Link to="/about">{t.nav.about}</Link></li>
-            <li><Link to="/contact">{t.nav.contact}</Link></li>
-            <li><Link to="/privacy">{t.footer.privacy}</Link></li>
+            <li>
+              <Link to="/mission">{t.nav.mission}</Link>
+            </li>
+            <li>
+              <Link to="/about">{t.nav.about}</Link>
+            </li>
+            <li>
+              <Link to="/contact">{t.nav.contact}</Link>
+            </li>
+            <li>
+              <Link to="/privacy">{t.footer.privacy}</Link>
+            </li>
           </FooterColumn>
           <div>
-            <h3 className="font-sans text-[10px] font-bold uppercase tracking-[0.18em] text-primary-foreground/40">{t.footer.colContact}</h3>
+            <h3 className="font-sans text-[10px] font-bold uppercase tracking-[0.18em] text-primary-foreground/40">
+              {t.footer.colContact}
+            </h3>
             <address className="mt-5 not-italic text-sm leading-7 text-primary-foreground/70">
-              5505 Rue Irwin<br />LaSalle, QC H8N 1A1<br />Canada<br />
-              <a href="tel:5148252825">514-825-2825</a><br />
-              <a href="mailto:reverscanada@gmail.com" className="break-all">reverscanada@gmail.com</a>
+              5505 Rue Irwin
+              <br />
+              LaSalle, QC H8N 1A1
+              <br />
+              Canada
+              <br />
+              <a href="tel:5148252825">514-825-2825</a>
+              <br />
+              <a href="mailto:reverscanada@gmail.com" className="break-all">
+                reverscanada@gmail.com
+              </a>
             </address>
           </div>
         </div>
 
         <div className="flex flex-col gap-8 pt-10 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <div className="font-display text-3xl">REVERS<span className="text-leaf">CANADA</span></div>
+            <div className="font-display text-3xl">
+              REVERS<span className="text-leaf">CANADA</span>
+            </div>
             <p className="mt-2 text-xs text-primary-foreground/45">{t.footer.registered}</p>
           </div>
           <div className="flex items-center gap-5">
-            <a href="#" aria-label="Facebook" className="text-primary-foreground/55 transition hover:text-leaf"><Facebook className="h-5 w-5" /></a>
-            <a href="#" aria-label="Instagram" className="text-primary-foreground/55 transition hover:text-leaf"><Instagram className="h-5 w-5" /></a>
+            <a
+              href="#"
+              aria-label="Facebook"
+              className="text-primary-foreground/55 transition hover:text-leaf"
+            >
+              <Facebook className="h-5 w-5" />
+            </a>
+            <a
+              href="#"
+              aria-label="Instagram"
+              className="text-primary-foreground/55 transition hover:text-leaf"
+            >
+              <Instagram className="h-5 w-5" />
+            </a>
           </div>
-          <p className="text-xs text-primary-foreground/45">© {new Date().getFullYear()} Revers Canada. {t.footer.rights}</p>
+          <p className="text-xs text-primary-foreground/45">
+            © {new Date().getFullYear()} Revers Canada. {t.footer.rights}
+          </p>
         </div>
       </div>
     </footer>
@@ -123,8 +224,12 @@ export function SiteFooter() {
 function FooterColumn({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div>
-      <h3 className="font-sans text-[10px] font-bold uppercase tracking-[0.18em] text-primary-foreground/40">{title}</h3>
-      <ul className="mt-5 space-y-3 text-sm text-primary-foreground/70 [&_a]:transition [&_a:hover]:text-leaf">{children}</ul>
+      <h3 className="font-sans text-[10px] font-bold uppercase tracking-[0.18em] text-primary-foreground/40">
+        {title}
+      </h3>
+      <ul className="mt-5 space-y-3 text-sm text-primary-foreground/70 [&_a]:transition [&_a:hover]:text-leaf">
+        {children}
+      </ul>
     </div>
   );
 }

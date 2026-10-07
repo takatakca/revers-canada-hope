@@ -36,7 +36,13 @@ const slugs = ["emploi", "numerique", "web", "distance", "ia"] as const;
 
 function RevpereHub() {
   const { t } = useLang();
-  const pillars = [t.pillars.emploi, t.pillars.numerique, t.pillars.web, t.pillars.distance, t.pillars.ia];
+  const pillars = [
+    t.pillars.emploi,
+    t.pillars.numerique,
+    t.pillars.web,
+    t.pillars.distance,
+    t.pillars.ia,
+  ];
 
   return (
     <>
@@ -63,29 +69,47 @@ function RevpereHub() {
               >
                 <span className="font-display text-5xl text-leaf md:col-span-1">{p.n}</span>
                 <div className="md:col-span-3">
-                  <img src={images[i]} alt="" width={1024} height={1280} loading="lazy" className="aspect-[16/10] w-full object-cover transition duration-500 group-hover:scale-[1.015]" />
+                  <img
+                    src={images[i]}
+                    alt=""
+                    width={1024}
+                    height={1280}
+                    loading="lazy"
+                    className="aspect-[16/10] w-full object-cover transition duration-500 group-hover:scale-[1.015]"
+                  />
                 </div>
                 <div className="md:col-span-6 md:px-6">
                   <h2 className="text-3xl leading-tight text-ink sm:text-4xl">{p.name}</h2>
                   <p className="mt-3 max-w-xl text-sm leading-6 text-muted-foreground">{p.lead}</p>
                 </div>
                 <span className="inline-flex items-center gap-2 text-sm font-semibold text-teal-deep md:col-span-2 md:justify-end">
-                  {t.pillarsHub.cta}<ArrowUpRight className="h-4 w-4" />
+                  {t.pillarsHub.cta}
+                  <ArrowUpRight className="h-4 w-4" />
                 </span>
               </Link>
             </Reveal>
           ))}
 
           <div className="mt-12 grid gap-8 lg:grid-cols-12">
-            <p className="border-l border-leaf pl-5 text-base leading-7 text-ink/80 lg:col-span-6">{t.pillarsHub.note}</p>
+            <p className="border-l border-leaf pl-5 text-base leading-7 text-ink/80 lg:col-span-6">
+              {t.pillarsHub.note}
+            </p>
             <div className="flex flex-col gap-3 sm:flex-row lg:col-span-5 lg:col-start-8 lg:justify-end">
               <Link to="/contact">
-                <Button size="lg" className="w-full rounded-none bg-ink text-primary-foreground hover:bg-ink/90 sm:w-auto">
-                  {t.nav.start}<ArrowRight className="ml-2 h-4 w-4" />
+                <Button
+                  size="lg"
+                  className="w-full rounded-none bg-ink text-primary-foreground hover:bg-ink/90 sm:w-auto"
+                >
+                  {t.nav.start}
+                  <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
               <Link to="/ressources">
-                <Button size="lg" variant="outline" className="w-full rounded-none border-ink bg-transparent text-ink hover:bg-ink/10 sm:w-auto">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="w-full rounded-none border-ink bg-transparent text-ink hover:bg-ink/10 sm:w-auto"
+                >
                   {t.nav.resources}
                 </Button>
               </Link>

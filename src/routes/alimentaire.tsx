@@ -28,7 +28,12 @@ function FoodPage() {
   const { t } = useLang();
   return (
     <>
-      <EditorialHero label="REVERS CANADA" title={t.food.title} lead={t.food.lead} image={foodImg} />
+      <EditorialHero
+        label="REVERS CANADA"
+        title={t.food.title}
+        lead={t.food.lead}
+        image={foodImg}
+      />
       <section className="section-space bg-background">
         <div className="home-shell px-5 sm:px-8 lg:px-0">
           <EditorialList items={t.food.items} />

@@ -37,8 +37,7 @@ function ContactPage() {
   const [submitting, setSubmitting] = useState(false);
 
   const update =
-    (k: keyof typeof form) =>
-    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
       setForm((f) => ({ ...f, [k]: e.target.value }));
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -80,7 +79,10 @@ function ContactPage() {
           <div className="space-y-4">
             <h2 className="font-display text-2xl text-ink">{t.contact.info}</h2>
             <div className="flex items-start gap-3 rounded-xl bg-white p-4 shadow-card">
-              <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-[color:var(--teal-deep)]" aria-hidden />
+              <MapPin
+                className="mt-0.5 h-5 w-5 shrink-0 text-[color:var(--teal-deep)]"
+                aria-hidden
+              />
               <div className="text-sm text-ink">
                 <div className="font-medium">REVERS CANADA</div>
                 <div>5505 Rue Irwin</div>
@@ -112,7 +114,11 @@ function ContactPage() {
             </a>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4 rounded-3xl bg-white p-8 shadow-card" noValidate>
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-4 rounded-3xl bg-white p-8 shadow-card"
+            noValidate
+          >
             {/* Honeypot — hidden from real users, catches naive bots */}
             <div aria-hidden="true" className="absolute left-[-9999px] h-0 w-0 overflow-hidden">
               <label>

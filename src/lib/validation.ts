@@ -21,7 +21,10 @@ export function validateDonationAmount(amount: unknown): boolean {
 export function sanitizeText(input: string, maxLength = 1000): string {
   if (typeof input !== "string") return "";
   // eslint-disable-next-line no-control-regex
-  return input.replace(/[\u0000-\u001F\u007F]/g, " ").trim().slice(0, maxLength);
+  return input
+    .replace(/[\u0000-\u001F\u007F]/g, " ")
+    .trim()
+    .slice(0, maxLength);
 }
 
 export const FIELD_LIMITS = {

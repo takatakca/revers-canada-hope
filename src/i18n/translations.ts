@@ -63,11 +63,26 @@ export const translations = {
       modelLead:
         "Montréal compte déjà des organismes solides pour les pères, le logement, l'alimentation et l'emploi. Le rôle de RêvPÈRE est d'être la porte d'entrée qui oriente, accompagne et reste présent dans la durée.",
       modelSteps: [
-        { t: "Accueillir", d: "Un premier contact humain, sans formulaire interminable ni jugement." },
-        { t: "Évaluer", d: "Comprendre la situation réelle : logement, revenu, garde, santé, compétences." },
-        { t: "Orienter", d: "Diriger vers le bon organisme partenaire quand il existe déjà et fait mieux." },
-        { t: "Former", d: "Combler ce qui manque : numérique, web, IA, travail à distance, employabilité." },
-        { t: "Suivre", d: "Rester présent après le placement, parce que la rechute arrive souvent après." },
+        {
+          t: "Accueillir",
+          d: "Un premier contact humain, sans formulaire interminable ni jugement.",
+        },
+        {
+          t: "Évaluer",
+          d: "Comprendre la situation réelle : logement, revenu, garde, santé, compétences.",
+        },
+        {
+          t: "Orienter",
+          d: "Diriger vers le bon organisme partenaire quand il existe déjà et fait mieux.",
+        },
+        {
+          t: "Former",
+          d: "Combler ce qui manque : numérique, web, IA, travail à distance, employabilité.",
+        },
+        {
+          t: "Suivre",
+          d: "Rester présent après le placement, parce que la rechute arrive souvent après.",
+        },
       ],
 
       ecosystemKicker: "REVERS CANADA",
@@ -122,11 +137,9 @@ export const translations = {
 
     pillarsHub: {
       title: "RêvPÈRE — les 5 piliers",
-      lead:
-        "Un programme structuré en cinq modules complémentaires. Chacun peut être suivi seul ou en parcours complet.",
+      lead: "Un programme structuré en cinq modules complémentaires. Chacun peut être suivi seul ou en parcours complet.",
       cta: "Explorer le pilier",
-      note:
-        "Les parcours sont gratuits pour les participants et adaptés au rythme de chacun. Aucun prérequis scolaire.",
+      note: "Les parcours sont gratuits pour les participants et adaptés au rythme de chacun. Aucun prérequis scolaire.",
     },
 
     pillars: {
@@ -134,8 +147,7 @@ export const translations = {
         n: "01",
         name: "Emploi",
         title: "Retour à l'emploi durable",
-        lead:
-          "Reprendre pied sur le marché du travail avec un plan réaliste, pas un simple CV refait à la hâte.",
+        lead: "Reprendre pied sur le marché du travail avec un plan réaliste, pas un simple CV refait à la hâte.",
         sections: [
           {
             t: "Ce qu'on travaille ensemble",
@@ -160,8 +172,7 @@ export const translations = {
         n: "02",
         name: "Numérique",
         title: "Compétences numériques essentielles",
-        lead:
-          "Sans aisance numérique, une candidature n'existe pas. On part exactement d'où vous êtes.",
+        lead: "Sans aisance numérique, une candidature n'existe pas. On part exactement d'où vous êtes.",
         sections: [
           {
             t: "Les bases",
@@ -186,8 +197,7 @@ export const translations = {
         n: "03",
         name: "Web",
         title: "Créer et vendre sur le web",
-        lead:
-          "Un métier accessible, apprenable rapidement, et qui se pratique de n'importe où.",
+        lead: "Un métier accessible, apprenable rapidement, et qui se pratique de n'importe où.",
         sections: [
           {
             t: "Ce qu'on apprend",
@@ -212,8 +222,7 @@ export const translations = {
         n: "04",
         name: "Travail à distance",
         title: "Travailler à distance, concrètement",
-        lead:
-          "Le télétravail change la donne pour un père : moins de transport, plus de présence auprès des enfants.",
+        lead: "Le télétravail change la donne pour un père : moins de transport, plus de présence auprès des enfants.",
         sections: [
           {
             t: "Se préparer",
@@ -237,8 +246,7 @@ export const translations = {
         n: "05",
         name: "Intelligence artificielle",
         title: "L'IA comme levier, pas comme menace",
-        lead:
-          "Savoir utiliser l'IA est devenu une compétence de base. C'est aussi un accélérateur puissant pour quelqu'un qui repart de zéro.",
+        lead: "Savoir utiliser l'IA est devenu une compétence de base. C'est aussi un accélérateur puissant pour quelqu'un qui repart de zéro.",
         sections: [
           {
             t: "Usages concrets",
@@ -263,8 +271,7 @@ export const translations = {
 
     mission: {
       title: "Notre mission",
-      lead:
-        "REVERS CANADA est une organisation communautaire montréalaise. Nous accompagnons les personnes en rupture — en priorité les pères, à travers le programme RêvPÈRE — vers l'autonomie économique et sociale.",
+      lead: "REVERS CANADA est une organisation communautaire montréalaise. Nous accompagnons les personnes en rupture — en priorité les pères, à travers le programme RêvPÈRE — vers l'autonomie économique et sociale.",
       blocks: [
         {
           t: "Ce que nous croyons",
@@ -284,7 +291,10 @@ export const translations = {
         { t: "Dignité", d: "Personne ne doit se justifier pour recevoir de l'aide." },
         { t: "Réalisme", d: "Des étapes atteignables plutôt que des promesses." },
         { t: "Compétence", d: "Former pour l'économie d'aujourd'hui, pas celle d'hier." },
-        { t: "Transparence", d: "Dire clairement ce que nous faisons et ce que nous ne faisons pas." },
+        {
+          t: "Transparence",
+          d: "Dire clairement ce que nous faisons et ce que nous ne faisons pas.",
+        },
       ],
       ctaT: "Vous voulez en parler ?",
       ctaD: "Écrivez-nous ou passez nous voir. Aucune démarche compliquée.",
@@ -292,10 +302,8 @@ export const translations = {
 
     resources: {
       title: "Bottin de ressources — Montréal",
-      lead:
-        "Ces organismes ne sont pas gérés par REVERS CANADA. Nous les listons parce qu'ils font un travail essentiel et que trouver la bonne porte est souvent le plus difficile.",
-      note:
-        "Répertoire informatif. Vérifiez toujours les heures et l'admissibilité directement auprès de l'organisme. Pour toute urgence, composez le 811 (santé) ou le 911.",
+      lead: "Ces organismes ne sont pas gérés par REVERS CANADA. Nous les listons parce qu'ils font un travail essentiel et que trouver la bonne porte est souvent le plus difficile.",
+      note: "Répertoire informatif. Vérifiez toujours les heures et l'admissibilité directement auprès de l'organisme. Pour toute urgence, composez le 811 (santé) ou le 911.",
       urgent: "En cas d'urgence ou de détresse : 811 · Info-Social 811 option 2 · 911",
       categories: [
         {
@@ -360,8 +368,7 @@ export const translations = {
 
     community: {
       title: "Communauté RêvPÈRE",
-      lead:
-        "La formation ouvre des portes. La communauté empêche de retomber. Les deux vont ensemble.",
+      lead: "La formation ouvre des portes. La communauté empêche de retomber. Les deux vont ensemble.",
       items: [
         {
           t: "Groupes de pairs",
@@ -388,13 +395,24 @@ export const translations = {
 
     housing: {
       title: "Habitation communautaire",
-      lead:
-        "Sans logement stable, aucun parcours d'emploi ne tient. Nous accompagnons les personnes dans la recherche, l'obtention et le maintien d'un logement.",
+      lead: "Sans logement stable, aucun parcours d'emploi ne tient. Nous accompagnons les personnes dans la recherche, l'obtention et le maintien d'un logement.",
       items: [
-        { t: "Recherche de logement", d: "Aide au repérage d'un logement abordable et au montage du dossier locatif." },
-        { t: "Logement transitoire", d: "Orientation vers les ressources de logement transitoire et supervisé du réseau." },
-        { t: "Maintien en logement", d: "Budget, relation avec le propriétaire, prévention des arriérés et de l'éviction." },
-        { t: "Défense des droits", d: "Information sur les droits des locataires et accompagnement vers les comités logement." },
+        {
+          t: "Recherche de logement",
+          d: "Aide au repérage d'un logement abordable et au montage du dossier locatif.",
+        },
+        {
+          t: "Logement transitoire",
+          d: "Orientation vers les ressources de logement transitoire et supervisé du réseau.",
+        },
+        {
+          t: "Maintien en logement",
+          d: "Budget, relation avec le propriétaire, prévention des arriérés et de l'éviction.",
+        },
+        {
+          t: "Défense des droits",
+          d: "Information sur les droits des locataires et accompagnement vers les comités logement.",
+        },
       ],
       noteT: "Important",
       noteD:
@@ -403,13 +421,24 @@ export const translations = {
 
     food: {
       title: "Aide et sécurité alimentaire",
-      lead:
-        "Manger correctement n'est pas un luxe : c'est la base d'un retour à l'emploi. Nous facilitons l'accès aux ressources alimentaires du quartier.",
+      lead: "Manger correctement n'est pas un luxe : c'est la base d'un retour à l'emploi. Nous facilitons l'accès aux ressources alimentaires du quartier.",
       items: [
-        { t: "Dépannage alimentaire", d: "Orientation vers les banques alimentaires et distributions de quartier." },
-        { t: "Cuisines collectives", d: "Cuisiner en groupe, à faible coût, et repartir avec des portions." },
-        { t: "Autonomie alimentaire", d: "Planification des repas, budget d'épicerie, bases nutritionnelles." },
-        { t: "Repas et enfants", d: "Soutien particulier lors des périodes de garde pour éviter l'insécurité alimentaire." },
+        {
+          t: "Dépannage alimentaire",
+          d: "Orientation vers les banques alimentaires et distributions de quartier.",
+        },
+        {
+          t: "Cuisines collectives",
+          d: "Cuisiner en groupe, à faible coût, et repartir avec des portions.",
+        },
+        {
+          t: "Autonomie alimentaire",
+          d: "Planification des repas, budget d'épicerie, bases nutritionnelles.",
+        },
+        {
+          t: "Repas et enfants",
+          d: "Soutien particulier lors des périodes de garde pour éviter l'insécurité alimentaire.",
+        },
       ],
       noteT: "Comment y accéder",
       noteD:
@@ -418,8 +447,7 @@ export const translations = {
 
     partners: {
       title: "Partenaires et employeurs",
-      lead:
-        "RêvPÈRE fonctionne en réseau. Organismes communautaires, employeurs, formateurs et donateurs : chacun tient une partie de la chaîne.",
+      lead: "RêvPÈRE fonctionne en réseau. Organismes communautaires, employeurs, formateurs et donateurs : chacun tient une partie de la chaîne.",
       groups: [
         {
           t: "Organismes communautaires",
@@ -444,8 +472,7 @@ export const translations = {
 
     about: {
       title: "À propos de REVERS CANADA",
-      lead:
-        "Organisation communautaire montréalaise dédiée à l'accompagnement des personnes en rupture vers l'autonomie, avec le programme RêvPÈRE comme initiative principale.",
+      lead: "Organisation communautaire montréalaise dédiée à l'accompagnement des personnes en rupture vers l'autonomie, avec le programme RêvPÈRE comme initiative principale.",
       missionT: "Mission",
       missionD:
         "Offrir un environnement sécuritaire, des ressources concrètes et un accompagnement humain pour permettre à chaque personne de se reconstruire.",
@@ -455,8 +482,7 @@ export const translations = {
       valuesT: "Valeurs",
       values: ["Dignité", "Écoute", "Action concrète", "Transparence"],
       taxT: "Reçu fiscal",
-      taxD:
-        "Une confirmation de don vous est envoyée par courriel. Cette confirmation ne constitue pas un reçu fiscal officiel : seuls les reçus officiels émis ultérieurement par REVERS CANADA peuvent être utilisés à des fins d'impôt.",
+      taxD: "Une confirmation de don vous est envoyée par courriel. Cette confirmation ne constitue pas un reçu fiscal officiel : seuls les reçus officiels émis ultérieurement par REVERS CANADA peuvent être utilisés à des fins d'impôt.",
     },
 
     programs: {
@@ -483,8 +509,7 @@ export const translations = {
 
     international: {
       title: "Aide internationale",
-      lead:
-        "Notre programme d'aide internationale recueille des dons matériels — jamais d'argent — pour soutenir des familles, des animaux et des communautés à l'étranger.",
+      lead: "Notre programme d'aide internationale recueille des dons matériels — jamais d'argent — pour soutenir des familles, des animaux et des communautés à l'étranger.",
       noticeT: "Important",
       noticeD:
         "Aucun don monétaire n'est accepté pour cette section. Les dons financiers à REVERS CANADA servent exclusivement nos programmes au Québec.",
@@ -499,17 +524,19 @@ export const translations = {
       ],
       dropT: "Point de dépôt",
       drops: [
-        { city: "LaSalle", addr: "5505 Rue Irwin, LaSalle (QC) H8N 1A1", hours: "Sur rendez-vous · 514-825-2825" },
+        {
+          city: "LaSalle",
+          addr: "5505 Rue Irwin, LaSalle (QC) H8N 1A1",
+          hours: "Sur rendez-vous · 514-825-2825",
+        },
       ],
       whyT: "Pourquoi des dons matériels?",
-      whyD:
-        "Nous travaillons avec des partenaires locaux fiables qui assurent la livraison directe aux familles, refuges et cliniques vétérinaires sur place. Vos dons matériels arrivent là où on en a réellement besoin.",
+      whyD: "Nous travaillons avec des partenaires locaux fiables qui assurent la livraison directe aux familles, refuges et cliniques vétérinaires sur place. Vos dons matériels arrivent là où on en a réellement besoin.",
     },
 
     donate: {
       title: "Faire un don",
-      lead:
-        "Votre don finance les ateliers RêvPÈRE, l'équipement informatique, l'accompagnement individuel et nos volets habitation et alimentaire. La confirmation envoyée par courriel ne constitue pas un reçu fiscal officiel.",
+      lead: "Votre don finance les ateliers RêvPÈRE, l'équipement informatique, l'accompagnement individuel et nos volets habitation et alimentaire. La confirmation envoyée par courriel ne constitue pas un reçu fiscal officiel.",
       onceT: "Don ponctuel",
       monthlyT: "Don mensuel",
       amounts: ["25", "50", "100", "250"],
@@ -563,7 +590,8 @@ export const translations = {
       lastName: "Nom",
       emailPh: "Adresse courriel",
       subscribe: "S'abonner",
-      newsletterOk: "Merci pour votre intérêt. Votre demande d'inscription à l'infolettre a été enregistrée.",
+      newsletterOk:
+        "Merci pour votre intérêt. Votre demande d'inscription à l'infolettre a été enregistrée.",
       newsletterAlready: "Cette adresse est déjà enregistrée pour l'infolettre.",
       newsletterErr: "Veuillez entrer une adresse courriel valide.",
       rights: "Tous droits réservés.",
@@ -639,8 +667,14 @@ export const translations = {
         "Montréal already has strong organizations for fathers, housing, food and employment. RêvPÈRE's role is to be the front door that welcomes, guides and stays present over time.",
       modelSteps: [
         { t: "Welcome", d: "A first human contact — no endless intake form, no judgment." },
-        { t: "Assess", d: "Understand the real situation: housing, income, custody, health, skills." },
-        { t: "Refer", d: "Point to the right partner organization when one already does it better." },
+        {
+          t: "Assess",
+          d: "Understand the real situation: housing, income, custody, health, skills.",
+        },
+        {
+          t: "Refer",
+          d: "Point to the right partner organization when one already does it better.",
+        },
         { t: "Train", d: "Fill the gap: digital, web, AI, remote work, employability." },
         { t: "Follow up", d: "Stay present after placement — that's when most setbacks happen." },
       ],
@@ -696,11 +730,9 @@ export const translations = {
 
     pillarsHub: {
       title: "RêvPÈRE — the 5 pillars",
-      lead:
-        "A program built as five complementary modules. Each can be taken alone or as a full journey.",
+      lead: "A program built as five complementary modules. Each can be taken alone or as a full journey.",
       cta: "Explore this pillar",
-      note:
-        "Programs are free for participants and adapted to each person's pace. No academic prerequisites.",
+      note: "Programs are free for participants and adapted to each person's pace. No academic prerequisites.",
     },
 
     pillars: {
@@ -783,8 +815,7 @@ export const translations = {
         n: "04",
         name: "Remote work",
         title: "Remote work, concretely",
-        lead:
-          "Remote work changes everything for a father: less commuting, more time with the children.",
+        lead: "Remote work changes everything for a father: less commuting, more time with the children.",
         sections: [
           {
             t: "Getting ready",
@@ -808,8 +839,7 @@ export const translations = {
         n: "05",
         name: "Artificial intelligence",
         title: "AI as leverage, not a threat",
-        lead:
-          "Knowing how to use AI is now a baseline skill — and a powerful accelerator for someone starting over.",
+        lead: "Knowing how to use AI is now a baseline skill — and a powerful accelerator for someone starting over.",
         sections: [
           {
             t: "Concrete uses",
@@ -834,8 +864,7 @@ export const translations = {
 
     mission: {
       title: "Our mission",
-      lead:
-        "REVERS CANADA is a Montréal community organization. We support people facing a rupture — fathers first, through the RêvPÈRE program — toward economic and social independence.",
+      lead: "REVERS CANADA is a Montréal community organization. We support people facing a rupture — fathers first, through the RêvPÈRE program — toward economic and social independence.",
       blocks: [
         {
           t: "What we believe",
@@ -863,10 +892,8 @@ export const translations = {
 
     resources: {
       title: "Resource directory — Montréal",
-      lead:
-        "These organizations are not run by REVERS CANADA. We list them because their work is essential and finding the right door is often the hardest part.",
-      note:
-        "Informational directory. Always verify hours and eligibility directly with the organization. In an emergency, call 811 (health) or 911.",
+      lead: "These organizations are not run by REVERS CANADA. We list them because their work is essential and finding the right door is often the hardest part.",
+      note: "Informational directory. Always verify hours and eligibility directly with the organization. In an emergency, call 811 (health) or 911.",
       urgent: "Emergency or distress: 811 · Info-Social 811 option 2 · 911",
       categories: [
         {
@@ -957,13 +984,24 @@ export const translations = {
 
     housing: {
       title: "Community housing",
-      lead:
-        "Without stable housing, no employment path holds. We support people in finding, obtaining and keeping a home.",
+      lead: "Without stable housing, no employment path holds. We support people in finding, obtaining and keeping a home.",
       items: [
-        { t: "Housing search", d: "Help finding affordable housing and building a rental application." },
-        { t: "Transitional housing", d: "Referral to transitional and supervised housing resources in the network." },
-        { t: "Keeping the home", d: "Budgeting, landlord relations, preventing arrears and eviction." },
-        { t: "Rights advocacy", d: "Information on tenant rights and referral to housing committees." },
+        {
+          t: "Housing search",
+          d: "Help finding affordable housing and building a rental application.",
+        },
+        {
+          t: "Transitional housing",
+          d: "Referral to transitional and supervised housing resources in the network.",
+        },
+        {
+          t: "Keeping the home",
+          d: "Budgeting, landlord relations, preventing arrears and eviction.",
+        },
+        {
+          t: "Rights advocacy",
+          d: "Information on tenant rights and referral to housing committees.",
+        },
       ],
       noteT: "Important",
       noteD:
@@ -972,23 +1010,23 @@ export const translations = {
 
     food: {
       title: "Food support & security",
-      lead:
-        "Eating properly isn't a luxury: it's the foundation of a return to work. We make neighbourhood food resources easier to reach.",
+      lead: "Eating properly isn't a luxury: it's the foundation of a return to work. We make neighbourhood food resources easier to reach.",
       items: [
         { t: "Food assistance", d: "Referral to food banks and neighbourhood distributions." },
         { t: "Collective kitchens", d: "Cook as a group, at low cost, and leave with portions." },
         { t: "Food autonomy", d: "Meal planning, grocery budgeting, nutrition basics." },
-        { t: "Meals and children", d: "Extra support during custody periods to prevent food insecurity." },
+        {
+          t: "Meals and children",
+          d: "Extra support during custody periods to prevent food insecurity.",
+        },
       ],
       noteT: "How to access it",
-      noteD:
-        "Contact us to learn what's available near you. No heavy paperwork required.",
+      noteD: "Contact us to learn what's available near you. No heavy paperwork required.",
     },
 
     partners: {
       title: "Partners and employers",
-      lead:
-        "RêvPÈRE works as a network. Community organizations, employers, trainers and donors each hold part of the chain.",
+      lead: "RêvPÈRE works as a network. Community organizations, employers, trainers and donors each hold part of the chain.",
       groups: [
         {
           t: "Community organizations",
@@ -1013,8 +1051,7 @@ export const translations = {
 
     about: {
       title: "About REVERS CANADA",
-      lead:
-        "A Montréal community organization dedicated to guiding people through rupture toward independence, with the RêvPÈRE program as our main initiative.",
+      lead: "A Montréal community organization dedicated to guiding people through rupture toward independence, with the RêvPÈRE program as our main initiative.",
       missionT: "Mission",
       missionD:
         "Offer a safe environment, real resources and human support so every person can rebuild.",
@@ -1024,8 +1061,7 @@ export const translations = {
       valuesT: "Values",
       values: ["Dignity", "Listening", "Concrete action", "Transparency"],
       taxT: "Tax receipts",
-      taxD:
-        "A donation confirmation is sent by email. This confirmation does not constitute an official tax receipt: only official receipts later issued by REVERS CANADA can be used for tax purposes.",
+      taxD: "A donation confirmation is sent by email. This confirmation does not constitute an official tax receipt: only official receipts later issued by REVERS CANADA can be used for tax purposes.",
     },
 
     programs: {
@@ -1052,8 +1088,7 @@ export const translations = {
 
     international: {
       title: "International Help",
-      lead:
-        "Our international help program collects in-kind donations — never money — to support families, animals and communities abroad.",
+      lead: "Our international help program collects in-kind donations — never money — to support families, animals and communities abroad.",
       noticeT: "Important",
       noticeD:
         "No monetary donations are accepted for this section. Financial gifts to REVERS CANADA exclusively fund our programs in Québec.",
@@ -1068,17 +1103,19 @@ export const translations = {
       ],
       dropT: "Drop-off location",
       drops: [
-        { city: "LaSalle", addr: "5505 Rue Irwin, LaSalle QC H8N 1A1", hours: "By appointment · 514-825-2825" },
+        {
+          city: "LaSalle",
+          addr: "5505 Rue Irwin, LaSalle QC H8N 1A1",
+          hours: "By appointment · 514-825-2825",
+        },
       ],
       whyT: "Why in-kind donations?",
-      whyD:
-        "We work with trusted local partners who deliver directly to families, shelters and veterinary clinics on the ground. Your in-kind donations land exactly where they're truly needed.",
+      whyD: "We work with trusted local partners who deliver directly to families, shelters and veterinary clinics on the ground. Your in-kind donations land exactly where they're truly needed.",
     },
 
     donate: {
       title: "Make a donation",
-      lead:
-        "Your gift funds RêvPÈRE workshops, computer equipment, one-on-one support and our housing and food streams. The email confirmation does not constitute an official tax receipt.",
+      lead: "Your gift funds RêvPÈRE workshops, computer equipment, one-on-one support and our housing and food streams. The email confirmation does not constitute an official tax receipt.",
       onceT: "One-time gift",
       monthlyT: "Monthly gift",
       amounts: ["25", "50", "100", "250"],
@@ -1132,7 +1169,8 @@ export const translations = {
       lastName: "Last name",
       emailPh: "Email address",
       subscribe: "Subscribe",
-      newsletterOk: "Thank you for your interest. Your newsletter subscription request has been recorded.",
+      newsletterOk:
+        "Thank you for your interest. Your newsletter subscription request has been recorded.",
       newsletterAlready: "This address is already signed up for the newsletter.",
       newsletterErr: "Please enter a valid email address.",
       rights: "All rights reserved.",

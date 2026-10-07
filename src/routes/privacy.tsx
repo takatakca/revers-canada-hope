@@ -73,28 +73,28 @@ function FrContent() {
       <Block title="Formulaire de contact">
         <p>
           Lorsque vous utilisez notre formulaire de contact, vos informations (nom, courriel,
-          téléphone optionnel, sujet et message) peuvent être enregistrées dans une base de
-          données sécurisée afin d'être traitées par l'équipe de Revers Canada. Si
-          l'enregistrement échoue, votre message est préparé sous forme de courriel envoyé via
-          votre application courriel par défaut à reverscanada@gmail.com.
+          téléphone optionnel, sujet et message) peuvent être enregistrées dans une base de données
+          sécurisée afin d'être traitées par l'équipe de Revers Canada. Si l'enregistrement échoue,
+          votre message est préparé sous forme de courriel envoyé via votre application courriel par
+          défaut à reverscanada@gmail.com.
         </p>
       </Block>
       <Block title="Infolettre">
         <p>
-          Votre adresse courriel et votre langue préférée peuvent être enregistrées dans une
-          base de données sécurisée pour permettre un suivi ultérieur. Aucun courriel
-          d'infolettre n'est encore envoyé tant que notre service d'envoi (Brevo, Mailchimp ou
-          équivalent) n'est pas officiellement connecté.
+          Votre adresse courriel et votre langue préférée peuvent être enregistrées dans une base de
+          données sécurisée pour permettre un suivi ultérieur. Aucun courriel d'infolettre n'est
+          encore envoyé tant que notre service d'envoi (Brevo, Mailchimp ou équivalent) n'est pas
+          officiellement connecté.
         </p>
       </Block>
       <Block title="Dons et paiements">
         <p>
           Votre intention de don (montant, fréquence, devise) est enregistrée dans une base de
-          données sécurisée. Les paiements sont traités de manière sécurisée par Stripe (mode
-          test ou production). REVERS CANADA ne collecte ni ne stocke aucune donnée de carte
-          bancaire — celles-ci sont saisies directement sur les pages sécurisées de Stripe.
-          Après un paiement, nous pouvons conserver le statut du paiement, l'identifiant
-          Stripe, et l'adresse courriel transmise par Stripe.
+          données sécurisée. Les paiements sont traités de manière sécurisée par Stripe (mode test
+          ou production). REVERS CANADA ne collecte ni ne stocke aucune donnée de carte bancaire —
+          celles-ci sont saisies directement sur les pages sécurisées de Stripe. Après un paiement,
+          nous pouvons conserver le statut du paiement, l'identifiant Stripe, et l'adresse courriel
+          transmise par Stripe.
         </p>
         <p className="font-semibold text-ink">
           Ce courriel ou cette confirmation ne constitue pas un reçu fiscal officiel.
@@ -110,18 +110,25 @@ function FrContent() {
       <Block title="Sécurité">
         <p>
           Nous mettons en place des mesures raisonnables pour protéger les informations qui nous
-          sont confiées. Aucune méthode de transmission sur Internet n'est cependant sécurisée à
-          100 %.
+          sont confiées. Aucune méthode de transmission sur Internet n'est cependant sécurisée à 100
+          %.
         </p>
       </Block>
       <Block title="Contact">
         <p>
-          REVERS CANADA<br />
-          5505 Rue Irwin<br />
-          LaSalle, QC H8N 1A1, Canada<br />
-          <a className="underline" href="mailto:reverscanada@gmail.com">reverscanada@gmail.com</a>
+          REVERS CANADA
+          <br />
+          5505 Rue Irwin
+          <br />
+          LaSalle, QC H8N 1A1, Canada
+          <br />
+          <a className="underline" href="mailto:reverscanada@gmail.com">
+            reverscanada@gmail.com
+          </a>
           {" · "}
-          <a className="underline" href="tel:5148252825">514-825-2825</a>
+          <a className="underline" href="tel:5148252825">
+            514-825-2825
+          </a>
         </p>
       </Block>
     </>
@@ -133,8 +140,8 @@ function EnContent() {
     <>
       <Block title="Introduction">
         <p>
-          Revers Canada respects your privacy. This policy explains what information we collect,
-          how it is used, and how it is stored.
+          Revers Canada respects your privacy. This policy explains what information we collect, how
+          it is used, and how it is stored.
         </p>
       </Block>
       <Block title="Information collected">
@@ -145,26 +152,26 @@ function EnContent() {
       </Block>
       <Block title="Contact form">
         <p>
-          When you use our contact form, your information (name, email, optional phone, subject
-          and message) may be stored in a secure database so the Revers Canada team can review
-          it. If storage fails, your message is prepared as an email opened via your default
-          mail client to reverscanada@gmail.com.
+          When you use our contact form, your information (name, email, optional phone, subject and
+          message) may be stored in a secure database so the Revers Canada team can review it. If
+          storage fails, your message is prepared as an email opened via your default mail client to
+          reverscanada@gmail.com.
         </p>
       </Block>
       <Block title="Newsletter">
         <p>
-          Your email and preferred language may be stored in a secure database so we can follow
-          up later. No newsletter email is sent yet — our mailing provider (Brevo, Mailchimp or
+          Your email and preferred language may be stored in a secure database so we can follow up
+          later. No newsletter email is sent yet — our mailing provider (Brevo, Mailchimp or
           similar) is not officially connected at this stage.
         </p>
       </Block>
       <Block title="Donations and payments">
         <p>
           Your donation intent (amount, frequency, currency) is stored in a secure database.
-          Payments are processed securely by Stripe (test or production mode). REVERS CANADA
-          does not collect or store any credit card data — card details are entered directly
-          on Stripe's secure pages. After a payment, we may keep the payment status, the
-          Stripe identifier, and the email address provided to Stripe.
+          Payments are processed securely by Stripe (test or production mode). REVERS CANADA does
+          not collect or store any credit card data — card details are entered directly on Stripe's
+          secure pages. After a payment, we may keep the payment status, the Stripe identifier, and
+          the email address provided to Stripe.
         </p>
         <p className="font-semibold text-ink">
           This email or confirmation does not constitute an official tax receipt.
@@ -184,12 +191,19 @@ function EnContent() {
       </Block>
       <Block title="Contact">
         <p>
-          REVERS CANADA<br />
-          5505 Rue Irwin<br />
-          LaSalle, QC H8N 1A1, Canada<br />
-          <a className="underline" href="mailto:reverscanada@gmail.com">reverscanada@gmail.com</a>
+          REVERS CANADA
+          <br />
+          5505 Rue Irwin
+          <br />
+          LaSalle, QC H8N 1A1, Canada
+          <br />
+          <a className="underline" href="mailto:reverscanada@gmail.com">
+            reverscanada@gmail.com
+          </a>
           {" · "}
-          <a className="underline" href="tel:5148252825">514-825-2825</a>
+          <a className="underline" href="tel:5148252825">
+            514-825-2825
+          </a>
         </p>
       </Block>
     </>

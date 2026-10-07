@@ -12,10 +12,14 @@ export const Route = createFileRoute("/ressources")({
         content:
           "Répertoire des ressources montréalaises pour les pères : hébergement, alimentation, santé mentale, emploi, droit familial. Maintenu par REVERS CANADA.",
       },
-      { property: "og:title", content: "Bottin de ressources pour les pères — Montréal | REVERS CANADA" },
+      {
+        property: "og:title",
+        content: "Bottin de ressources pour les pères — Montréal | REVERS CANADA",
+      },
       {
         property: "og:description",
-        content: "Trouver la bonne porte est souvent le plus difficile. Voici les ressources montréalaises regroupées par besoin.",
+        content:
+          "Trouver la bonne porte est souvent le plus difficile. Voici les ressources montréalaises regroupées par besoin.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -36,12 +40,16 @@ function ResourcesPage() {
           <div className="mt-14 grid border-t border-ink/20 md:grid-cols-2 lg:grid-cols-3">
             {r.categories.map((c, i) => (
               <Reveal key={c.t} className="border-b border-ink/20 py-9 md:pr-10">
-                <span className="text-xs font-bold tabular-nums text-teal-deep">{String(i + 1).padStart(2, "0")}</span>
+                <span className="text-xs font-bold tabular-nums text-teal-deep">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
                 <h2 className="mt-3 text-3xl leading-tight text-ink">{c.t}</h2>
                 <p className="mt-2 text-sm text-muted-foreground">{c.d}</p>
                 <ul className="mt-4 space-y-2">
                   {c.items.map((it) => (
-                    <li key={it} className="border-l border-leaf pl-3 text-sm text-ink/80">{it}</li>
+                    <li key={it} className="border-l border-leaf pl-3 text-sm text-ink/80">
+                      {it}
+                    </li>
                   ))}
                 </ul>
               </Reveal>

@@ -73,7 +73,9 @@ function PillarPage() {
               <span className="font-display text-7xl text-leaf sm:text-8xl">{p.n}</span>
               <h1 className="editorial-title mt-3 text-primary-foreground">{p.title}</h1>
             </div>
-            <p className="max-w-xl text-lg leading-8 text-primary-foreground/75 lg:col-span-4 lg:self-end">{p.lead}</p>
+            <p className="max-w-xl text-lg leading-8 text-primary-foreground/75 lg:col-span-4 lg:self-end">
+              {p.lead}
+            </p>
           </div>
         </div>
       </section>
@@ -84,12 +86,16 @@ function PillarPage() {
             <Reveal key={s.t}>
               <div className="grid gap-6 border-t border-ink/20 py-10 lg:grid-cols-12">
                 <div className="lg:col-span-4">
-                  <span className="text-xs font-bold tabular-nums text-teal-deep">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="text-xs font-bold tabular-nums text-teal-deep">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
                   <h2 className="mt-3 text-3xl leading-tight text-ink">{s.t}</h2>
                 </div>
                 <ul className="grid gap-x-8 gap-y-3 text-base text-ink/80 sm:grid-cols-2 lg:col-span-7 lg:col-start-6">
                   {s.items.map((it) => (
-                    <li key={it} className="border-b border-ink/10 pb-3">— {it}</li>
+                    <li key={it} className="border-b border-ink/10 pb-3">
+                      — {it}
+                    </li>
                   ))}
                 </ul>
               </div>
@@ -98,17 +104,29 @@ function PillarPage() {
 
           <div className="mt-6 flex flex-col gap-3 border-t border-ink/20 pt-10 sm:flex-row">
             <Link to="/contact">
-              <Button size="lg" className="w-full rounded-none bg-ink text-primary-foreground hover:bg-ink/90 sm:w-auto">
-                {t.nav.start}<ArrowRight className="ml-2 h-4 w-4" />
+              <Button
+                size="lg"
+                className="w-full rounded-none bg-ink text-primary-foreground hover:bg-ink/90 sm:w-auto"
+              >
+                {t.nav.start}
+                <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
             <Link to="/revpere">
-              <Button size="lg" variant="outline" className="w-full rounded-none border-ink bg-transparent text-ink hover:bg-ink/10 sm:w-auto">
+              <Button
+                size="lg"
+                variant="outline"
+                className="w-full rounded-none border-ink bg-transparent text-ink hover:bg-ink/10 sm:w-auto"
+              >
                 {t.nav.pillars}
               </Button>
             </Link>
-            <Link to="/donate" className="inline-flex items-center gap-2 self-start border-b border-teal-deep pb-1 text-sm font-semibold text-teal-deep sm:self-center sm:ml-4">
-              <Heart className="h-4 w-4" />{t.nav.donateCta}
+            <Link
+              to="/donate"
+              className="inline-flex items-center gap-2 self-start border-b border-teal-deep pb-1 text-sm font-semibold text-teal-deep sm:self-center sm:ml-4"
+            >
+              <Heart className="h-4 w-4" />
+              {t.nav.donateCta}
             </Link>
           </div>
         </div>

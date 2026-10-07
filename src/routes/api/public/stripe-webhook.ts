@@ -49,11 +49,11 @@ export const Route = createFileRoute("/api/public/stripe-webhook")({
               const paymentIntentId =
                 typeof session.payment_intent === "string"
                   ? session.payment_intent
-                  : session.payment_intent?.id ?? null;
+                  : (session.payment_intent?.id ?? null);
               const customerId =
                 typeof session.customer === "string"
                   ? session.customer
-                  : session.customer?.id ?? null;
+                  : (session.customer?.id ?? null);
               const donorEmail = session.customer_details?.email ?? session.customer_email ?? null;
               const donorName = session.customer_details?.name ?? null;
 

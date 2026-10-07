@@ -14,8 +14,7 @@ export const homeCopy = {
       titleB: "Retrouver son autonomie.",
       subtitle:
         "RêvPÈRE accompagne les pères vers l'emploi et l'autonomie numérique grâce à des outils concrets : informatique, Web, télétravail et intelligence artificielle.",
-      human:
-        "Aider un père à se remettre debout, c'est aussi aider ses enfants à avancer.",
+      human: "Aider un père à se remettre debout, c'est aussi aider ses enfants à avancer.",
       ctaPrimary: "Commencer mon parcours",
       ctaSecondary: "Découvrir RêvPÈRE",
       ctaQuiet: "J'ai besoin d'une ressource",
@@ -240,13 +239,11 @@ export const homeCopy = {
       titleB: "Regain your independence.",
       subtitle:
         "RêvPÈRE supports fathers toward employment and digital independence with concrete tools: computers, the Web, remote work and artificial intelligence.",
-      human:
-        "Helping a father get back on his feet also helps his children move forward.",
+      human: "Helping a father get back on his feet also helps his children move forward.",
       ctaPrimary: "Start my journey",
       ctaSecondary: "Discover RêvPÈRE",
       ctaQuiet: "I need a resource",
-      imageAlt:
-        "A father working with a community worker at a laptop in a community centre",
+      imageAlt: "A father working with a community worker at a laptop in a community centre",
     },
     signage: ["Employment", "Digital", "Web", "Remote work", "AI", "Independence"],
     shift: {
@@ -318,14 +315,7 @@ export const homeCopy = {
         nav: "Web",
         title: "Understanding the Web instead of just enduring it.",
         lead: "Browsing, searching, verifying, presenting yourself — without feeling lost.",
-        items: [
-          "Browser",
-          "Search",
-          "LinkedIn",
-          "Portfolio",
-          "Training",
-          "Online services",
-        ],
+        items: ["Browser", "Search", "LinkedIn", "Portfolio", "Training", "Online services"],
         cta: "Discover RêvPÈRE Web",
         imageAlt: "Two men looking at a web browser together on a laptop",
       },

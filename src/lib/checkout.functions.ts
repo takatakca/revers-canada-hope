@@ -7,7 +7,15 @@ const InputSchema = z.object({
 
 type Result =
   | { ok: true; checkout_url: string }
-  | { ok: false; error: "not_found" | "invalid_status" | "invalid_amount" | "stripe_not_configured" | "stripe_failed" };
+  | {
+      ok: false;
+      error:
+        | "not_found"
+        | "invalid_status"
+        | "invalid_amount"
+        | "stripe_not_configured"
+        | "stripe_failed";
+    };
 
 /**
  * Server-only: create a Stripe Checkout session for an existing donation_intent.
@@ -32,7 +40,8 @@ export const createDonationCheckout = createServerFn({ method: "POST" })
 
     if (readError || !intent) return { ok: false, error: "not_found" };
     if (intent.status !== "pending_checkout") return { ok: false, error: "invalid_status" };
-    if (!intent.amount_cents || intent.amount_cents <= 0) return { ok: false, error: "invalid_amount" };
+    if (!intent.amount_cents || intent.amount_cents <= 0)
+      return { ok: false, error: "invalid_amount" };
 
     // 2) Build URLs
     const siteUrl =

@@ -14,7 +14,8 @@ export const Route = createFileRoute("/partenaires")({
       { property: "og:title", content: "Partenaires et employeurs | REVERS CANADA" },
       {
         property: "og:description",
-        content: "RêvPÈRE fonctionne en réseau : zéro doublon, zéro personne perdue entre deux services.",
+        content:
+          "RêvPÈRE fonctionne en réseau : zéro doublon, zéro personne perdue entre deux services.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

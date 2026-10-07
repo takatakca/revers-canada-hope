@@ -43,9 +43,7 @@ const RECIPIENT = "reverscanada@gmail.com";
  * 3. If the insert fails (offline, RLS, etc.), fall back to a mailto: link
  *    so the user can still reach us.
  */
-export async function prepareContactSubmission(
-  input: ContactInput,
-): Promise<ContactSubmission> {
+export async function prepareContactSubmission(input: ContactInput): Promise<ContactSubmission> {
   // Honeypot — silently accept bots but do nothing
   if (input.website && input.website.trim() !== "") {
     return { ok: true, saved: false };
@@ -80,8 +78,7 @@ export async function prepareContactSubmission(
       message: payload.message,
       language: payload.lang,
       source: payload.source,
-      user_agent:
-        typeof navigator !== "undefined" ? navigator.userAgent.slice(0, 500) : null,
+      user_agent: typeof navigator !== "undefined" ? navigator.userAgent.slice(0, 500) : null,
     });
     if (!error) saved = true;
     else if (import.meta.env.DEV) console.warn("[contact] insert failed:", error.message);
