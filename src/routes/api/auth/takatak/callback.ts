@@ -2,10 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { exchangeTakatakLaunchCode } from "@/lib/takatak/client";
-import {
-  createReversSessionCookie,
-  REVERS_SESSION_COOKIE,
-} from "@/lib/takatak/session";
+import { createReversSessionCookie } from "@/lib/takatak/session";
 
 export const Route = createFileRoute("/api/auth/takatak/callback")({
   server: {
