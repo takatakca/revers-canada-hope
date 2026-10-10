@@ -110,6 +110,93 @@ export type Database = {
         }
         Relationships: []
       }
+      revers_profiles: {
+        Row: {
+          id: string
+          takatak_master_identity_id: string
+          sync_status: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          takatak_master_identity_id: string
+          sync_status?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          takatak_master_identity_id?: string
+          sync_status?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      takatak_outbox: {
+        Row: {
+          id: string
+          event_id: string
+          event_type: string
+          version: string
+          source_system: string
+          source_workspace: string | null
+          source_entity_type: string
+          source_entity_id: string
+          idempotency_key: string
+          occurred_at: string
+          payload: Json
+          status: string
+          attempts: number
+          last_error: string | null
+          next_attempt_at: string
+          delivered_at: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          event_id: string
+          event_type: string
+          version?: string
+          source_system?: string
+          source_workspace?: string | null
+          source_entity_type: string
+          source_entity_id: string
+          idempotency_key: string
+          occurred_at?: string
+          payload: Json
+          status?: string
+          attempts?: number
+          last_error?: string | null
+          next_attempt_at?: string
+          delivered_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          event_id?: string
+          event_type?: string
+          version?: string
+          source_system?: string
+          source_workspace?: string | null
+          source_entity_type?: string
+          source_entity_id?: string
+          idempotency_key?: string
+          occurred_at?: string
+          payload?: Json
+          status?: string
+          attempts?: number
+          last_error?: string | null
+          next_attempt_at?: string
+          delivered_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       newsletter_subscribers: {
         Row: {
           consent: boolean

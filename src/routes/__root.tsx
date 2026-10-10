@@ -51,8 +51,6 @@ export const Route = createRootRoute({
       { name: "description", content: "Revers Canada is a nonprofit website connecting Canadians with resources and support for homeless women and children." },
       { property: "og:description", content: "Revers Canada is a nonprofit website connecting Canadians with resources and support for homeless women and children." },
       { name: "twitter:description", content: "Revers Canada is a nonprofit website connecting Canadians with resources and support for homeless women and children." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/c15c3419-1a32-4a3c-b14c-4d6b6b0974af/id-preview-9f8b2e15--7ed2d7d2-9140-475e-b227-82dafa866a6b.lovable.app-1776661219870.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/c15c3419-1a32-4a3c-b14c-4d6b6b0974af/id-preview-9f8b2e15--7ed2d7d2-9140-475e-b227-82dafa866a6b.lovable.app-1776661219870.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

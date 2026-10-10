@@ -25,4 +25,12 @@ export default tseslint.config(
     },
   },
   eslintPluginPrettier,
+  {
+    files: ["**/*.{ts,tsx}"],
+    // Existing UI code predates the migration and has formatting-only drift.
+    // Keep semantic lint errors blocking while formatting is cleaned up separately.
+    rules: {
+      "prettier/prettier": "warn",
+    },
+  },
 );

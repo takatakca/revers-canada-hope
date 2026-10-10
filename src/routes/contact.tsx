@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Mail, Phone, MapPin, Loader2 } from "lucide-react";
+import { Phone, MapPin, Loader2 } from "lucide-react";
 import { useLang } from "@/i18n/LangContext";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -53,10 +53,9 @@ function ContactPage() {
       }
       if (result.saved) {
         toast.success(t.contact.sent);
-      } else if (result.mailtoHref) {
-        // Backend insert failed — fall back to mailto so the user is never stuck.
-        window.location.href = result.mailtoHref;
-        toast.success(t.contact.sentFallback);
+      } else if (!result.saved) {
+        toast.error(t.contact.unavailable);
+        return;
       }
       setForm({ name: "", email: "", phone: "", subject: "", message: "", website: "" });
     } catch {
@@ -102,13 +101,6 @@ function ContactPage() {
             >
               <Phone className="h-5 w-5 text-[color:var(--teal-deep)]" aria-hidden />
               <span className="text-sm text-ink">{t.contact.phoneNum}</span>
-            </a>
-            <a
-              href={`mailto:${t.contact.mail}`}
-              className="flex items-center gap-3 rounded-xl bg-white p-4 shadow-card transition hover:shadow-soft"
-            >
-              <Mail className="h-5 w-5 text-[color:var(--teal-deep)]" aria-hidden />
-              <span className="text-sm text-ink">{t.contact.mail}</span>
             </a>
           </div>
 
