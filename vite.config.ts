@@ -7,7 +7,7 @@ import { nitro } from "nitro/vite";
 
 // REVERS CANADA is deployed as a portable Node.js/TanStack Start application.
 // Nitro produces the standalone .output/server/index.mjs runtime used by cPanel
-// and other Node hosts. No Lovable or Cloudflare build adapter is required.
+// and other Node hosts.
 process.env.NITRO_PRESET = process.env.NITRO_PRESET || "node-server";
 
 export default defineConfig({
