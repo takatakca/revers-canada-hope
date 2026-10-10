@@ -1,8 +1,9 @@
-import "server-only";
+import "@tanstack/react-start/server-only";
 
 import { randomUUID } from "node:crypto";
 
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import type { Json } from "@/integrations/supabase/types";
 import { postTakatakEvent, type TakatakEventEnvelope } from "./client";
 
 export type EnqueueTakatakEventInput = {
@@ -40,7 +41,7 @@ export async function enqueueTakatakEvent(
     source_entity_id: input.sourceEntityId,
     idempotency_key: input.idempotencyKey,
     occurred_at: envelope.occurredAt,
-    payload: envelope.payload,
+    payload: envelope.payload as Json,
     status: "pending",
     attempts: 0,
     next_attempt_at: new Date().toISOString(),
