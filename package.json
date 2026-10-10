@@ -10,8 +10,9 @@
     "preview": "vite preview",
     "start": "node .output/server/index.mjs",
     "lint": "eslint .",
-    "qa": "npm run lint && npm run build",
-    "format": "prettier --write ."
+    "qa": "npm run qa:github-migration && npm run lint && npm run build",
+    "format": "prettier --write .",
+    "qa:github-migration": "node scripts/verify-github-migration.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
