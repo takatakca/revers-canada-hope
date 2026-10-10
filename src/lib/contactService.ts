@@ -1,6 +1,5 @@
 import { sanitizeText, validateEmail, validateRequired, FIELD_LIMITS } from "./validation";
 import { safeSet, STORAGE_KEYS } from "./storage";
-import { supabase } from "@/integrations/supabase/client";
 
 export type ContactInput = {
   name: string;
@@ -28,12 +27,6 @@ export type ContactSubmission = {
   };
 };
 
-/**
- * Store a contact request inside REVERS.
- *
- * There is deliberately no mailto fallback: public forms must create an
- * internal REVERS record and must never depend on an invented mailbox.
- */
 export async function prepareContactSubmission(
   input: ContactInput,
 ): Promise<ContactSubmission> {
@@ -59,39 +52,33 @@ export async function prepareContactSubmission(
     lang: input.lang ?? "fr",
   };
 
-  let saved = false;
   try {
-    const { error } = await supabase.from("contacts").insert({
-      name: payload.name,
-      email: payload.email,
-      phone: payload.phone || null,
-      subject: payload.subject || null,
-      message: payload.message,
-      language: payload.lang,
-      source: payload.source,
-      user_agent:
-        typeof navigator !== "undefined"
-          ? navigator.userAgent.slice(0, 500)
-          : null,
+    const response = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        ...payload,
+        website: "",
+      }),
     });
 
-    if (!error) saved = true;
-    else if (import.meta.env.DEV) {
-      console.warn("[contact] insert failed:", error.message);
+    const result = (await response.json()) as {
+      ok?: boolean;
+      saved?: boolean;
+    };
+
+    if (!response.ok || result.ok !== true || result.saved !== true) {
+      return { ok: false, errors: ["backend_unavailable"], payload };
     }
-  } catch (err) {
-    if (import.meta.env.DEV) console.warn("[contact] insert threw:", err);
-  }
 
-  safeSet(STORAGE_KEYS.contactLast, {
-    submittedAt: payload.submittedAt,
-    source: payload.source,
-    saved,
-  });
+    safeSet(STORAGE_KEYS.contactLast, {
+      submittedAt: payload.submittedAt,
+      source: payload.source,
+      saved: true,
+    });
 
-  if (!saved) {
+    return { ok: true, saved: true, payload };
+  } catch {
     return { ok: false, errors: ["backend_unavailable"], payload };
   }
-
-  return { ok: true, saved: true, payload };
 }
