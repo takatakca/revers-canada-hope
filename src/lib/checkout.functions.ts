@@ -34,11 +34,9 @@ export const createDonationCheckout = createServerFn({ method: "POST" })
     if (intent.status !== "pending_checkout") return { ok: false, error: "invalid_status" };
     if (!intent.amount_cents || intent.amount_cents <= 0) return { ok: false, error: "invalid_amount" };
 
-    // 2) Build URLs
-    const siteUrl =
-      process.env.VITE_PUBLIC_SITE_URL ||
-      process.env.PUBLIC_SITE_URL ||
-      "https://revers-canada-hope.lovable.app";
+    // 2) Build URLs. Never fall back to a preview or invented production host.
+    const siteUrl = process.env.PUBLIC_SITE_URL?.trim();
+    if (!siteUrl) return { ok: false, error: "stripe_not_configured" };
 
     // 3) Create Stripe Checkout session
     try {
