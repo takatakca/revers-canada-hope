@@ -195,7 +195,7 @@ export function SiteHeader() {
               href="/api/auth/takatak/start"
               className="mt-3 block border border-white/25 px-6 py-4 text-center text-[13px] font-semibold uppercase tracking-[0.16em] text-white/85"
             >
-              Compte TAKATAK
+              {lang === "fr" ? "Compte TAKATAK" : "TAKATAK account"}
             </a>
             <Link
               to="/donate"
