@@ -26,7 +26,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
 
       - name: Validate deployment configuration
         env:
@@ -48,6 +47,7 @@ jobs:
 
       - name: Quality gates
         run: |
+          npm run qa:github-migration
           npm run typecheck
           npm run lint
           NITRO_PRESET=node-server npm run build
