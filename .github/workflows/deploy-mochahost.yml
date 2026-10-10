@@ -1,0 +1,168 @@
+name: Deploy REVERS CANADA to MochaHost
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: revers-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Validate deployment configuration
+        env:
+          MOCHAHOST_HOST: ${{ secrets.MOCHAHOST_HOST }}
+          MOCHAHOST_USER: ${{ secrets.MOCHAHOST_USER }}
+          MOCHAHOST_SSH_PORT: ${{ secrets.MOCHAHOST_SSH_PORT }}
+          MOCHAHOST_APP_ROOT: ${{ secrets.MOCHAHOST_APP_ROOT }}
+          MOCHAHOST_SSH_PRIVATE_KEY: ${{ secrets.MOCHAHOST_SSH_PRIVATE_KEY }}
+          MOCHAHOST_KNOWN_HOSTS: ${{ secrets.MOCHAHOST_KNOWN_HOSTS }}
+          REVERS_PRODUCTION_URL: ${{ secrets.REVERS_PRODUCTION_URL }}
+        run: |
+          set -euo pipefail
+          for name in MOCHAHOST_HOST MOCHAHOST_USER MOCHAHOST_SSH_PORT MOCHAHOST_APP_ROOT MOCHAHOST_SSH_PRIVATE_KEY MOCHAHOST_KNOWN_HOSTS REVERS_PRODUCTION_URL; do
+            test -n "${!name}" || { echo "Missing required deployment secret: $name"; exit 1; }
+          done
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Quality gates
+        run: |
+          npm run typecheck
+          npm run lint
+          NITRO_PRESET=node-server npm run build
+
+      - name: Verify build artifact
+        run: |
+          test -f .output/server/index.mjs
+          test -d .output/public
+          test -f app.js
+
+      - name: Prepare SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.MOCHAHOST_SSH_PRIVATE_KEY }}
+          KNOWN_HOSTS: ${{ secrets.MOCHAHOST_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/revers_deploy_key
+          chmod 600 ~/.ssh/revers_deploy_key
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: Package immutable release
+        env:
+          RELEASE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          rm -rf artifact release.tgz
+          mkdir -p artifact
+          cp -a .output artifact/.output
+          printf '%s\n' "$RELEASE_SHA" > artifact/RELEASE_SHA
+          tar -czf release.tgz -C artifact .
+
+      - name: Upload release
+        env:
+          HOST: ${{ secrets.MOCHAHOST_HOST }}
+          USER: ${{ secrets.MOCHAHOST_USER }}
+          PORT: ${{ secrets.MOCHAHOST_SSH_PORT }}
+          ROOT: ${{ secrets.MOCHAHOST_APP_ROOT }}
+          RELEASE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          ssh -i ~/.ssh/revers_deploy_key -p "$PORT" "$USER@$HOST" "mkdir -p '$ROOT/incoming' '$ROOT/releases/$RELEASE_SHA' '$ROOT/tmp'"
+          scp -i ~/.ssh/revers_deploy_key -P "$PORT" release.tgz "$USER@$HOST:$ROOT/incoming/$RELEASE_SHA.tgz"
+          scp -i ~/.ssh/revers_deploy_key -P "$PORT" app.js "$USER@$HOST:$ROOT/app.js"
+
+      - name: Activate release
+        env:
+          HOST: ${{ secrets.MOCHAHOST_HOST }}
+          USER: ${{ secrets.MOCHAHOST_USER }}
+          PORT: ${{ secrets.MOCHAHOST_SSH_PORT }}
+          ROOT: ${{ secrets.MOCHAHOST_APP_ROOT }}
+          RELEASE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          ssh -i ~/.ssh/revers_deploy_key -p "$PORT" "$USER@$HOST" "ROOT='$ROOT' RELEASE_SHA='$RELEASE_SHA' bash -s" <<'REMOTE'
+          set -euo pipefail
+
+          mkdir -p "$ROOT/releases/$RELEASE_SHA" "$ROOT/tmp"
+          tar -xzf "$ROOT/incoming/$RELEASE_SHA.tgz" -C "$ROOT/releases/$RELEASE_SHA"
+          test -f "$ROOT/releases/$RELEASE_SHA/.output/server/index.mjs"
+          printf '%s\n' "$RELEASE_SHA" > "$ROOT/releases/$RELEASE_SHA/RELEASE_SHA"
+
+          if [ -f "$ROOT/CURRENT" ]; then
+            cp "$ROOT/CURRENT" "$ROOT/PREVIOUS"
+          fi
+
+          printf '%s\n' "$RELEASE_SHA" > "$ROOT/CURRENT"
+          touch "$ROOT/tmp/restart.txt"
+          rm -f "$ROOT/incoming/$RELEASE_SHA.tgz"
+          REMOTE
+
+      - name: Verify production health
+        env:
+          HOST: ${{ secrets.MOCHAHOST_HOST }}
+          USER: ${{ secrets.MOCHAHOST_USER }}
+          PORT: ${{ secrets.MOCHAHOST_SSH_PORT }}
+          ROOT: ${{ secrets.MOCHAHOST_APP_ROOT }}
+          REVERS_PRODUCTION_URL: ${{ secrets.REVERS_PRODUCTION_URL }}
+        run: |
+          set -euo pipefail
+          health_ok=false
+          for attempt in $(seq 1 12); do
+            if curl -fsS --max-time 15 "$REVERS_PRODUCTION_URL/healthz" | jq -e '.ok == true' >/dev/null &&
+               curl -fsS --max-time 15 "$REVERS_PRODUCTION_URL/readyz" | jq -e '.ok == true' >/dev/null; then
+              health_ok=true
+              break
+            fi
+            sleep 5
+          done
+
+          if [ "$health_ok" != true ]; then
+            echo "Production health check failed; rolling back."
+            ssh -i ~/.ssh/revers_deploy_key -p "$PORT" "$USER@$HOST" "ROOT='$ROOT' bash -s" <<'REMOTE'
+          set -euo pipefail
+          if [ -s "$ROOT/PREVIOUS" ]; then
+            cp "$ROOT/PREVIOUS" "$ROOT/CURRENT"
+            touch "$ROOT/tmp/restart.txt"
+          fi
+          REMOTE
+            exit 1
+          fi
+
+      - name: Keep latest five releases
+        env:
+          HOST: ${{ secrets.MOCHAHOST_HOST }}
+          USER: ${{ secrets.MOCHAHOST_USER }}
+          PORT: ${{ secrets.MOCHAHOST_SSH_PORT }}
+          ROOT: ${{ secrets.MOCHAHOST_APP_ROOT }}
+        run: |
+          ssh -i ~/.ssh/revers_deploy_key -p "$PORT" "$USER@$HOST" "ROOT='$ROOT' bash -s" <<'REMOTE'
+          set -euo pipefail
+          find "$ROOT/releases" -mindepth 1 -maxdepth 1 -type d -printf '%T@ %p\n' |
+            sort -nr |
+            tail -n +6 |
+            cut -d' ' -f2- |
+            xargs -r rm -rf
+          REMOTE
