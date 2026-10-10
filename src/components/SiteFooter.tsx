@@ -99,7 +99,6 @@ export function SiteFooter() {
             <address className="mt-5 not-italic text-sm leading-7 text-primary-foreground/70">
               5505 Rue Irwin<br />LaSalle, QC H8N 1A1<br />Canada<br />
               <a href="tel:5148252825">514-825-2825</a><br />
-              <a href="mailto:reverscanada@gmail.com" className="break-all">reverscanada@gmail.com</a>
             </address>
           </div>
         </div>
