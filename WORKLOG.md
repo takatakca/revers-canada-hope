@@ -1,3 +1,4 @@
+- 2026-10-10 | ChatGPT/GitHub agent | feat/github-takatak-migration → PR #1 | TESTED / CI IN PROGRESS | Removed provider-coupled build/auth paths, kept Node/Nitro + MochaHost deployment, fixed route-tree/server-only/typecheck gates | wait for lint/build; owner merges PR #1 only after CI is green
 # Work log
 
 Newest first, one line per piece of work. Rule: `AGENTS.md` › Work log rule.
