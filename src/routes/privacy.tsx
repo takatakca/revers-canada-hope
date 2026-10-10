@@ -75,8 +75,8 @@ function FrContent() {
           Lorsque vous utilisez notre formulaire de contact, vos informations (nom, courriel,
           téléphone optionnel, sujet et message) peuvent être enregistrées dans une base de
           données sécurisée afin d'être traitées par l'équipe de Revers Canada. Si
-          l'enregistrement échoue, votre message est préparé sous forme de courriel envoyé via
-          votre application courriel par défaut à reverscanada@gmail.com.
+          Si l'enregistrement échoue, le formulaire affiche une erreur et ne redirige pas
+          vers une adresse courriel non vérifiée.
         </p>
       </Block>
       <Block title="Infolettre">
@@ -119,8 +119,7 @@ function FrContent() {
           REVERS CANADA<br />
           5505 Rue Irwin<br />
           LaSalle, QC H8N 1A1, Canada<br />
-          <a className="underline" href="mailto:reverscanada@gmail.com">reverscanada@gmail.com</a>
-          {" · "}
+
           <a className="underline" href="tel:5148252825">514-825-2825</a>
         </p>
       </Block>
