@@ -15,12 +15,21 @@ function assert(condition, message) {
 }
 
 assert(!existsSync(join(root, "wrangler.jsonc")), "Cloudflare/Lovable wrangler config removed");
-assert(!existsSync(join(root, "src/integrations/supabase/previewAuthStorage.ts")), "Lovable preview auth broker removed");
+assert(
+  !existsSync(join(root, "src/integrations/supabase/previewAuthStorage.ts")),
+  "Lovable preview auth broker removed",
+);
 
 const packageJson = JSON.parse(read("package.json"));
-assert(!packageJson.devDependencies?.["@lovable.dev/vite-tanstack-config"], "Lovable Vite package removed");
+assert(
+  !packageJson.devDependencies?.["@lovable.dev/vite-tanstack-config"],
+  "Lovable Vite package removed",
+);
 assert(!packageJson.dependencies?.["@cloudflare/vite-plugin"], "Cloudflare Vite package removed");
-assert(packageJson.scripts?.start === "node .output/server/index.mjs", "Node/Nitro production start script configured");
+assert(
+  packageJson.scripts?.start === "node .output/server/index.mjs",
+  "Node/Nitro production start script configured",
+);
 
 const vite = read("vite.config.ts");
 assert(vite.includes('from "nitro/vite"'), "Nitro adapter is configured");
