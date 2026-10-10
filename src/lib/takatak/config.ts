@@ -1,3 +1,5 @@
+import "@tanstack/react-start/server-only";
+
 export type TakatakConfig = {
   launchUrl: string;
   apiBaseUrl: string;
