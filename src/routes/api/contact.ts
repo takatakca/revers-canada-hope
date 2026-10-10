@@ -102,6 +102,7 @@ export const Route = createFileRoute("/api/contact")({
             payload: {
               source: "contact_form",
               language: input.lang,
+              sourceEntityId: contact.id,
             },
           });
           eventId = queued.eventId;
