@@ -28,6 +28,14 @@ import { Route as PiliersPilierRouteImport } from './routes/piliers.$pilier'
 import { Route as DonateSuccessRouteImport } from './routes/donate.success'
 import { Route as DonateCancelledRouteImport } from './routes/donate.cancelled'
 import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/stripe-webhook'
+import { Route as ApiAuthTakatakCallbackRouteImport } from './routes/api/auth/takatak/callback'
+import { Route as ApiAuthTakatakLogoutRouteImport } from './routes/api/auth/takatak/logout'
+import { Route as ApiAuthTakatakSessionRouteImport } from './routes/api/auth/takatak/session'
+import { Route as ApiAuthTakatakStartRouteImport } from './routes/api/auth/takatak/start'
+import { Route as ApiContactRouteImport } from './routes/api/contact'
+import { Route as ApiInternalTakatakOutboxRouteImport } from './routes/api/internal/takatak/outbox'
+import { Route as HealthzRouteImport } from './routes/healthz'
+import { Route as ReadyzRouteImport } from './routes/readyz'
 
 const RevpereRoute = RevpereRouteImport.update({
   id: '/revpere',
@@ -125,6 +133,47 @@ const ApiPublicStripeWebhookRoute = ApiPublicStripeWebhookRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 
+const ApiAuthTakatakCallbackRoute = ApiAuthTakatakCallbackRouteImport.update({
+  id: '/api/auth/takatak/callback',
+  path: '/api/auth/takatak/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthTakatakLogoutRoute = ApiAuthTakatakLogoutRouteImport.update({
+  id: '/api/auth/takatak/logout',
+  path: '/api/auth/takatak/logout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthTakatakSessionRoute = ApiAuthTakatakSessionRouteImport.update({
+  id: '/api/auth/takatak/session',
+  path: '/api/auth/takatak/session',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthTakatakStartRoute = ApiAuthTakatakStartRouteImport.update({
+  id: '/api/auth/takatak/start',
+  path: '/api/auth/takatak/start',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiContactRoute = ApiContactRouteImport.update({
+  id: '/api/contact',
+  path: '/api/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiInternalTakatakOutboxRoute = ApiInternalTakatakOutboxRouteImport.update({
+  id: '/api/internal/takatak/outbox',
+  path: '/api/internal/takatak/outbox',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HealthzRoute = HealthzRouteImport.update({
+  id: '/healthz',
+  path: '/healthz',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReadyzRoute = ReadyzRouteImport.update({
+  id: '/readyz',
+  path: '/readyz',
+  getParentRoute: () => rootRouteImport,
+} as any)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/GAR': typeof GARRoute
@@ -144,6 +193,14 @@ export interface FileRoutesByFullPath {
   '/donate/cancelled': typeof DonateCancelledRoute
   '/donate/success': typeof DonateSuccessRoute
   '/piliers/$pilier': typeof PiliersPilierRoute
+  '/api/auth/takatak/callback': typeof ApiAuthTakatakCallbackRoute
+  '/api/auth/takatak/logout': typeof ApiAuthTakatakLogoutRoute
+  '/api/auth/takatak/session': typeof ApiAuthTakatakSessionRoute
+  '/api/auth/takatak/start': typeof ApiAuthTakatakStartRoute
+  '/api/contact': typeof ApiContactRoute
+  '/api/internal/takatak/outbox': typeof ApiInternalTakatakOutboxRoute
+  '/healthz': typeof HealthzRoute
+  '/readyz': typeof ReadyzRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
 }
 export interface FileRoutesByTo {
@@ -272,6 +329,14 @@ export interface RootRouteChildren {
   RessourcesRoute: typeof RessourcesRoute
   RevpereRoute: typeof RevpereRoute
   PiliersPilierRoute: typeof PiliersPilierRoute
+  ApiAuthTakatakCallbackRoute: typeof ApiAuthTakatakCallbackRoute
+  ApiAuthTakatakLogoutRoute: typeof ApiAuthTakatakLogoutRoute
+  ApiAuthTakatakSessionRoute: typeof ApiAuthTakatakSessionRoute
+  ApiAuthTakatakStartRoute: typeof ApiAuthTakatakStartRoute
+  ApiContactRoute: typeof ApiContactRoute
+  ApiInternalTakatakOutboxRoute: typeof ApiInternalTakatakOutboxRoute
+  HealthzRoute: typeof HealthzRoute
+  ReadyzRoute: typeof ReadyzRoute
   ApiPublicStripeWebhookRoute: typeof ApiPublicStripeWebhookRoute
 }
 
@@ -403,6 +468,62 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DonateCancelledRouteImport
       parentRoute: typeof DonateRoute
     }
+    '/api/auth/takatak/callback': {
+      id: '/api/auth/takatak/callback'
+      path: '/api/auth/takatak/callback'
+      fullPath: '/api/auth/takatak/callback'
+      preLoaderRoute: typeof ApiAuthTakatakCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/takatak/logout': {
+      id: '/api/auth/takatak/logout'
+      path: '/api/auth/takatak/logout'
+      fullPath: '/api/auth/takatak/logout'
+      preLoaderRoute: typeof ApiAuthTakatakLogoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/takatak/session': {
+      id: '/api/auth/takatak/session'
+      path: '/api/auth/takatak/session'
+      fullPath: '/api/auth/takatak/session'
+      preLoaderRoute: typeof ApiAuthTakatakSessionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/takatak/start': {
+      id: '/api/auth/takatak/start'
+      path: '/api/auth/takatak/start'
+      fullPath: '/api/auth/takatak/start'
+      preLoaderRoute: typeof ApiAuthTakatakStartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/contact': {
+      id: '/api/contact'
+      path: '/api/contact'
+      fullPath: '/api/contact'
+      preLoaderRoute: typeof ApiContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/internal/takatak/outbox': {
+      id: '/api/internal/takatak/outbox'
+      path: '/api/internal/takatak/outbox'
+      fullPath: '/api/internal/takatak/outbox'
+      preLoaderRoute: typeof ApiInternalTakatakOutboxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/healthz': {
+      id: '/healthz'
+      path: '/healthz'
+      fullPath: '/healthz'
+      preLoaderRoute: typeof HealthzRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/readyz': {
+      id: '/readyz'
+      path: '/readyz'
+      fullPath: '/readyz'
+      preLoaderRoute: typeof ReadyzRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/stripe-webhook': {
       id: '/api/public/stripe-webhook'
       path: '/api/public/stripe-webhook'
@@ -443,6 +564,14 @@ const rootRouteChildren: RootRouteChildren = {
   RessourcesRoute: RessourcesRoute,
   RevpereRoute: RevpereRoute,
   PiliersPilierRoute: PiliersPilierRoute,
+  ApiAuthTakatakCallbackRoute: ApiAuthTakatakCallbackRoute,
+  ApiAuthTakatakLogoutRoute: ApiAuthTakatakLogoutRoute,
+  ApiAuthTakatakSessionRoute: ApiAuthTakatakSessionRoute,
+  ApiAuthTakatakStartRoute: ApiAuthTakatakStartRoute,
+  ApiContactRoute: ApiContactRoute,
+  ApiInternalTakatakOutboxRoute: ApiInternalTakatakOutboxRoute,
+  HealthzRoute: HealthzRoute,
+  ReadyzRoute: ReadyzRoute,
   ApiPublicStripeWebhookRoute: ApiPublicStripeWebhookRoute,
 }
 export const routeTree = rootRouteImport
