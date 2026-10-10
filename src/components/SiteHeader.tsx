@@ -123,6 +123,12 @@ export function SiteHeader() {
           >
             {t.nav.contact}
           </Link>
+          <a
+            href="/api/auth/takatak/start"
+            className="hidden text-[12px] font-semibold uppercase tracking-[0.16em] text-white/70 transition hover:text-white md:inline"
+          >
+            TAKATAK
+          </a>
           <Link
             to="/revpere"
             className="hidden bg-[color:var(--leaf)] px-6 py-3 text-[12px] font-semibold uppercase tracking-[0.16em] text-white transition hover:bg-[color:var(--teal-deep)] sm:inline-block"
@@ -185,6 +191,12 @@ export function SiteHeader() {
             >
               {lang === "fr" ? "Commencer" : "Get started"}
             </Link>
+            <a
+              href="/api/auth/takatak/start"
+              className="mt-3 block border border-white/25 px-6 py-4 text-center text-[13px] font-semibold uppercase tracking-[0.16em] text-white/85"
+            >
+              Compte TAKATAK
+            </a>
             <Link
               to="/donate"
               className="mt-3 block border border-white/25 px-6 py-4 text-center text-[13px] font-semibold uppercase tracking-[0.16em] text-white/85"
