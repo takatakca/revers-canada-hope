@@ -21,6 +21,7 @@ if (!fs.existsSync(entry)) {
   throw new Error(`REVERS release entry does not exist: ${entry}`);
 }
 
+process.env.RELEASE_SHA = release;
 process.chdir(path.join(root, "releases", release));
 
 import(pathToFileURL(entry).href).catch((error) => {
