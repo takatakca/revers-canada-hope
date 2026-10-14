@@ -13,13 +13,19 @@ export function validateRequired(value: unknown): boolean {
 }
 
 export function validateDonationAmount(amount: unknown): boolean {
-  const n = typeof amount === "string" ? Number(amount) : (amount as number);
-  const cents = Math.round(n * 100);
-  // No zero-cent, sub-dollar or over-limit Stripe donation intents.
-  return Number.isFinite(n) && n >= 1 && n <= 1_000_000 && cents > 0 && Number.isSafeInteger(cents);
+  if (typeof amount !== "string" && typeof amount !== "number") return false;
+  // Accept only plain CAD amounts with at most two decimal places.
+  const decimal = String(amount).trim();
+  if (!/^[0-9]+([.][0-9]{1,2})?$/.test(decimal)) return false;
+  const value = Number(decimal);
+  const cents = Math.round(value * 100);
+  return Number.isFinite(value) &&
+    value >= 1 &&
+    value <= 1_000_000 &&
+    Number.isSafeInteger(cents);
 }
 
-/** Strip control chars and clamp length. Prevents accidental HTML/script injection in text payloads. */
+/** Strip control chars and clamp length. Not an HTML sanitizer: render as text. */
 export function sanitizeText(input: string, maxLength = 1000): string {
   if (typeof input !== "string") return "";
   // eslint-disable-next-line no-control-regex

@@ -173,6 +173,8 @@ function DonatePage() {
                 <Input
                   type="number"
                   min="1"
+                  max="1000000"
+                  step="0.01"
                   value={other}
                   onChange={(e) => setOther(e.target.value)}
                   placeholder="0.00"
