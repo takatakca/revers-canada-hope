@@ -36,7 +36,15 @@ export const Route = createFileRoute("/api/auth/takatak/callback")({
             );
           }
 
-          const response = Response.redirect("/", 303);
+          const siteUrl = process.env.PUBLIC_SITE_URL?.trim();
+          if (!siteUrl) {
+            throw new Error("PUBLIC_SITE_URL is not configured for TAKATAK callback.");
+          }
+          const redirectUrl = new URL("/", siteUrl);
+          if (redirectUrl.protocol !== "https:") {
+            throw new Error("TAKATAK product callback must redirect to HTTPS.");
+          }
+          const response = Response.redirect(redirectUrl.toString(), 303);
           response.headers.set("Cache-Control", "no-store");
           response.headers.set(
             "Set-Cookie",
