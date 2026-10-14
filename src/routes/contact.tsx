@@ -48,7 +48,7 @@ function ContactPage() {
     try {
       const result = await prepareContactSubmission({ ...form, lang });
       if (!result.ok) {
-        toast.error(t.contact.missing);
+        toast.error(result.errors?.includes("backend_unavailable") ? t.contact.unavailable : t.contact.missing);
         return;
       }
       if (result.saved) {
@@ -59,7 +59,7 @@ function ContactPage() {
       }
       setForm({ name: "", email: "", phone: "", subject: "", message: "", website: "" });
     } catch {
-      toast.error(t.contact.missing);
+      toast.error(t.contact.unavailable);
     } finally {
       setSubmitting(false);
     }

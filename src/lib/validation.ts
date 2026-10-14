@@ -14,7 +14,9 @@ export function validateRequired(value: unknown): boolean {
 
 export function validateDonationAmount(amount: unknown): boolean {
   const n = typeof amount === "string" ? Number(amount) : (amount as number);
-  return Number.isFinite(n) && n > 0 && n <= 1_000_000;
+  const cents = Math.round(n * 100);
+  // No zero-cent, sub-dollar or over-limit Stripe donation intents.
+  return Number.isFinite(n) && n >= 1 && n <= 1_000_000 && cents > 0 && Number.isSafeInteger(cents);
 }
 
 /** Strip control chars and clamp length. Prevents accidental HTML/script injection in text payloads. */
