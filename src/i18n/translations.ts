@@ -534,6 +534,7 @@ export const translations = {
         "Les paiements sont traités de manière sécurisée par Stripe. REVERS CANADA ne stocke aucune donnée de carte bancaire.",
       intentSaved: (a: string) => `Merci. Votre intention de don de ${a} $ a été enregistrée.`,
       invalidAmount: "Veuillez choisir ou saisir un montant supérieur à 0.",
+      saveUnavailable: "Impossible d’enregistrer le don pour le moment. Aucun paiement n’a été effectué.",
     },
 
     contact: {
@@ -564,7 +565,10 @@ export const translations = {
       subscribe: "S'abonner",
       newsletterOk: "Merci pour votre intérêt. Votre demande d'inscription à l'infolettre a été enregistrée.",
       newsletterAlready: "Cette adresse est déjà enregistrée pour l'infolettre.",
-      newsletterErr: "Veuillez entrer une adresse courriel valide.",
+      newsletterErr: "Veuillez entrer un courriel valide et accepter la politique de confidentialité.",
+      newsletterUnavailable: "L’inscription ne peut pas être enregistrée pour le moment. Réessayez plus tard.",
+      newsletterConsent: "Je consens à recevoir l’infolettre et j’ai lu la",
+      newsletterPrivacy: "Désabonnement possible à tout moment sur demande.",
       rights: "Tous droits réservés.",
       privacy: "Politique de confidentialité",
       registered: "Organisme communautaire — Montréal, Québec",
@@ -1102,6 +1106,7 @@ export const translations = {
         "Payments are processed securely by Stripe. REVERS CANADA does not store any credit card data.",
       intentSaved: (a: string) => `Thank you. Your $${a} donation intent has been recorded.`,
       invalidAmount: "Please choose or enter an amount greater than 0.",
+      saveUnavailable: "We could not save your donation request. No payment has been made.",
     },
 
     contact: {
@@ -1132,7 +1137,10 @@ export const translations = {
       subscribe: "Subscribe",
       newsletterOk: "Thank you for your interest. Your newsletter subscription request has been recorded.",
       newsletterAlready: "This address is already signed up for the newsletter.",
-      newsletterErr: "Please enter a valid email address.",
+      newsletterErr: "Enter a valid email and agree to the privacy policy.",
+      newsletterUnavailable: "We could not save your subscription. Please try again later.",
+      newsletterConsent: "I agree to receive the newsletter and have read the",
+      newsletterPrivacy: "You may request to unsubscribe at any time.",
       rights: "All rights reserved.",
       privacy: "Privacy policy",
       registered: "Community organization — Montréal, Québec",

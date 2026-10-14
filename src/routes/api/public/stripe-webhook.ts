@@ -30,8 +30,11 @@ export const Route = createFileRoute("/api/public/stripe-webhook")({
 
         try {
           switch (event.type) {
-            case "checkout.session.completed": {
+            case "checkout.session.completed":
+            case "checkout.session.async_payment_succeeded": {
               const session = event.data.object as import("stripe").Stripe.Checkout.Session;
+              // Checkout completion does not always mean that funds were received.
+              if (session.payment_status !== "paid") break;
               const intentId = session.metadata?.donation_intent_id;
               if (!intentId) {
                 console.warn("[stripe-webhook] completed session without donation_intent_id");
@@ -69,7 +72,7 @@ export const Route = createFileRoute("/api/public/stripe-webhook")({
                   donor_name: donorName,
                 })
                 .eq("id", intentId);
-              if (error) console.error("[stripe-webhook] update paid failed:", error.message);
+              if (error) throw new Error(`Could not record paid donation: ${error.code ?? "unknown"}`);
               break;
             }
 
@@ -77,11 +80,12 @@ export const Route = createFileRoute("/api/public/stripe-webhook")({
               const session = event.data.object as import("stripe").Stripe.Checkout.Session;
               const intentId = session.metadata?.donation_intent_id;
               if (!intentId) break;
-              await supabaseAdmin
+              const { error } = await supabaseAdmin
                 .from("donation_intents")
                 .update({ status: "cancelled" })
                 .eq("id", intentId)
                 .neq("status", "paid");
+              if (error) throw new Error(`Could not cancel donation intent: ${error.code ?? "unknown"}`);
               break;
             }
 
@@ -89,11 +93,12 @@ export const Route = createFileRoute("/api/public/stripe-webhook")({
               const pi = event.data.object as import("stripe").Stripe.PaymentIntent;
               const intentId = pi.metadata?.donation_intent_id;
               if (!intentId) break;
-              await supabaseAdmin
+              const { error } = await supabaseAdmin
                 .from("donation_intents")
                 .update({ status: "failed" })
                 .eq("id", intentId)
                 .neq("status", "paid");
+              if (error) throw new Error(`Could not mark donation failed: ${error.code ?? "unknown"}`);
               break;
             }
 

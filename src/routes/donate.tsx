@@ -4,7 +4,6 @@ import { Heart, ShieldCheck, Loader2 } from "lucide-react";
 import { useLang } from "@/i18n/LangContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { saveDonationIntent } from "@/lib/donationService";
 import { useServerFn } from "@tanstack/react-start";
@@ -17,7 +16,7 @@ export const Route = createFileRoute("/donate")({
       {
         name: "description",
         content:
-          "Soutenez les femmes et enfants du Québec avec un don ponctuel ou mensuel sécurisé par Stripe. Reçu fiscal officiel.",
+          "Soutenez les programmes RêvPÈRE de REVERS CANADA : accompagnement des pères, formation, aide alimentaire et habitation. Aucun reçu fiscal officiel n’est garanti.",
       },
       { property: "og:title", content: "Faire un don — Revers Canada" },
       {
@@ -34,7 +33,6 @@ function DonatePage() {
   const [type, setType] = useState<"once" | "monthly">("once");
   const [amount, setAmount] = useState<string>("50");
   const [other, setOther] = useState("");
-  const [coverFee, setCoverFee] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [stripeReady, setStripeReady] = useState(false);
 
@@ -54,11 +52,10 @@ function DonatePage() {
       const result = await saveDonationIntent({
         amount: raw,
         frequency: type,
-        coverFee,
         lang,
       });
       if (!result.ok) {
-        toast.error(t.donate.invalidAmount);
+        toast.error(result.error === "invalid_amount" ? t.donate.invalidAmount : t.donate.saveUnavailable);
         return;
       }
 
@@ -183,14 +180,6 @@ function DonatePage() {
                 />
               </div>
             </div>
-
-            <label className="mt-5 flex items-center gap-2 text-sm text-ink">
-              <Checkbox
-                checked={coverFee}
-                onCheckedChange={(v) => setCoverFee(Boolean(v))}
-              />
-              {t.donate.coverFee}
-            </label>
 
             <Button
               type="submit"

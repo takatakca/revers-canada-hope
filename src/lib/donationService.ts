@@ -1,5 +1,4 @@
 import { validateDonationAmount } from "./validation";
-import { safeSet, STORAGE_KEYS } from "./storage";
 import { supabase } from "@/integrations/supabase/client";
 
 export type DonationFrequency = "once" | "monthly";
@@ -61,7 +60,6 @@ export async function saveDonationIntent(input: DonationInput): Promise<Donation
       .select("id")
       .single();
     if (!error && data) {
-      safeSet(STORAGE_KEYS.donation, intent);
       return { ok: true, intent, saved: true, intentId: data.id };
     }
     if (import.meta.env.DEV) console.warn("[donation] insert failed:", error?.message);
@@ -69,10 +67,8 @@ export async function saveDonationIntent(input: DonationInput): Promise<Donation
     if (import.meta.env.DEV) console.warn("[donation] insert threw:", err);
   }
 
-  // 2) Fallback to localStorage.
-  const ok = safeSet(STORAGE_KEYS.donation, intent);
-  if (!ok) return { ok: false, error: "storage_failed" };
-  return { ok: true, intent, saved: false };
+  // A local browser record is not a durable donation request.
+  return { ok: false, error: "storage_failed" };
 }
 
 /** Future: create a real Stripe Checkout session via server function. */

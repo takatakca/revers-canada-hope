@@ -3,6 +3,7 @@ import { useState } from "react";
 import { ArrowRight, Facebook, Instagram, Loader2 } from "lucide-react";
 import { useLang } from "@/i18n/LangContext";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { saveNewsletterInterest } from "@/lib/newsletterService";
@@ -10,9 +11,8 @@ import { FIELD_LIMITS } from "@/lib/validation";
 
 export function SiteFooter() {
   const { t, lang } = useLang();
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [consent, setConsent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubscribe = async (event: React.FormEvent) => {
@@ -20,17 +20,16 @@ export function SiteFooter() {
     if (submitting) return;
     setSubmitting(true);
     try {
-      const result = await saveNewsletterInterest({ firstName, lastName, email, lang, consent: true });
+      const result = await saveNewsletterInterest({ email, lang, consent });
       if (!result.ok) {
-        toast.error(t.footer.newsletterErr);
+        toast.error(result.error === "save_failed" ? t.footer.newsletterUnavailable : t.footer.newsletterErr);
         return;
       }
       toast[result.alreadySubscribed ? "message" : "success"](
         result.alreadySubscribed ? t.footer.newsletterAlready : t.footer.newsletterOk,
       );
-      setFirstName("");
-      setLastName("");
       setEmail("");
+      setConsent(false);
     } finally {
       setSubmitting(false);
     }
@@ -58,16 +57,17 @@ export function SiteFooter() {
             <h2 className="text-2xl text-primary-foreground">{t.footer.newsletter}</h2>
             <p className="mt-3 max-w-md text-sm leading-6 text-primary-foreground/60">{t.footer.newsletterD}</p>
             <form onSubmit={handleSubscribe} className="mt-7">
-              <div className="grid gap-px bg-primary-foreground/20 sm:grid-cols-2">
-                <Input value={firstName} onChange={(event) => setFirstName(event.target.value)} maxLength={FIELD_LIMITS.name} placeholder={t.footer.firstName} aria-label={t.footer.firstName} className="h-12 rounded-none border-0 bg-ink text-primary-foreground placeholder:text-primary-foreground/45 focus-visible:ring-leaf" />
-                <Input value={lastName} onChange={(event) => setLastName(event.target.value)} maxLength={FIELD_LIMITS.name} placeholder={t.footer.lastName} aria-label={t.footer.lastName} className="h-12 rounded-none border-0 bg-ink text-primary-foreground placeholder:text-primary-foreground/45 focus-visible:ring-leaf" />
-              </div>
-              <div className="mt-px flex bg-primary-foreground/20">
+              <div className="flex bg-primary-foreground/20">
                 <Input type="email" required value={email} onChange={(event) => setEmail(event.target.value)} maxLength={FIELD_LIMITS.email} placeholder={t.footer.emailPh} aria-label={t.footer.emailPh} className="h-12 rounded-none border-0 bg-ink text-primary-foreground placeholder:text-primary-foreground/45 focus-visible:ring-leaf" />
-                <Button type="submit" size="icon" disabled={submitting} className="h-12 w-12 shrink-0 rounded-none bg-leaf text-ink hover:bg-leaf/90" aria-label={t.footer.subscribe}>
+                <Button type="submit" size="icon" disabled={submitting || !consent} className="h-12 w-12 shrink-0 rounded-none bg-leaf text-ink hover:bg-leaf/90" aria-label={t.footer.subscribe}>
                   {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
                 </Button>
               </div>
+              <label className="mt-4 flex items-start gap-3 text-xs leading-5 text-primary-foreground/75">
+                <Checkbox checked={consent} onCheckedChange={(value) => setConsent(value === true)} className="mt-0.5" />
+                <span>{t.footer.newsletterConsent} <Link to="/privacy" className="underline hover:text-leaf">{t.footer.privacy}</Link>.</span>
+              </label>
+              <p role="status" className="mt-2 text-xs text-primary-foreground/55">{t.footer.newsletterPrivacy}</p>
             </form>
           </div>
         </div>

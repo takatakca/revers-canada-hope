@@ -19,7 +19,9 @@ export const createDonationCheckout = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => InputSchema.parse(data))
   .handler(async ({ data }): Promise<Result> => {
     const secret = process.env.STRIPE_SECRET_KEY;
-    if (!secret) return { ok: false, error: "stripe_not_configured" };
+    if (!secret || !process.env.STRIPE_WEBHOOK_SECRET) {
+      return { ok: false, error: "stripe_not_configured" };
+    }
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
@@ -57,7 +59,7 @@ export const createDonationCheckout = createServerFn({ method: "POST" })
             : "Don ponctuel — REVERS CANADA";
 
       const session = await stripe.checkout.sessions.create({
-        mode: "payment", // monthly support requires Stripe Price + subscription mode (future phase)
+        mode: isMonthly ? "subscription" : "payment",
         payment_method_types: ["card"],
         line_items: [
           {
@@ -65,6 +67,7 @@ export const createDonationCheckout = createServerFn({ method: "POST" })
               currency,
               product_data: { name: productName },
               unit_amount: intent.amount_cents,
+              ...(isMonthly ? { recurring: { interval: "month" as const } } : {}),
             },
             quantity: 1,
           },
@@ -75,6 +78,9 @@ export const createDonationCheckout = createServerFn({ method: "POST" })
           source: "REVERS_CANADA_GAR",
           frequency: intent.frequency,
         },
+        ...(isMonthly
+          ? { subscription_data: { metadata: { donation_intent_id: intent.id, project: "REVERS_CANADA" } } }
+          : {}),
         locale: language === "en" ? "en" : "fr",
         success_url: `${siteUrl}/donate/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${siteUrl}/donate/cancelled`,
@@ -105,5 +111,13 @@ export const createDonationCheckout = createServerFn({ method: "POST" })
 
 /** Public flag for the UI — true when Stripe is wired on the server. */
 export const isStripeConfigured = createServerFn({ method: "GET" }).handler(async () => {
-  return { configured: Boolean(process.env.STRIPE_SECRET_KEY) };
+  return {
+    configured: Boolean(
+      process.env.STRIPE_SECRET_KEY &&
+        process.env.STRIPE_WEBHOOK_SECRET &&
+        process.env.PUBLIC_SITE_URL &&
+        process.env.SUPABASE_URL &&
+        process.env.SUPABASE_SERVICE_ROLE_KEY,
+    ),
+  };
 });

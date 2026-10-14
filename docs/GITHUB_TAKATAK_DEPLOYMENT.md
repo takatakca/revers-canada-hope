@@ -65,7 +65,7 @@ Do not put application secrets in this workflow.
 - TAKATAK_REVERS_SERVICE_TOKEN
 - TAKATAK_REVERS_HMAC_SECRET
 - REVERS_OUTBOX_WORKER_TOKEN
-- STRIPE_SECRET_KEY when Stripe is enabled
+- STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET when Stripe is enabled
 
 Production secrets belong in the cPanel application's environment or approved secret manager, never in GitHub source.
 
@@ -106,9 +106,9 @@ Delivery is idempotent and retryable.
 
 ## Domain rule
 
-The final REVERS production domain is not hardcoded in source. Configure PUBLIC_SITE_URL and REVERS_PRODUCTION_URL only after the owner confirms the production domain.
+The owner confirmed the target domain on 2026-10-14: **reverscanada.ca**. Configure `PUBLIC_SITE_URL=https://reverscanada.ca` in the cPanel runtime and `REVERS_PRODUCTION_URL=https://reverscanada.ca` as a GitHub production secret after DNS/TLS are verified. A confirmed target name is not proof that production is reachable.
 
 ## Current status
 
-GitHub migration branch is prepared for CI validation and pull-request review.
+The GitHub migration was merged to `main` in PR #1 on 2026-10-10. Continuous deployment code is present, but there is no verified successful production release in this handoff.
 TAKATAK integration code is implemented but production connection is not claimed until a real exchange succeeds.

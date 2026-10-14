@@ -32,25 +32,25 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Revers Canada — Refuge, nourriture & retour à l'emploi au Québec" },
+      { title: "REVERS CANADA — RêvPÈRE, accompagnement des pères à Montréal" },
       {
         name: "description",
         content:
-          "Revers Canada est un organisme de bienfaisance québécois qui accompagne les femmes et enfants en situation d'itinérance vers un toit, des repas et un emploi.",
+          "REVERS CANADA soutient les pères et leurs familles à Montréal : emploi, autonomie numérique, accompagnement, logement, alimentation et ressources communautaires.",
       },
-      { name: "author", content: "Revers Canada" },
-      { property: "og:title", content: "Revers Canada — Refuge, nourriture & retour à l'emploi au Québec" },
+      { name: "author", content: "REVERS CANADA" },
+      { property: "og:title", content: "REVERS CANADA — Accompagner les pères et leurs familles" },
       {
         property: "og:description",
-        content:
-          "Refuge, sécurité alimentaire et réinsertion professionnelle pour les femmes et enfants du Québec.",
+        content: "RêvPÈRE accompagne les pères vers l'emploi et l'autonomie, et oriente les familles vers les ressources adaptées.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Revers Canada — Refuge, nourriture & retour à l'emploi au Québec" },
-      { name: "description", content: "Revers Canada is a nonprofit website connecting Canadians with resources and support for homeless women and children." },
-      { property: "og:description", content: "Revers Canada is a nonprofit website connecting Canadians with resources and support for homeless women and children." },
-      { name: "twitter:description", content: "Revers Canada is a nonprofit website connecting Canadians with resources and support for homeless women and children." },
+      { name: "twitter:title", content: "REVERS CANADA — RêvPÈRE" },
+      {
+        name: "twitter:description",
+        content: "Un parcours concret pour les pères : emploi, numérique, soutien et ressources communautaires.",
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

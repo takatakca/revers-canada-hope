@@ -2,7 +2,7 @@
 
 ## Current branch
 
-`feat/github-takatak-migration`
+`main` (PR #1 was merged on 2026-10-10)
 
 ## Completed
 
@@ -19,7 +19,7 @@
 
 ## Current blockers
 
-- The final REVERS production domain/callback is not hardcoded because it has not been confirmed in the repository.
+- Target production domain confirmed by owner on 2026-10-14: `reverscanada.ca`; DNS/TLS, cPanel runtime `PUBLIC_SITE_URL`, TAKATAK callback, and GitHub `REVERS_PRODUCTION_URL` still require verification.
 - Production TAKATAK service and HMAC secrets must be installed through the approved secret manager.
 - The MochaHost application root must be provided as the GitHub production secret `MOCHAHOST_APP_ROOT`.
 - Production deployment remains unverified until the GitHub deployment workflow succeeds and both `/healthz` and `/readyz` return HTTP 200.
