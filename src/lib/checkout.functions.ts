@@ -80,7 +80,7 @@ export const createDonationCheckout = createServerFn({ method: "POST" })
         },
         ...(isMonthly
           ? { subscription_data: { metadata: { donation_intent_id: intent.id, project: "REVERS_CANADA" } } }
-          : {}),
+          : { payment_intent_data: { metadata: { donation_intent_id: intent.id, project: "REVERS_CANADA" } } }),
         locale: language === "en" ? "en" : "fr",
         success_url: `${siteUrl}/donate/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${siteUrl}/donate/cancelled`,

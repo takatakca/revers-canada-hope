@@ -35,19 +35,37 @@ export const Route = createFileRoute("/api/public/stripe-webhook")({
               const session = event.data.object as import("stripe").Stripe.Checkout.Session;
               // Checkout completion does not always mean that funds were received.
               if (session.payment_status !== "paid") break;
+              if (session.metadata?.project !== "REVERS_CANADA") break;
               const intentId = session.metadata?.donation_intent_id;
               if (!intentId) {
                 console.warn("[stripe-webhook] completed session without donation_intent_id");
                 break;
               }
 
-              // Idempotency: skip if already paid
-              const { data: existing } = await supabaseAdmin
+              const { data: existing, error: lookupError } = await supabaseAdmin
                 .from("donation_intents")
-                .select("status")
+                .select("id,status,amount_cents,currency,frequency,stripe_checkout_session_id")
                 .eq("id", intentId)
                 .maybeSingle();
-              if (existing?.status === "paid") break;
+
+              if (lookupError || !existing) {
+                throw new Error("Donation intent for signed Stripe session is missing.");
+              }
+              if (
+                existing.stripe_checkout_session_id &&
+                existing.stripe_checkout_session_id !== session.id
+              ) {
+                throw new Error("Stripe session does not match the donation intent.");
+              }
+              if (
+                existing.amount_cents !== session.amount_total ||
+                existing.currency.toLowerCase() !== session.currency?.toLowerCase() ||
+                (existing.frequency === "monthly") !== (session.mode === "subscription")
+              ) {
+                throw new Error("Stripe payment amount, currency or frequency mismatch.");
+              }
+              // Signed duplicate notifications must not count a donation twice.
+              if (existing.status === "paid") break;
 
               const paymentIntentId =
                 typeof session.payment_intent === "string"
@@ -60,7 +78,7 @@ export const Route = createFileRoute("/api/public/stripe-webhook")({
               const donorEmail = session.customer_details?.email ?? session.customer_email ?? null;
               const donorName = session.customer_details?.name ?? null;
 
-              const { error } = await supabaseAdmin
+              const { data: updated, error } = await supabaseAdmin
                 .from("donation_intents")
                 .update({
                   status: "paid",
@@ -71,19 +89,23 @@ export const Route = createFileRoute("/api/public/stripe-webhook")({
                   donor_email: donorEmail,
                   donor_name: donorName,
                 })
-                .eq("id", intentId);
-              if (error) throw new Error(`Could not record paid donation: ${error.code ?? "unknown"}`);
+                .eq("id", intentId)
+                .select("id")
+                .maybeSingle();
+              if (error || !updated) throw new Error(`Could not record paid donation: ${error?.code ?? "missing"}`);
               break;
             }
 
             case "checkout.session.async_payment_failed": {
               const session = event.data.object as import("stripe").Stripe.Checkout.Session;
+              if (session.metadata?.project !== "REVERS_CANADA") break;
               const intentId = session.metadata?.donation_intent_id;
               if (!intentId) break;
               const { error } = await supabaseAdmin
                 .from("donation_intents")
                 .update({ status: "failed" })
                 .eq("id", intentId)
+                .eq("stripe_checkout_session_id", session.id)
                 .neq("status", "paid");
               if (error) throw new Error(`Could not record failed checkout: ${error.code ?? "unknown"}`);
               break;
@@ -91,12 +113,14 @@ export const Route = createFileRoute("/api/public/stripe-webhook")({
 
             case "checkout.session.expired": {
               const session = event.data.object as import("stripe").Stripe.Checkout.Session;
+              if (session.metadata?.project !== "REVERS_CANADA") break;
               const intentId = session.metadata?.donation_intent_id;
               if (!intentId) break;
               const { error } = await supabaseAdmin
                 .from("donation_intents")
                 .update({ status: "cancelled" })
                 .eq("id", intentId)
+                .eq("stripe_checkout_session_id", session.id)
                 .neq("status", "paid");
               if (error) throw new Error(`Could not cancel donation intent: ${error.code ?? "unknown"}`);
               break;
@@ -104,6 +128,7 @@ export const Route = createFileRoute("/api/public/stripe-webhook")({
 
             case "payment_intent.payment_failed": {
               const pi = event.data.object as import("stripe").Stripe.PaymentIntent;
+              if (pi.metadata?.project !== "REVERS_CANADA") break;
               const intentId = pi.metadata?.donation_intent_id;
               if (!intentId) break;
               const { error } = await supabaseAdmin

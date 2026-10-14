@@ -47,3 +47,7 @@ Donation intent creation has been moved from the browser Supabase client to a Ta
 ## TAKATAK security hardening (2026-10-14)
 
 Signed product cookies now reject invalid expiration values, reject already expired upstream sessions, cap signed payload expiration at ten minutes, and require a session signing secret at least 32 characters long. The HMAC outbox worker requires a strong token and uses constant-time comparison, with error details logged server-side only. Files: `src/lib/takatak/session.ts`, `src/lib/takatak/client.ts`, `src/routes/api/internal/takatak/outbox.ts`. Verify a real TAKATAK launch and worker authorization after connection is configured.
+
+## Stripe verification guard (2026-10-14)
+
+Initial payment webhook checks signed Stripe Checkout project metadata against REVERS, verifies session-id/amount/currency/frequency match the stored donation intent before marking paid, and applies failure/expiry only to that session. One-time Stripe PaymentIntent now carries the same metadata for failure handling. Needs actual Stripe test-mode event verification; no production keys available in GitHub documents.
