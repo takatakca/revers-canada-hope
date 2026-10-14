@@ -46,3 +46,11 @@
 ## Lockfile and mobile UI remediation (2026-10-14)
 
 The dedicated GitHub [repair workflow](https://github.com/takatakca/revers-canada-hope/actions/runs/38615786073) succeeded and bot committed synchronized `package-lock.json` at `8f3ba2b67f50ec83913c2caf40f7be7c9dc583ab` after passing `npm ci --ignore-scripts`. Both main CI and deployment workflows have been restored to `npm ci --no-audit --no-fund` (with normal scripts); verify on the resulting commit. `src/components/PlatformExtras.tsx` now implements a real PWA install prompt/fallback instructions and removes invented workshop/ad placeholders; `src/components/SiteLayout.tsx` removes the unsolicited welcome popup and misleading announcement strip.
+
+
+## Outbox scheduler and verified CI (2026-10-14)
+
+- After Prettier repair, **CI run [38616454152](https://github.com/takatakca/revers-canada-hope/actions/runs/38616454152) succeeded** on `d55a2b139903f83e310c7839399dc4c7f3d5ca6d`.
+- **Deploy run [38616599494](https://github.com/takatakca/revers-canada-hope/actions/runs/38616599494) failed before upload**; logs confirm missing `MOCHAHOST_HOST`. Production is not verified.
+- New `.github/workflows/deliver-takatak-outbox.yml` runs scheduled or manual delivery, gated by matching `REVERS_OUTBOX_WORKER_TOKEN` in GitHub `production` and in cPanel runtime. Missing tokens skip safely. No live delivery has been verified.
+- Next agent must check CI for the latest `main`, configure authorized production secrets, test a queued TAKATAK event end-to-end, and keep the scheduler disabled by missing secrets until the server is verified.

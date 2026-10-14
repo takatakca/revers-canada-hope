@@ -56,3 +56,8 @@ The deployment writes `CURRENT.next` and uses atomic `mv` to switch the live rel
 ## Deterministic lockfile restored
 
 The [Repair REVERS npm lockfile run 38615786073](https://github.com/takatakca/revers-canada-hope/actions/runs/38615786073) successfully regenerated/verified the npm lockfile with Node 22, producing commit `8f3ba2b`. The main CI and deployment install steps were restored to `npm ci --no-audit --no-fund`. Verify that normal install scripts work on the current main CI, not only the repair job's `--ignore-scripts` validation.
+
+
+## TAKATAK outbox delivery
+
+A separate [scheduled GitHub Actions workflow](../.github/workflows/deliver-takatak-outbox.yml) calls `POST https://reverscanada.ca/api/internal/takatak/outbox` approximately every 30 minutes, or on operator-requested `workflow_dispatch`. GitHub Actions schedules are best-effort; they may be delayed under load, so delivery latency is **not guaranteed**. The workflow requires **two production GitHub secrets**: `REVERS_PRODUCTION_URL=https://reverscanada.ca` and `REVERS_OUTBOX_WORKER_TOKEN` (minimum 32 characters, equal to the cPanel runtime worker token). If either is missing, scheduled iterations log "not configured" and do no work. The handler obtains pending events from the operational database and signs HMAC events server-side with TAKATAK credentials. No event payload, personal data, or tokens are printed to GitHub logs. Test a real queued event and check delivered status before claiming that TAKATAK is connected.

@@ -39,3 +39,10 @@ Connected Supabase currently lists TAKATAK STAGING, FESTI ICE, TAKATAK Dashboard
 
 - GitHub [repair-lockfile run 38615786073](https://github.com/takatakca/revers-canada-hope/actions/runs/38615786073) completed **successfully**; bot commit `8f3ba2b67f50ec83913c2caf40f7be7c9dc583ab` synchronized the lockfile. Main/deploy restored to `npm ci` pending fresh full CI result.
 - Removed misleading welcome popup and unverified event/ad claims. Mobile home-screen installation now uses an actual browser prompt where supported and fallback instructions elsewhere; device verification remains pending.
+
+
+## Most recent verified pipeline (2026-10-14)
+
+- `d55a2b139903f83e310c7839399dc4c7f3d5ca6d` passed all [CI run 38616454152](https://github.com/takatakca/revers-canada-hope/actions/runs/38616454152), after formatting the validation tests.
+- [Deploy run 38616599494](https://github.com/takatakca/revers-canada-hope/actions/runs/38616599494) failed before remote upload due to missing `MOCHAHOST_HOST`. No release was observed in production.
+- Added scheduled TAKATAK event outbox worker workflow; production credentials remain unconfigured/unverified.

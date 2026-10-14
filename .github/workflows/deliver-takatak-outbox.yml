@@ -1,0 +1,51 @@
+name: REVERS TAKATAK event delivery
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: revers-outbox-worker
+  cancel-in-progress: false
+
+jobs:
+  deliver:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    environment: production
+    steps:
+      - name: Deliver privacy-minimized pending events
+        env:
+          SITE_URL: ${{ secrets.REVERS_PRODUCTION_URL }}
+          WORKER_TOKEN: ${{ secrets.REVERS_OUTBOX_WORKER_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Do not attempt calls or fabricate success while production is unconfigured.
+          if [ -z "$SITE_URL" ] || [ -z "$WORKER_TOKEN" ]; then
+            echo "REVERS outbox is not configured in the GitHub production environment."
+            exit 0
+          fi
+          if [ "$SITE_URL" != "https://reverscanada.ca" ]; then
+            echo "Unexpected production URL, refusing outbox delivery."
+            exit 1
+          fi
+          if [ "${#WORKER_TOKEN}" -lt 32 ]; then
+            echo "Worker token must contain at least 32 characters."
+            exit 1
+          fi
+
+          # Only the server decides which events may leave the REVERS database.
+          response="$(curl --fail --silent --show-error --max-time 25 \
+            --retry 2 --retry-all-errors --retry-delay 2 \
+            -X POST "$SITE_URL/api/internal/takatak/outbox" \
+            --header "Authorization: Bearer $WORKER_TOKEN" \
+            --header "Content-Type: application/json")"
+          printf "%s" "$response" | jq -e \
+            '.ok == true and (.delivered|type == "number") and (.retried|type == "number") and (.failed|type == "number")' >/dev/null
+          printf "%s" "$response" | jq -r \
+            '"Delivered: \(.delivered), retrying: \(.retried), failed: \(.failed)"'
