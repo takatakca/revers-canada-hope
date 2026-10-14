@@ -38,6 +38,18 @@ jobs:
         with:
           node-version: 22
 
+      - name: Reject a stale validated release
+        env:
+          EXPECTED_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          main_sha="$(git ls-remote origin refs/heads/main | awk '{print $1}')"
+          if [ -z "$main_sha" ] || [ "$main_sha" != "$EXPECTED_SHA" ]; then
+            echo "The validated commit is not the current main head; refusing stale deployment."
+            exit 1
+          fi
+
       - name: Validate deployment configuration
         env:
           MOCHAHOST_HOST: ${{ secrets.MOCHAHOST_HOST }}
@@ -53,7 +65,7 @@ jobs:
             test -n "${!name}" || { echo "Missing required deployment secret: $name"; exit 1; }
           done
           # Fail closed on unexpected paths/URLs before any remote shell or deletion.
-          [[ "$MOCHAHOST_APP_ROOT" =~ ^/home/[A-Za-z0-9._/-]+$ ]] || { echo "Invalid application root"; exit 1; }
+          [[ "$MOCHAHOST_APP_ROOT" =~ ^/home/[A-Za-z0-9._-]+/[A-Za-z0-9._/-]+$ ]] || { echo "Invalid application root"; exit 1; }
           [[ "$MOCHAHOST_APP_ROOT" != *..* && "$MOCHAHOST_APP_ROOT" != */ ]] || { echo "Unsafe application root"; exit 1; }
           [[ "$MOCHAHOST_SSH_PORT" =~ ^[0-9]{1,5}$ ]] || { echo "Invalid SSH port"; exit 1; }
           [[ "$REVERS_PRODUCTION_URL" == https://reverscanada.ca ]] || { echo "Expected canonical production URL https://reverscanada.ca"; exit 1; }

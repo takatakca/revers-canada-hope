@@ -13,3 +13,5 @@
 
 | 2026-10-14 | Cap signed REVERS product sessions to 10 minutes and reject invalid/expired TAKATAK expiry | Prevent replay even if browser cookie expiry is bypassed | Session signing key must be at least 32 characters; exchange remains TAKATAK-authoritative |
 | 2026-10-14 | Use constant-time worker token comparison and generic public errors | Reduce secret-timing and error-disclosure risk | Worker token should have at least 32 bytes; operational failures logged only server-side |
+
+| 2026-10-14 | Fail closed when a CI-validated SHA is no longer current `main` | Avoid delayed workflow_run deployments reverting the active release | No automatic force push or stale publication; fresh CI required on latest head |

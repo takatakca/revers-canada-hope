@@ -29,3 +29,5 @@ Stripe initial Checkout webhook now validates the signed event's project, intent
 MochaHost deployment safety: live `CURRENT` activation is atomic, and cleanup preserves both `CURRENT` and `PREVIOUS` release directories. Exercise rollback on an authorized staging/production instance before marking release handling fully verified.
 
 Public-interface honesty: replaced the fake mobile download button with a real browser install prompt or device instructions, removed unverified workshop announcements and ad-slot placeholders, and removed the blocking welcome popup. Verify accessibility on actual browsers before calling the PWA fully supported.
+
+Deployment safety added: **reject stale CI builds** whose SHA does not equal current `main` before touching SSH; require app root subdirectory. Verify CI and production after secrets are configured. Known DNS probe from this runner did not resolve `reverscanada.ca`.

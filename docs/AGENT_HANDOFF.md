@@ -54,3 +54,13 @@ The dedicated GitHub [repair workflow](https://github.com/takatakca/revers-canad
 - **Deploy run [38616599494](https://github.com/takatakca/revers-canada-hope/actions/runs/38616599494) failed before upload**; logs confirm missing `MOCHAHOST_HOST`. Production is not verified.
 - New `.github/workflows/deliver-takatak-outbox.yml` runs scheduled or manual delivery, gated by matching `REVERS_OUTBOX_WORKER_TOKEN` in GitHub `production` and in cPanel runtime. Missing tokens skip safely. No live delivery has been verified.
 - Next agent must check CI for the latest `main`, configure authorized production secrets, test a queued TAKATAK event end-to-end, and keep the scheduler disabled by missing secrets until the server is verified.
+
+
+## Latest verified CI and stale deploy guard (2026-10-14)
+
+- [REVERS CI run 38616907443](https://github.com/takatakca/revers-canada-hope/actions/runs/38616907443) **succeeded** for `090e55d53955b835b3dbcf2d54fc8b65e8e677eb` (migration check, `npm ci`, typecheck, lint, tests, build).
+- [Deployment 38617055204](https://github.com/takatakca/revers-canada-hope/actions/runs/38617055204) **failed** before SSH due to missing GitHub `production` secret `MOCHAHOST_HOST`, confirmed in workflow logs.
+- `curl -sSIL --max-time 8 https://reverscanada.ca/healthz` could not resolve the host from this execution environment; production DNS is **unverified** and must be checked independently from the host / registrar. Do not conclude a successful live release.
+- The TAKATAK callback `src/routes/api/auth/takatak/callback.ts` was fixed to redirect via absolute HTTPS `PUBLIC_SITE_URL`; a Node 22 `Response.redirect("/")` call otherwise throws `TypeError`.
+- The deploy workflow now rejects old CI SHAs after a newer push to `main`, and insists on a subdirectory of `/home/<account>` for safe artifact removal.
+- **Next step:** verify CI for the newest main commit, configure the authorized `production` GitHub secrets and cPanel runtime, confirm DNS, then run SSH deploy with `/healthz.release` and `/readyz`.

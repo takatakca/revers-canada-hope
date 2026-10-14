@@ -61,3 +61,8 @@ The [Repair REVERS npm lockfile run 38615786073](https://github.com/takatakca/re
 ## TAKATAK outbox delivery
 
 A separate [scheduled GitHub Actions workflow](../.github/workflows/deliver-takatak-outbox.yml) calls `POST https://reverscanada.ca/api/internal/takatak/outbox` approximately every 30 minutes, or on operator-requested `workflow_dispatch`. GitHub Actions schedules are best-effort; they may be delayed under load, so delivery latency is **not guaranteed**. The workflow requires **two production GitHub secrets**: `REVERS_PRODUCTION_URL=https://reverscanada.ca` and `REVERS_OUTBOX_WORKER_TOKEN` (minimum 32 characters, equal to the cPanel runtime worker token). If either is missing, scheduled iterations log "not configured" and do no work. The handler obtains pending events from the operational database and signs HMAC events server-side with TAKATAK credentials. No event payload, personal data, or tokens are printed to GitHub logs. Test a real queued event and check delivered status before claiming that TAKATAK is connected.
+
+
+## Stale-release guard
+
+The deploy workflow compares the *validated* CI head SHA with the **current** `origin/main` SHA before reading secrets or uploading a build. If another agent has already pushed a newer main commit, the old release is rejected rather than rolling production backward. An explicit operator dispatch also needs to target the current main release. `MOCHAHOST_APP_ROOT` must point to an application subdirectory **below** the account's home directory, not directly to `/home/<account>`.

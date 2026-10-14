@@ -46,3 +46,5 @@ Connected Supabase currently lists TAKATAK STAGING, FESTI ICE, TAKATAK Dashboard
 - `d55a2b139903f83e310c7839399dc4c7f3d5ca6d` passed all [CI run 38616454152](https://github.com/takatakca/revers-canada-hope/actions/runs/38616454152), after formatting the validation tests.
 - [Deploy run 38616599494](https://github.com/takatakca/revers-canada-hope/actions/runs/38616599494) failed before remote upload due to missing `MOCHAHOST_HOST`. No release was observed in production.
 - Added scheduled TAKATAK event outbox worker workflow; production credentials remain unconfigured/unverified.
+
+Latest source verification: [CI 38616907443](https://github.com/takatakca/revers-canada-hope/actions/runs/38616907443) passed for `090e55d5`; [deploy 38617055204](https://github.com/takatakca/revers-canada-hope/actions/runs/38617055204) failed before upload at `MOCHAHOST_HOST`. A direct DNS/curl probe for `reverscanada.ca` in this environment could not resolve the host. The site remains **unverified / not deployed by this session**.
