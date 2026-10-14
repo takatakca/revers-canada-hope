@@ -3,7 +3,7 @@
 | Priority | Task | State | Evidence / acceptance |
 | --- | --- | --- | --- |
 | P0 | Gate deployment on successful CI SHA and check production SHA | code implemented; live verify pending | `workflow_run` on successful push, `/healthz.release` matches validated Git SHA, rollback on failure |
-| P0 | Regenerate and commit a synchronized npm lockfile | complete in GitHub; CI verification next | `npm ci` fails with EUSAGE: missing Nitro/Supabase/Stripe packages and invalid transitive versions; regenerate with Node 22/npm 10, commit lockfile, restore `npm ci` |
+| P0 | Regenerate and commit a synchronized npm lockfile | complete; `npm ci` verified in CI 38617278856 | `npm ci` fails with EUSAGE: missing Nitro/Supabase/Stripe packages and invalid transitive versions; regenerate with Node 22/npm 10, commit lockfile, restore `npm ci` |
 | P0 | Configure MochaHost production environment secrets | blocked: human credentials | Set `MOCHAHOST_HOST` and other names in `docs/DEPLOYMENT.md` via GitHub UI, not git |
 | P0 | Verify real database readiness health gate | code implemented; production pending | `/readyz` returns HTTP 200 only if configured and operational contacts-table query succeeds; test failure mode against correct REVERS instance |
 | P0 | Verify DNS/TLS and actual MochaHost root | blocked: hosting access | Browser and curl checks show correct production health and version |
@@ -16,7 +16,7 @@
 | P1 | Newsletter provider opt-in/opt-out lifecycle | pending | Consent and unsubscribe recorded, actual delivery verified |
 | P1 | Private support-request admin operations | pending | Server-enforced TAKATAK entitlement and scoped permissions, no exposed case data |
 | P1 | Verified father/family partner-resource directory | partial | Vet real partner names, locations and services, add links without fabricated availability |
-| P2 | Unit tests for money and input validation | code implemented; CI pending | Node 22 `node:test` added, test step in CI/deploy; inspect latest CI outcome |
+| P2 | Unit tests for money and input validation | complete in CI 38617278856 | Node 22 `node:test` added, test step in CI/deploy; inspect latest CI outcome |
 | P2 | Mobile/accessibility/performance/security checks | pending | Automated and real-device evidence, no dead controls |
 | P2 | Post-release operations and rollback drill | pending | Healthy exact SHA, rollback to known-good release, incident playbook |
 

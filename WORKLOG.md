@@ -4,6 +4,7 @@
 Newest first, one line per piece of work. Rule: `AGENTS.md` › Work log rule.
 Format: `YYYY-MM-DD | agent | branch → PR | status | what | next step`
 
+- 2026-10-14 | ChatGPT/GitHub agent | main → direct commit | done; production blocked | Preserve final known green CI 38617278856 for cb03c7a9, confirmed deploy failure 38617413243, next exact action in canonical handoff | configure GitHub production secrets, DNS and correct REVERS Supabase; verify next CI
 - 2026-10-14 | ChatGPT/GitHub agent | main → direct commit | done; secrets/DNS blocked | Reject stale CI release, restrict app root, record successful CI and failed MochaHost deployment plus DNS probe | latest CI; configure authorized host secrets and DNS then live health probes
 - 2026-10-14 | ChatGPT/GitHub agent | main → direct commit | done; live TAKATAK delivery blocked | Schedule 30-minute event outbox with fail-closed worker auth and document tested CI and deployment-secret blocker | verify CI; install matching worker secrets after MochaHost release
 - 2026-10-14 | ChatGPT/GitHub agent | main → direct commit | done; live deployment blocked | Introduce strict CAD amount unit tests, improve Stripe/TAKATAK safety and MochaHost release retention; consolidate full handoff | verify exact-head CI, repair npm lockfile and obtain authorized MochaHost/Supabase access

@@ -64,3 +64,12 @@ The dedicated GitHub [repair workflow](https://github.com/takatakca/revers-canad
 - The TAKATAK callback `src/routes/api/auth/takatak/callback.ts` was fixed to redirect via absolute HTTPS `PUBLIC_SITE_URL`; a Node 22 `Response.redirect("/")` call otherwise throws `TypeError`.
 - The deploy workflow now rejects old CI SHAs after a newer push to `main`, and insists on a subdirectory of `/home/<account>` for safe artifact removal.
 - **Next step:** verify CI for the newest main commit, configure the authorized `production` GitHub secrets and cPanel runtime, confirm DNS, then run SSH deploy with `/healthz.release` and `/readyz`.
+
+## Final live evidence captured on 2026-10-14
+
+1. Last non-documentation code/pipeline commit `cb03c7a99f8ad4c84abe2d48d076cf57e0159c56`: stale-CI release guard and safe app-root validation.
+2. [REVERS CI run 38617278856](https://github.com/takatakca/revers-canada-hope/actions/runs/38617278856) **success** for `cb03c7a9`: `npm ci`, migration check, typecheck, lint, Node validation tests, Vite/Nitro production build and artifact existence check.
+3. [Deploy run 38617413243](https://github.com/takatakca/revers-canada-hope/actions/runs/38617413243) **failure** at `Validate deployment configuration` before upload; same missing `MOCHAHOST_HOST` environment secret as all earlier attempts. No successful real deployment observed.
+4. Latest verified `main` at documentation refresh start: `cb03c7a99f8ad4c84abe2d48d076cf57e0159c56`. This document's commit will be newer; read the current main ref and verify CI for that SHA.
+5. Next practical action: configure `production` secrets in GitHub, confirm REVERS DNS resolves and TLS is valid, connect the actual REVERS Supabase project `cmcbsbjxrrwtmxvcsbsg`, configure runtime secrets, then validate deploy `/healthz.release` & `/readyz` and actual TAKATAK/Stripe flows.
+6. **Not done:** domain availability, online deployment, Supabase migration/permissions audit, real TAKATAK exchange, Stripe test-mode webhook, recurring reconciliation, newsletter sender, restricted case-management portal. Do not report 100%.
