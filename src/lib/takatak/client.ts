@@ -58,7 +58,10 @@ export async function exchangeTakatakLaunchCode(
     data.session.product !== "revers" ||
     data.session.entitlement !== "revers_access" ||
     typeof data.session.identityId !== "string" ||
-    typeof data.session.expiresAt !== "string"
+    !data.session.identityId.trim() ||
+    typeof data.session.expiresAt !== "string" ||
+    !Number.isFinite(Date.parse(data.session.expiresAt)) ||
+    Date.parse(data.session.expiresAt) <= Date.now()
   ) {
     throw new Error("TAKATAK returned an invalid REVERS session.");
   }

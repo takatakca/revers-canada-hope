@@ -43,3 +43,7 @@ Donation intent creation has been moved from the browser Supabase client to a Ta
 ## Operational readiness health update (2026-10-14)
 
 `src/routes/readyz.ts` now performs a real low-cost Supabase `contacts` table query with a 3.5s timeout and fails closed with HTTP 503 when the DB/table is unreachable. This is a public endpoint with no secret-status details. The live REVERS Supabase project remains inaccessible through the connected account, so this check is code-only until the correct project can be verified. It is **not** a reason to bypass the readiness gate.
+
+## TAKATAK security hardening (2026-10-14)
+
+Signed product cookies now reject invalid expiration values, reject already expired upstream sessions, cap signed payload expiration at ten minutes, and require a session signing secret at least 32 characters long. The HMAC outbox worker requires a strong token and uses constant-time comparison, with error details logged server-side only. Files: `src/lib/takatak/session.ts`, `src/lib/takatak/client.ts`, `src/routes/api/internal/takatak/outbox.ts`. Verify a real TAKATAK launch and worker authorization after connection is configured.

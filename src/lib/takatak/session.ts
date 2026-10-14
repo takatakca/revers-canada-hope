@@ -44,18 +44,26 @@ export function createReversSessionCookie(
   session: ReversProductSession,
 ): string {
   const secret = getTakatakConfig().sessionSecret;
-  if (!secret) throw new Error("REVERS_SESSION_SECRET is not configured.");
+  if (secret.length < 32) throw new Error("REVERS_SESSION_SECRET must be at least 32 characters.");
 
-  const payload = encode(JSON.stringify(session));
+  const now = Date.now();
+  const upstreamExpiresAt = Date.parse(session.expiresAt);
+  if (
+    session.product !== "revers" ||
+    session.entitlement !== "revers_access" ||
+    !session.identityId.trim() ||
+    !Number.isFinite(upstreamExpiresAt) ||
+    upstreamExpiresAt <= now
+  ) {
+    throw new Error("TAKATAK returned an expired or invalid product session.");
+  }
+
+  // Cap the cryptographically signed payload, not only the browser cookie.
+  // An extracted cookie therefore cannot be replayed after ten minutes.
+  const expiresAt = new Date(Math.min(upstreamExpiresAt, now + 600_000)).toISOString();
+  const payload = encode(JSON.stringify({ ...session, expiresAt }));
   const signed = `${payload}.${sign(payload, secret)}`;
-  const remaining = Math.max(
-    1,
-    Math.min(
-      600,
-      Math.floor((Date.parse(session.expiresAt) - Date.now()) / 1000),
-    ),
-  );
-
+  const remaining = Math.max(1, Math.floor((Date.parse(expiresAt) - now) / 1000));
   return serializeCookie(signed, remaining);
 }
 
@@ -76,7 +84,7 @@ export function readReversSession(
   request: Request,
 ): ReversProductSession | null {
   const secret = getTakatakConfig().sessionSecret;
-  if (!secret) return null;
+  if (secret.length < 32) return null;
 
   const raw = getCookie(request, REVERS_SESSION_COOKIE);
   if (!raw) return null;
@@ -103,7 +111,9 @@ export function readReversSession(
       session.product !== "revers" ||
       session.entitlement !== "revers_access" ||
       typeof session.identityId !== "string" ||
+      !session.identityId.trim() ||
       typeof session.expiresAt !== "string" ||
+      !Number.isFinite(Date.parse(session.expiresAt)) ||
       Date.parse(session.expiresAt) <= Date.now()
     ) {
       return null;

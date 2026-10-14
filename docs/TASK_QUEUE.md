@@ -19,3 +19,5 @@
 | P2 | Post-release operations and rollback drill | pending | Healthy exact SHA, rollback to known-good release, incident playbook |
 
 Do not reorder around secrets by inventing values. Independently executable source tasks can advance while deployment awaits credentials.
+
+Security follow-up: test invalid/expired TAKATAK sessions, replay after ten minutes, and internal worker authorization with a live authorized environment. The current code and CI cannot substitute for real integration tests.
