@@ -1,6 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { validateDonationAmount, validateEmail, validateRequired, sanitizeText, FIELD_LIMITS } from "../src/lib/validation.ts";
+import {
+  validateDonationAmount,
+  validateEmail,
+  validateRequired,
+  sanitizeText,
+  FIELD_LIMITS,
+} from "../src/lib/validation.ts";
 
 test("CAD donations accept integer and cent-denominated amounts", () => {
   for (const amount of [1, "1", 1.01, "1.01", 25, "100.99", 1000000]) {
@@ -9,8 +15,25 @@ test("CAD donations accept integer and cent-denominated amounts", () => {
 });
 
 test("CAD donations reject sub-cent rounding, exponents and overflow", () => {
-  for (const amount of [0, 0.5, "0.99", -1, "1.001", "1e3", "0x10", "Infinity",
-    NaN, Infinity, "1,000", true, null, {}, "", " ", "1000000.01"]) {
+  for (const amount of [
+    0,
+    0.5,
+    "0.99",
+    -1,
+    "1.001",
+    "1e3",
+    "0x10",
+    "Infinity",
+    NaN,
+    Infinity,
+    "1,000",
+    true,
+    null,
+    {},
+    "",
+    " ",
+    "1000000.01",
+  ]) {
     assert.equal(validateDonationAmount(amount), false, String(amount));
   }
 });
