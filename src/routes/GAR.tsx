@@ -5,11 +5,12 @@ import { HomePage } from "./index";
 export const Route = createFileRoute("/GAR")({
   head: () => ({
     meta: [
-      { title: "Revers Canada — GAR" },
+      { title: "REVERS CANADA — RêvPÈRE" },
+      { name: "robots", content: "noindex,follow" },
       {
         name: "description",
         content:
-          "Organisme de bienfaisance québécois offrant refuge, nourriture et réinsertion professionnelle aux femmes et enfants en situation d'itinérance.",
+          "Ancienne adresse de REVERS CANADA : découvrez RêvPÈRE et les ressources d’accompagnement des pères de Montréal.",
       },
     ],
   }),

@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { ArrowRight, Facebook, Instagram, Loader2 } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { useLang } from "@/i18n/LangContext";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -107,10 +107,6 @@ export function SiteFooter() {
           <div>
             <div className="font-display text-3xl">REVERS<span className="text-leaf">CANADA</span></div>
             <p className="mt-2 text-xs text-primary-foreground/45">{t.footer.registered}</p>
-          </div>
-          <div className="flex items-center gap-5">
-            <a href="#" aria-label="Facebook" className="text-primary-foreground/55 transition hover:text-leaf"><Facebook className="h-5 w-5" /></a>
-            <a href="#" aria-label="Instagram" className="text-primary-foreground/55 transition hover:text-leaf"><Instagram className="h-5 w-5" /></a>
           </div>
           <p className="text-xs text-primary-foreground/45">© {new Date().getFullYear()} Revers Canada. {t.footer.rights}</p>
         </div>

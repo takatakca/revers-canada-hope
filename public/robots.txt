@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /healthz
+Disallow: /readyz
+
+Sitemap: https://reverscanada.ca/sitemap.xml

@@ -23,7 +23,7 @@ export const Route = createFileRoute("/privacy")({
 function PrivacyPage() {
   const { lang } = useLang();
   const updated =
-    lang === "fr" ? "Dernière mise à jour : 1 juin 2026" : "Last updated: June 1, 2026";
+    lang === "fr" ? "Dernière mise à jour : 14 octobre 2026" : "Last updated: October 14, 2026";
 
   return (
     <>
@@ -75,13 +75,13 @@ function FrContent() {
           Lorsque vous utilisez notre formulaire de contact, vos informations (nom, courriel,
           téléphone optionnel, sujet et message) peuvent être enregistrées dans une base de
           données sécurisée afin d'être traitées par l'équipe de Revers Canada. Si
-          Si l'enregistrement échoue, le formulaire affiche une erreur et ne redirige pas
+          l'enregistrement échoue, le formulaire affiche une erreur et ne redirige pas
           vers une adresse courriel non vérifiée.
         </p>
       </Block>
       <Block title="Infolettre">
         <p>
-          Votre adresse courriel et votre langue préférée peuvent être enregistrées dans une
+          Votre adresse courriel, votre langue et votre consentement explicite sont enregistrés dans une
           base de données sécurisée pour permettre un suivi ultérieur. Aucun courriel
           d'infolettre n'est encore envoyé tant que notre service d'envoi (Brevo, Mailchimp ou
           équivalent) n'est pas officiellement connecté.
@@ -103,7 +103,7 @@ function FrContent() {
       <Block title="Stockage local temporaire">
         <p>
           Le stockage local (localStorage) est utilisé pour conserver temporairement vos choix
-          (langue, intentions de don, intérêt pour l'infolettre). Vous pouvez l'effacer à tout
+          (langue et anciens choix). Les nouvelles demandes de don et d'infolettre exigent une confirmation du serveur. Vous pouvez l'effacer à tout
           moment dans les paramètres de votre navigateur.
         </p>
       </Block>
@@ -146,13 +146,12 @@ function EnContent() {
         <p>
           When you use our contact form, your information (name, email, optional phone, subject
           and message) may be stored in a secure database so the Revers Canada team can review
-          it. If storage fails, your message is prepared as an email opened via your default
-          mail client to reverscanada@gmail.com.
+          it. If storage fails, the form displays an error rather than claiming success.
         </p>
       </Block>
       <Block title="Newsletter">
         <p>
-          Your email and preferred language may be stored in a secure database so we can follow
+          Your email, language and explicit consent are stored in a secure database so we can follow
           up later. No newsletter email is sent yet — our mailing provider (Brevo, Mailchimp or
           similar) is not officially connected at this stage.
         </p>
@@ -172,7 +171,7 @@ function EnContent() {
       <Block title="Temporary local storage">
         <p>
           localStorage is used to temporarily keep your choices (language, donation intents,
-          newsletter interest). You can clear it at any time in your browser settings.
+          earlier choices). New donation and newsletter requests must be confirmed by the server. You can clear it in your browser settings.
         </p>
       </Block>
       <Block title="Security">
@@ -186,8 +185,6 @@ function EnContent() {
           REVERS CANADA<br />
           5505 Rue Irwin<br />
           LaSalle, QC H8N 1A1, Canada<br />
-          <a className="underline" href="mailto:reverscanada@gmail.com">reverscanada@gmail.com</a>
-          {" · "}
           <a className="underline" href="tel:5148252825">514-825-2825</a>
         </p>
       </Block>
