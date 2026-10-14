@@ -6,6 +6,7 @@
 | P0 | Regenerate and commit a synchronized npm lockfile | pending (CI evidence) | `npm ci` fails with EUSAGE: missing Nitro/Supabase/Stripe packages and invalid transitive versions; regenerate with Node 22/npm 10, commit lockfile, restore `npm ci` |
 | P0 | Configure MochaHost production environment secrets | blocked: human credentials | Set `MOCHAHOST_HOST` and other names in `docs/DEPLOYMENT.md` via GitHub UI, not git |
 | P0 | Verify DNS/TLS and actual MochaHost root | blocked: hosting access | Browser and curl checks show correct production health and version |
+| P0 | Revoke direct anonymous Supabase table insertion grants | blocked: REVERS Supabase project not connected | Donation, contact and newsletter now save server-side; after confirming correct project, revoke anon/authenticated INSERT and update policies and verify negative RLS checks |
 | P0 | Apply/verify Supabase migrations | blocked: project access/credentials | Migration history and service-role-only policies reviewed, no public cross-tenant data |
 | P0 | Prove TAKATAK launch/exchange & entitlement | blocked: live integration secrets | Full real server exchange and a denied unauthorized user |
 | P0 | Test Stripe webhook and recurring billing end to end | blocked: Stripe credentials | Signed event replay + renewal/cancel/failed payment; no official tax receipt unless entitled |

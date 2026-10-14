@@ -35,3 +35,7 @@
 3. Confirm workflow-run deploy only fires after successful `REVERS CI`, and that the deployment config gate reports missing secrets.
 4. Configure the named secrets in `docs/DEPLOYMENT.md` with authorized cPanel/GitHub access; never commit secret values.
 5. Verify production `/healthz.release` equals exact SHA and `/readyz` returns 200, then continue TAKATAK/Stripe/Supabase P0 gates.
+
+## Donation service hardening, 2026-10-14
+
+Donation intent creation has been moved from the browser Supabase client to a TanStack server function using server-only `supabaseAdmin`. This removes the browser's dependency on direct operational writes for donations. **The live database privilege revocation is still a P0 action.** The repository points to Supabase project `cmcbsbjxrrwtmxvcsbsg` (public project ref only), which is not present in the currently connected Supabase project's list; do not modify unrelated databases. Add the server-only policy after accessing the correct project, then test anon/authenticated insert is denied, and service_role insert succeeds. No real database changes were claimed in this batch.

@@ -23,3 +23,7 @@ Updated: 2026-10-14. Source: GitHub `takatakca/revers-canada-hope`, default bran
 - No controlled evidence of production end-to-end security, accessibility or payment tests.
 
 The repository is **not 100% complete** and the website must **not** be called deployed until the documented gates pass.
+
+## Database account access finding (2026-10-14)
+
+Connected Supabase currently lists TAKATAK STAGING, FESTI ICE, TAKATAK Dashboard, foodhub and ALKAO, but **does not list the operational REVERS project ref `cmcbsbjxrrwtmxvcsbsg`** found in repository configuration. The live REVERS database cannot be migrated or verified from this connection. Do not apply REVERS SQL to other TAKATAK projects.

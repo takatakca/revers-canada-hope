@@ -1,19 +1,17 @@
 import { validateDonationAmount } from "./validation";
-import { supabase } from "@/integrations/supabase/client";
+import { createDonationIntent } from "./donation.functions";
 
 export type DonationFrequency = "once" | "monthly";
 
 export type DonationInput = {
   amount: number | string;
   frequency: DonationFrequency;
-  coverFee?: boolean;
   lang?: "fr" | "en";
 };
 
 export type DonationIntent = {
   amount: number;
   frequency: DonationFrequency;
-  coverFee: boolean;
   lang: "fr" | "en";
   source: "REVERS_CANADA_GAR";
   status: "pending_checkout";
@@ -21,60 +19,33 @@ export type DonationIntent = {
 };
 
 export type DonationResult =
-  | { ok: true; intent: DonationIntent; saved: boolean; intentId?: string }
+  | { ok: true; intent: DonationIntent; saved: true; intentId: string }
   | { ok: false; error: "invalid_amount" | "storage_failed" };
 
-/**
- * Persist a donation intent in the backend (with localStorage fallback).
- *
- * NOTE: No real payment is taken here. Stripe Checkout is created in a separate
- * server function once we have the persisted intentId.
- */
+/** Server persistence is required. A local intent is not a donation or payment. */
 export async function saveDonationIntent(input: DonationInput): Promise<DonationResult> {
-  if (!validateDonationAmount(input.amount)) return { ok: false, error: "invalid_amount" };
+  if (!validateDonationAmount(input.amount)) {
+    return { ok: false, error: "invalid_amount" };
+  }
 
   const intent: DonationIntent = {
     amount: Number(input.amount),
     frequency: input.frequency,
-    coverFee: Boolean(input.coverFee),
-    lang: input.lang ?? "fr",
+    lang: input.lang === "en" ? "en" : "fr",
     source: "REVERS_CANADA_GAR",
     status: "pending_checkout",
     savedAt: new Date().toISOString(),
   };
 
-  const dbFrequency = intent.frequency === "monthly" ? "monthly" : "one_time";
-  const amountCents = Math.round(intent.amount * 100);
-
-  // 1) Try backend insert.
   try {
-    const { data, error } = await supabase
-      .from("donation_intents")
-      .insert({
-        amount_cents: amountCents,
-        currency: "CAD",
-        frequency: dbFrequency,
-        language: intent.lang,
-        source: intent.source,
-      })
-      .select("id")
-      .single();
-    if (!error && data) {
-      return { ok: true, intent, saved: true, intentId: data.id };
+    const result = await createDonationIntent({
+      data: { amount: intent.amount, frequency: intent.frequency, lang: intent.lang },
+    });
+    if (!result.ok) {
+      return { ok: false, error: result.error === "invalid_amount" ? "invalid_amount" : "storage_failed" };
     }
-    if (import.meta.env.DEV) console.warn("[donation] insert failed:", error?.message);
-  } catch (err) {
-    if (import.meta.env.DEV) console.warn("[donation] insert threw:", err);
+    return { ok: true, intent, saved: true, intentId: result.intentId };
+  } catch {
+    return { ok: false, error: "storage_failed" };
   }
-
-  // A local browser record is not a durable donation request.
-  return { ok: false, error: "storage_failed" };
-}
-
-/** Future: create a real Stripe Checkout session via server function. */
-export async function createDonationCheckoutSession(
-  _data: DonationInput,
-): Promise<{ ok: false; error: "not_implemented" }> {
-  // TODO: implement via createServerFn -> Stripe Checkout
-  return { ok: false, error: "not_implemented" };
 }
