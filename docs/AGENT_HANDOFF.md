@@ -51,3 +51,7 @@ Signed product cookies now reject invalid expiration values, reject already expi
 ## Stripe verification guard (2026-10-14)
 
 Initial payment webhook checks signed Stripe Checkout project metadata against REVERS, verifies session-id/amount/currency/frequency match the stored donation intent before marking paid, and applies failure/expiry only to that session. One-time Stripe PaymentIntent now carries the same metadata for failure handling. Needs actual Stripe test-mode event verification; no production keys available in GitHub documents.
+
+## Release-pointer safety, 2026-10-14
+
+Changed `.github/workflows/deploy-mochahost.yml` to atomically switch `CURRENT` and never prune a release referenced by `CURRENT`/`PREVIOUS`. This is source-side CI/CD hardening, not evidence that MochaHost accepted a release. Check that the YAML quality gates still pass and remote upload remains blocked only by missing deployment secrets.

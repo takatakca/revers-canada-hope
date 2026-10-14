@@ -132,7 +132,8 @@ jobs:
             cp "$ROOT/CURRENT" "$ROOT/PREVIOUS"
           fi
 
-          printf '%s\n' "$RELEASE_SHA" > "$ROOT/CURRENT"
+          printf '%s\n' "$RELEASE_SHA" > "$ROOT/CURRENT.next"
+          mv -f "$ROOT/CURRENT.next" "$ROOT/CURRENT"
           touch "$ROOT/tmp/restart.txt"
           rm -f "$ROOT/incoming/$RELEASE_SHA.tgz"
           REMOTE
@@ -180,9 +181,23 @@ jobs:
         run: |
           ssh -i ~/.ssh/revers_deploy_key -p "$PORT" "$USER@$HOST" "ROOT='$ROOT' bash -s" <<'REMOTE'
           set -euo pipefail
-          find "$ROOT/releases" -mindepth 1 -maxdepth 1 -type d -printf '%T@ %p\n' |
-            sort -nr |
-            tail -n +6 |
-            cut -d' ' -f2- |
-            xargs -r rm -rf
+          current="$(cat "$ROOT/CURRENT" 2>/dev/null || true)"
+          previous="$(cat "$ROOT/PREVIOUS" 2>/dev/null || true)"
+          kept=0
+          # Retain the current/rollback pointers unconditionally, plus five other releases.
+          while IFS= read -r release; do
+            [ -n "$release" ] || continue
+            name="${release##*/}"
+            if [ "$name" = "$current" ] || [ "$name" = "$previous" ]; then
+              continue
+            fi
+            kept=$((kept + 1))
+            if [ "$kept" -gt 5 ]; then
+              rm -rf -- "$release"
+            fi
+          done < <(
+            find "$ROOT/releases" -mindepth 1 -maxdepth 1 -type d -printf '%T@ %p\n' |
+              sort -nr |
+              cut -d' ' -f2-
+          )
           REMOTE

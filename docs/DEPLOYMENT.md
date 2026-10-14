@@ -48,3 +48,7 @@ CI run [38613420293](https://github.com/takatakca/revers-canada-hope/actions/run
 ## Real database readiness gate
 
 `/readyz` now checks the operational `contacts` table using server-side credentials with a 3.5-second abort timeout. It returns HTTP 503 on failed connectivity or missing migration instead of claiming readiness from the presence of environment variables. The public response reveals no secret configuration detail or contact record. Ensure the correct REVERS Supabase project is ready before deploying; this is intentional and may block activation until migration and network access are fixed.
+
+## Atomic release activation and retention
+
+The deployment writes `CURRENT.next` and uses atomic `mv` to switch the live release pointer. Retention preserves every release referenced by `CURRENT` or `PREVIOUS` even if it falls outside the newest five other releases. The upload uses an immutable commit directory; health checks verify that exact commit. Remote tests still require working SSH/cPanel credentials.
