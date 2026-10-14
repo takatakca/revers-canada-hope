@@ -2,7 +2,9 @@ name: Deploy REVERS CANADA to MochaHost
 
 on:
   workflow_dispatch:
-  push:
+  workflow_run:
+    workflows: ["REVERS CI"]
+    types: [completed]
     branches: [main]
 
 permissions:
@@ -17,10 +19,19 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     environment: production
+    # Only release an actual successful push to our own main, or an authorized manual dispatch.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'workflow_run' &&
+       github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push' &&
+       github.event.workflow_run.head_repository.full_name == github.repository)
 
     steps:
-      - name: Checkout
+      - name: Checkout exact validated commit
         uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
 
       - name: Use Node.js 22
         uses: actions/setup-node@v7
@@ -41,9 +52,14 @@ jobs:
           for name in MOCHAHOST_HOST MOCHAHOST_USER MOCHAHOST_SSH_PORT MOCHAHOST_APP_ROOT MOCHAHOST_SSH_PRIVATE_KEY MOCHAHOST_KNOWN_HOSTS REVERS_PRODUCTION_URL; do
             test -n "${!name}" || { echo "Missing required deployment secret: $name"; exit 1; }
           done
+          # Fail closed on unexpected paths/URLs before any remote shell or deletion.
+          [[ "$MOCHAHOST_APP_ROOT" =~ ^/home/[A-Za-z0-9._/-]+$ ]] || { echo "Invalid application root"; exit 1; }
+          [[ "$MOCHAHOST_APP_ROOT" != *..* && "$MOCHAHOST_APP_ROOT" != */ ]] || { echo "Unsafe application root"; exit 1; }
+          [[ "$MOCHAHOST_SSH_PORT" =~ ^[0-9]{1,5}$ ]] || { echo "Invalid SSH port"; exit 1; }
+          [[ "$REVERS_PRODUCTION_URL" == https://reverscanada.ca ]] || { echo "Expected canonical production URL https://reverscanada.ca"; exit 1; }
 
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
 
       - name: Quality gates
         run: |
@@ -72,7 +88,7 @@ jobs:
 
       - name: Package immutable release
         env:
-          RELEASE_SHA: ${{ github.sha }}
+          RELEASE_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
         run: |
           set -euo pipefail
           rm -rf artifact release.tgz
@@ -87,7 +103,7 @@ jobs:
           USER: ${{ secrets.MOCHAHOST_USER }}
           PORT: ${{ secrets.MOCHAHOST_SSH_PORT }}
           ROOT: ${{ secrets.MOCHAHOST_APP_ROOT }}
-          RELEASE_SHA: ${{ github.sha }}
+          RELEASE_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
         run: |
           set -euo pipefail
           ssh -i ~/.ssh/revers_deploy_key -p "$PORT" "$USER@$HOST" "mkdir -p '$ROOT/incoming' '$ROOT/releases/$RELEASE_SHA' '$ROOT/tmp'"
@@ -100,7 +116,7 @@ jobs:
           USER: ${{ secrets.MOCHAHOST_USER }}
           PORT: ${{ secrets.MOCHAHOST_SSH_PORT }}
           ROOT: ${{ secrets.MOCHAHOST_APP_ROOT }}
-          RELEASE_SHA: ${{ github.sha }}
+          RELEASE_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
         run: |
           set -euo pipefail
           ssh -i ~/.ssh/revers_deploy_key -p "$PORT" "$USER@$HOST" "ROOT='$ROOT' RELEASE_SHA='$RELEASE_SHA' bash -s" <<'REMOTE'
@@ -127,11 +143,12 @@ jobs:
           PORT: ${{ secrets.MOCHAHOST_SSH_PORT }}
           ROOT: ${{ secrets.MOCHAHOST_APP_ROOT }}
           REVERS_PRODUCTION_URL: ${{ secrets.REVERS_PRODUCTION_URL }}
+          EXPECTED_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
         run: |
           set -euo pipefail
           health_ok=false
           for attempt in $(seq 1 12); do
-            if curl -fsS --max-time 15 "$REVERS_PRODUCTION_URL/healthz" | jq -e '.ok == true' >/dev/null &&
+            if curl -fsS --max-time 15 "$REVERS_PRODUCTION_URL/healthz" | jq -e --arg sha "$EXPECTED_SHA" '.ok == true and .release == $sha' >/dev/null &&
                curl -fsS --max-time 15 "$REVERS_PRODUCTION_URL/readyz" | jq -e '.ok == true' >/dev/null; then
               health_ok=true
               break
@@ -145,8 +162,10 @@ jobs:
           set -euo pipefail
           if [ -s "$ROOT/PREVIOUS" ]; then
             cp "$ROOT/PREVIOUS" "$ROOT/CURRENT"
-            touch "$ROOT/tmp/restart.txt"
+          else
+            rm -f "$ROOT/CURRENT"
           fi
+          touch "$ROOT/tmp/restart.txt"
           REMOTE
             exit 1
           fi

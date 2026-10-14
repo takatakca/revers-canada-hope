@@ -1,3 +1,4 @@
+- 2026-10-14 | ChatGPT/GitHub agent | main → direct commit | done; CI verification pending | Gate MochaHost deployments on successful REVERS CI and exact SHA, switch npm install to npm ci, add five standardized handoff documents | check latest CI, deploy secrets, then next P0 task
 - 2026-10-14 | ChatGPT/GitHub agent | main → direct commit | done; prod blocked | Father-focused contact triage topics and sensitive-family-information warning (FR/EN) | CI, secure operational routing, production secrets
 - 2026-10-14 | ChatGPT/GitHub agent | main → direct commit | done; prod blocked | Correct backend-unavailable contact feedback and donation amount safety | CI then production secrets/DNS/Stripe setup
 - 2026-10-14 | ChatGPT/GitHub agent | main → direct commit | done; prod blocked | Stripe idempotency for donation intents and async payment failure reconciliation | CI, deploy secrets and signed Stripe webhook configuration
