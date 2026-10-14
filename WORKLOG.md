@@ -1,3 +1,4 @@
+- 2026-10-14 | ChatGPT/GitHub agent | main → direct commit | done; prod blocked | Father-focused contact triage topics and sensitive-family-information warning (FR/EN) | CI, secure operational routing, production secrets
 - 2026-10-14 | ChatGPT/GitHub agent | main → direct commit | done; prod blocked | Correct backend-unavailable contact feedback and donation amount safety | CI then production secrets/DNS/Stripe setup
 - 2026-10-14 | ChatGPT/GitHub agent | main → direct commit | done; prod blocked | Stripe idempotency for donation intents and async payment failure reconciliation | CI, deploy secrets and signed Stripe webhook configuration
 - 2026-10-14 | ChatGPT/GitHub agent | main → direct commit | done; prod blocked | Server-verified Stripe payment status on donation confirmation page, privacy-minimized response | CI and MochaHost deployment pending secret setup
