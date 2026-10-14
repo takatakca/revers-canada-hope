@@ -52,3 +52,7 @@ CI run [38613420293](https://github.com/takatakca/revers-canada-hope/actions/run
 ## Atomic release activation and retention
 
 The deployment writes `CURRENT.next` and uses atomic `mv` to switch the live release pointer. Retention preserves every release referenced by `CURRENT` or `PREVIOUS` even if it falls outside the newest five other releases. The upload uses an immutable commit directory; health checks verify that exact commit. Remote tests still require working SSH/cPanel credentials.
+
+## Deterministic lockfile restored
+
+The [Repair REVERS npm lockfile run 38615786073](https://github.com/takatakca/revers-canada-hope/actions/runs/38615786073) successfully regenerated/verified the npm lockfile with Node 22, producing commit `8f3ba2b`. The main CI and deployment install steps were restored to `npm ci --no-audit --no-fund`. Verify that normal install scripts work on the current main CI, not only the repair job's `--ignore-scripts` validation.

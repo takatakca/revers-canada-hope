@@ -1,3 +1,4 @@
+- 2026-10-14 | ChatGPT/GitHub agent | main → direct commit | done; browser/production QA pending | Restore reproducible npm ci after lockfile bot repair; implement real install button, remove fake ads, popups and unverified event claims | latest CI and mobile-browser smoke, then production secrets
 # Work log
 
 Newest first, one line per piece of work. Rule: `AGENTS.md` › Work log rule.

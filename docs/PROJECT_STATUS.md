@@ -34,3 +34,8 @@ Connected Supabase currently lists TAKATAK STAGING, FESTI ICE, TAKATAK Dashboard
 - [CI 38614682169](https://github.com/takatakca/revers-canada-hope/actions/runs/38614682169) passed after TAKATAK session and Stripe payment validation hardening.
 - New `node:test` validation checks were introduced after those runs. At the time of capture, CI `38615246341` for `193e729c` was queued, so their success is **not yet claimed**.
 - CI-triggered deploys still fail before SSH due to missing `MOCHAHOST_HOST`; exact production release unverified.
+
+## Lockfile recovery and interface correction (2026-10-14)
+
+- GitHub [repair-lockfile run 38615786073](https://github.com/takatakca/revers-canada-hope/actions/runs/38615786073) completed **successfully**; bot commit `8f3ba2b67f50ec83913c2caf40f7be7c9dc583ab` synchronized the lockfile. Main/deploy restored to `npm ci` pending fresh full CI result.
+- Removed misleading welcome popup and unverified event/ad claims. Mobile home-screen installation now uses an actual browser prompt where supported and fallback instructions elsewhere; device verification remains pending.

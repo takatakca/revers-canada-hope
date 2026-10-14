@@ -3,7 +3,7 @@
 | Priority | Task | State | Evidence / acceptance |
 | --- | --- | --- | --- |
 | P0 | Gate deployment on successful CI SHA and check production SHA | code implemented; live verify pending | `workflow_run` on successful push, `/healthz.release` matches validated Git SHA, rollback on failure |
-| P0 | Regenerate and commit a synchronized npm lockfile | pending (CI evidence) | `npm ci` fails with EUSAGE: missing Nitro/Supabase/Stripe packages and invalid transitive versions; regenerate with Node 22/npm 10, commit lockfile, restore `npm ci` |
+| P0 | Regenerate and commit a synchronized npm lockfile | complete in GitHub; CI verification next | `npm ci` fails with EUSAGE: missing Nitro/Supabase/Stripe packages and invalid transitive versions; regenerate with Node 22/npm 10, commit lockfile, restore `npm ci` |
 | P0 | Configure MochaHost production environment secrets | blocked: human credentials | Set `MOCHAHOST_HOST` and other names in `docs/DEPLOYMENT.md` via GitHub UI, not git |
 | P0 | Verify real database readiness health gate | code implemented; production pending | `/readyz` returns HTTP 200 only if configured and operational contacts-table query succeeds; test failure mode against correct REVERS instance |
 | P0 | Verify DNS/TLS and actual MochaHost root | blocked: hosting access | Browser and curl checks show correct production health and version |
@@ -26,3 +26,5 @@ Security follow-up: test invalid/expired TAKATAK sessions, replay after ten minu
 Stripe initial Checkout webhook now validates the signed event's project, intent linkage, amount, currency, payment mode and session association before marking a donation paid. A separate recurring-invoice ledger remains a pending P1 requirement; do not claim successful renewal reconciliation yet.
 
 MochaHost deployment safety: live `CURRENT` activation is atomic, and cleanup preserves both `CURRENT` and `PREVIOUS` release directories. Exercise rollback on an authorized staging/production instance before marking release handling fully verified.
+
+Public-interface honesty: replaced the fake mobile download button with a real browser install prompt or device instructions, removed unverified workshop announcements and ad-slot placeholders, and removed the blocking welcome popup. Verify accessibility on actual browsers before calling the PWA fully supported.

@@ -1,115 +1,147 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { X, Smartphone, Bell, Heart, UserPlus } from "lucide-react";
+import { ArrowRight, CheckCircle2, Smartphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLang } from "@/i18n/LangContext";
 
-/** VISUAL ONLY — no backend, no install logic, no ad scripts. */
+type InstallPromptEvent = Event & {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: string }>;
+};
 
-export function WelcomePopup() {
-  const [open, setOpen] = useState(false);
-  useEffect(() => {
-    if (sessionStorage.getItem("rc_welcome_seen")) return;
-    const id = setTimeout(() => setOpen(true), 2500);
-    return () => clearTimeout(id);
-  }, []);
-  if (!open) return null;
-  const close = () => {
-    sessionStorage.setItem("rc_welcome_seen", "1");
-    setOpen(false);
-  };
-  return (
-    <div className="fixed inset-0 z-[100] flex items-end justify-center bg-ink/60 p-4 sm:items-center" role="dialog" aria-modal="true" aria-label="Bienvenue">
-      <div className="relative w-full max-w-md bg-background p-7 shadow-xl">
-        <button onClick={close} aria-label="Fermer" className="absolute right-3 top-3 p-2 text-ink/60 hover:text-ink">
-          <X className="h-5 w-5" />
-        </button>
-        <p className="editorial-label text-teal-deep">Bienvenue chez REVERS CANADA</p>
-        <h2 className="mt-3 text-3xl leading-tight text-ink">Par où voulez-vous commencer?</h2>
-        <div className="mt-6 grid border-t border-ink/15">
-          {[
-            { icon: UserPlus, t: "Je veux participer", d: "Inscription participant — bientôt", to: "/revpere" as const },
-            { icon: Heart, t: "Je veux soutenir", d: "Faire un don ou devenir partenaire", to: "/donate" as const },
-            { icon: Bell, t: "J'ai besoin d'aide", d: "Trouver une ressource près de chez moi", to: "/ressources" as const },
-          ].map(({ icon: I, t, d, to }) => (
-            <Link key={t} to={to} onClick={close} className="flex items-center gap-4 border-b border-ink/15 py-4 hover:bg-muted">
-              <I className="h-5 w-5 shrink-0 text-teal-deep" />
-              <span>
-                <span className="block font-semibold text-ink">{t}</span>
-                <span className="block text-sm text-muted-foreground">{d}</span>
-              </span>
-            </Link>
-          ))}
-        </div>
-        <p className="mt-5 text-xs text-muted-foreground">Gestion numérique par TAKATAK</p>
-      </div>
-    </div>
-  );
-}
-
-export function AnnouncementStrip() {
-  const [hidden, setHidden] = useState(false);
-  if (hidden) return null;
-  return (
-    <div className="bg-leaf text-ink">
-      <div className="home-shell flex items-center justify-between gap-3 px-5 py-3 text-sm sm:px-8 lg:px-0">
-        <span className="flex items-center gap-2"><Bell className="h-4 w-4" /> Annonce : inscriptions aux ateliers numériques bientôt ouvertes.</span>
-        <button onClick={() => setHidden(true)} aria-label="Masquer l'annonce"><X className="h-4 w-4" /></button>
-      </div>
-    </div>
-  );
-}
-
-export function AdSlot({ label }: { label: string }) {
-  return (
-    <div className="flex min-h-[140px] flex-col items-center justify-center border border-dashed border-ink/25 bg-muted/40 p-6 text-center">
-      <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{label}</span>
-      <span className="mt-2 text-sm text-ink/70">Annonce à venir</span>
-    </div>
-  );
-}
-
-function PhoneMock() {
+function PhonePreview() {
   return (
     <div className="mx-auto w-[220px] rounded-[2rem] border-8 border-ink bg-background p-3 shadow-xl">
       <div className="bg-ink px-3 py-4 text-primary-foreground">
-        <p className="text-[10px] uppercase tracking-widest text-leaf">REVERS</p>
-        <p className="mt-1 text-sm font-semibold">Bonjour 👋</p>
+        <p className="text-[10px] uppercase tracking-widest text-leaf">REVERS CANADA</p>
+        <p className="mt-1 text-sm font-semibold">RêvPÈRE</p>
       </div>
       <div className="mt-3 grid grid-cols-2 gap-2">
-        {["Emploi", "Aide alimentaire", "Habitation", "Ressources"].map((x) => (
-          <div key={x} className="bg-muted px-2 py-4 text-center text-[11px] font-medium text-ink">{x}</div>
+        {["Emploi", "Alimentation", "Habitation", "Ressources"].map((label) => (
+          <div key={label} className="bg-muted px-2 py-4 text-center text-[11px] font-medium text-ink">
+            {label}
+          </div>
         ))}
       </div>
-      <div className="mt-3 bg-leaf px-2 py-2 text-center text-[11px] font-semibold text-ink">Prochain atelier : IA</div>
+      <p className="mt-3 bg-leaf px-2 py-2 text-center text-[11px] font-semibold text-ink">
+        Un site, plusieurs ressources
+      </p>
+      <p className="mt-2 text-center text-[10px] text-muted-foreground">
+        Aperçu illustratif
+      </p>
     </div>
   );
 }
 
+/** Browser installation prompt when available; accurate device instructions otherwise. */
 export function AppAndPartners() {
+  const { lang } = useLang();
+  const [installEvent, setInstallEvent] = useState<InstallPromptEvent | null>(null);
+  const [showInstructions, setShowInstructions] = useState(false);
+  const [installed, setInstalled] = useState(false);
+
+  useEffect(() => {
+    const browser = navigator as Navigator & { standalone?: boolean };
+    setInstalled(window.matchMedia("(display-mode: standalone)").matches || browser.standalone === true);
+
+    const onPrompt = (event: Event) => {
+      event.preventDefault();
+      setInstallEvent(event as InstallPromptEvent);
+    };
+    const onInstalled = () => {
+      setInstalled(true);
+      setInstallEvent(null);
+      setShowInstructions(false);
+    };
+
+    window.addEventListener("beforeinstallprompt", onPrompt);
+    window.addEventListener("appinstalled", onInstalled);
+    return () => {
+      window.removeEventListener("beforeinstallprompt", onPrompt);
+      window.removeEventListener("appinstalled", onInstalled);
+    };
+  }, []);
+
+  const handleInstall = async () => {
+    if (installed) return;
+    if (!installEvent) {
+      setShowInstructions((previous) => !previous);
+      return;
+    }
+
+    try {
+      await installEvent.prompt();
+      const choice = await installEvent.userChoice;
+      setShowInstructions(choice.outcome !== "accepted");
+    } catch {
+      setShowInstructions(true);
+    } finally {
+      setInstallEvent(null);
+    }
+  };
+
   return (
     <section className="border-t border-ink/15 bg-background py-16 sm:py-20">
       <div className="home-shell grid gap-12 px-5 sm:px-8 lg:grid-cols-12 lg:px-0">
         <div className="lg:col-span-7">
-          <p className="editorial-label text-teal-deep">Application mobile</p>
-          <h2 className="mt-4 max-w-xl text-4xl leading-[1.05] text-ink sm:text-5xl">REVERS CANADA dans votre poche.</h2>
-          <p className="mt-5 max-w-lg leading-7 text-muted-foreground">
-            Ajoutez le site à l'écran d'accueil de votre téléphone : ressources, ateliers et annonces en un geste.
+          <p className="editorial-label text-teal-deep">
+            {lang === "fr" ? "Accès mobile" : "Mobile access"}
           </p>
-          <div className="mt-7 flex flex-wrap gap-3">
-            <Button size="lg" className="rounded-none bg-ink text-primary-foreground hover:bg-ink/90">
-              <Smartphone className="mr-2 h-4 w-4" /> Télécharger sur mon téléphone
+          <h2 className="mt-4 max-w-xl text-4xl leading-[1.05] text-ink sm:text-5xl">
+            {lang === "fr" ? "REVERS CANADA dans votre poche." : "REVERS CANADA in your pocket."}
+          </h2>
+          <p className="mt-5 max-w-lg leading-7 text-muted-foreground">
+            {lang === "fr"
+              ? "Ajoutez ce site à l'écran d'accueil de votre téléphone pour retrouver les ressources et les programmes facilement."
+              : "Add this website to your phone's home screen for easy access to resources and programs."}
+          </p>
+          <div className="mt-7 flex flex-wrap items-center gap-4">
+            <Button type="button" size="lg" disabled={installed} onClick={handleInstall}
+              className="rounded-none bg-ink text-primary-foreground hover:bg-ink/90">
+              {installed ? <CheckCircle2 className="mr-2 h-4 w-4" /> : <Smartphone className="mr-2 h-4 w-4" />}
+              {installed
+                ? lang === "fr" ? "Déjà installé" : "Already installed"
+                : lang === "fr" ? "Ajouter à mon téléphone" : "Add to my phone"}
             </Button>
-            <span className="self-center text-xs text-muted-foreground">iPhone : Partager → « Sur l'écran d'accueil »</span>
+            {!installed && !installEvent && (
+              <span className="text-xs text-muted-foreground">
+                {lang === "fr" ? "Instructions selon votre appareil" : "Device-specific instructions"}
+              </span>
+            )}
           </div>
-          <div className="mt-12 grid gap-4 sm:grid-cols-3">
-            <AdSlot label="Espace partenaire" />
-            <AdSlot label="Publicité locale" />
-            <AdSlot label="Commanditaire communautaire" />
+          {showInstructions && !installed && (
+            <div className="mt-5 max-w-lg border-l-2 border-teal-deep bg-muted/40 p-5 text-sm text-ink"
+              role="status">
+              <p className="font-semibold">
+                {lang === "fr" ? "Installation depuis le navigateur" : "Install from your browser"}
+              </p>
+              <p className="mt-2 leading-6">
+                {lang === "fr"
+                  ? "iPhone (Safari) : touchez Partager, puis « Sur l'écran d'accueil ». Android (Chrome) : ouvrez le menu ⋮ puis « Ajouter à l'écran d'accueil » ou « Installer l'application ». Les options dépendent du navigateur."
+                  : "iPhone (Safari): tap Share, then Add to Home Screen. Android (Chrome): open the ⋮ menu and choose Add to Home Screen or Install app. Options depend on your browser."}
+              </p>
+            </div>
+          )}
+
+          <div className="mt-12 border-t border-ink/15 pt-8">
+            <p className="font-semibold text-ink">
+              {lang === "fr" ? "Agir avec REVERS CANADA" : "Get involved with REVERS CANADA"}
+            </p>
+            <div className="mt-4 flex flex-wrap gap-5 text-sm font-semibold text-teal-deep">
+              <Link to="/ressources" className="inline-flex items-center gap-2 hover:underline">
+                {lang === "fr" ? "Trouver de l'aide" : "Find support"} <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link to="/partenaires" className="inline-flex items-center gap-2 hover:underline">
+                {lang === "fr" ? "Devenir partenaire" : "Become a partner"} <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link to="/donate" className="inline-flex items-center gap-2 hover:underline">
+                {lang === "fr" ? "Soutenir la mission" : "Support the mission"} <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
           </div>
         </div>
-        <div className="lg:col-span-4 lg:col-start-9"><PhoneMock /></div>
+        <div className="lg:col-span-4 lg:col-start-9"><PhonePreview /></div>
       </div>
-      <p className="home-shell mt-12 px-5 text-xs text-muted-foreground sm:px-8 lg:px-0">Propulsé par TAKATAK · Espace publicitaire Google AdSense à venir</p>
     </section>
   );
 }

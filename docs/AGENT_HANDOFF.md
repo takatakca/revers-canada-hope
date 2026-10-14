@@ -42,3 +42,7 @@
 **cPanel runtime:** `PUBLIC_SITE_URL`, operational `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `REVERS_SESSION_SECRET`, TAKATAK launch/service/HMAC/outbox credentials, Stripe secret and webhook signing secret when donations are enabled. Set build-time Vite publishable configuration separately.
 
 **Real status:** CODE ADVANCING. CI for latest release requires fresh verification. PRODUCTION NOT DEPLOYED/NOT VERIFIED. The project is **not 100% complete**; consult `docs/TASK_QUEUE.md`.
+
+## Lockfile and mobile UI remediation (2026-10-14)
+
+The dedicated GitHub [repair workflow](https://github.com/takatakca/revers-canada-hope/actions/runs/38615786073) succeeded and bot committed synchronized `package-lock.json` at `8f3ba2b67f50ec83913c2caf40f7be7c9dc583ab` after passing `npm ci --ignore-scripts`. Both main CI and deployment workflows have been restored to `npm ci --no-audit --no-fund` (with normal scripts); verify on the resulting commit. `src/components/PlatformExtras.tsx` now implements a real PWA install prompt/fallback instructions and removes invented workshop/ad placeholders; `src/components/SiteLayout.tsx` removes the unsolicited welcome popup and misleading announcement strip.
