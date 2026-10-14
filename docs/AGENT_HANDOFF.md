@@ -4,7 +4,7 @@
 **Last GitHub head independently confirmed at start of this batch:** `ede77977b686057c657ae1e9bdf6707aa692e21b`. This handoff is committed with subsequent changes: for the actual last pushed SHA consult `git rev-parse origin/main` or the GitHub `main` ref; the final assistant report records the newly pushed commit.
 
 ## Last finished task
-- Improved CI-to-deploy gating and SHA-aware health verification; pinned dependency installation to npm lockfile.
+- Improved CI-to-deploy gating and SHA-aware health verification; attempted deterministic `npm ci`; temporarily reverted to `npm install` after CI proved lockfile drift.
 - Added standardized five-document status, task queue, deployment, decisions and agent-handoff continuity.
 - Prior existing batch finished father-focused support categories and privacy warning.
 
@@ -21,7 +21,7 @@
 - GitHub CI `38610837318`: **success** (migration, typecheck, lint, Nitro build).
 - Deploy `38610837590`: **failure** at Validate deployment configuration, no SSH/production transfer.
 - No open GitHub issues or PRs in initial search.
-- Exact-release deployment gate and npm ci are new; their CI outcome must be checked after push.
+- Initial new CI [38613420293](https://github.com/takatakca/revers-canada-hope/actions/runs/38613420293) failed during `npm ci`: lockfile missing current Supabase/Nitro/Stripe packages and outdated transitive versions. Regenerate lockfile with Node 22/npm 10, then restore `npm ci`. The next commit restores previously working `npm install` to unblock other checks.
 
 ## Blocking issues (no invented access)
 - GitHub `production` environment missing `MOCHAHOST_HOST` (proven from earlier logs); remaining deployment secrets unverified.

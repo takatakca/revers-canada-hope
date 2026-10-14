@@ -3,6 +3,7 @@
 | Priority | Task | State | Evidence / acceptance |
 | --- | --- | --- | --- |
 | P0 | Gate deployment on successful CI SHA and check production SHA | in progress (this batch) | `workflow_run` on successful push, `/healthz.release` matches validated Git SHA, rollback on failure |
+| P0 | Regenerate and commit a synchronized npm lockfile | pending (CI evidence) | `npm ci` fails with EUSAGE: missing Nitro/Supabase/Stripe packages and invalid transitive versions; regenerate with Node 22/npm 10, commit lockfile, restore `npm ci` |
 | P0 | Configure MochaHost production environment secrets | blocked: human credentials | Set `MOCHAHOST_HOST` and other names in `docs/DEPLOYMENT.md` via GitHub UI, not git |
 | P0 | Verify DNS/TLS and actual MochaHost root | blocked: hosting access | Browser and curl checks show correct production health and version |
 | P0 | Apply/verify Supabase migrations | blocked: project access/credentials | Migration history and service-role-only policies reviewed, no public cross-tenant data |

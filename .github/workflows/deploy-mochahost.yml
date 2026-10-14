@@ -59,7 +59,7 @@ jobs:
           [[ "$REVERS_PRODUCTION_URL" == https://reverscanada.ca ]] || { echo "Expected canonical production URL https://reverscanada.ca"; exit 1; }
 
       - name: Install dependencies
-        run: npm ci --no-audit --no-fund
+        run: npm install --no-audit --no-fund
 
       - name: Quality gates
         run: |

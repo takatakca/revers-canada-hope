@@ -3,7 +3,7 @@
 Production target: `https://reverscanada.ca` (domain confirmed by owner, not live-verified). Hosting architecture from repository: MochaHost cPanel / Passenger Node.js 22, immutable Nitro builds performed by GitHub Actions.
 
 ## Automatic publication
-1. Every push to `main` triggers `REVERS CI`; it runs `npm ci`, migration verification, typecheck, lint and production build.
+1. Every push to `main` triggers `REVERS CI`; it currently runs `npm install` (temporary while an out-of-sync lockfile is repaired), migration verification, typecheck, lint and production build.
 2. After a successful **push** CI from the same repository's `main`, the deploy workflow runs with `workflow_run`, checking out the exact validated `head_sha`.
 3. The deploy job verifies configuration, performs its own quality gates, bundles and uploads `.output`, switches `CURRENT`, restarts Passenger, and checks both endpoints.
 4. Health must report `{ ok: true, release: "<exact validated SHA>" }`, and readiness must return `ok: true`; otherwise rollback to `PREVIOUS`, or remove `CURRENT` on an unsuccessful first deployment.
@@ -40,3 +40,7 @@ Apply migrations separately in the **correct project**, verify RLS and outbox wo
 - `REVERS CI` run [38610837318](https://github.com/takatakca/revers-canada-hope/actions/runs/38610837318): success, commit `ede77977`.
 - Deploy run [38610837590](https://github.com/takatakca/revers-canada-hope/actions/runs/38610837590): failed before uploading because of missing `MOCHAHOST_HOST`.
 - Production release: **unverified**.
+
+## Lockfile drift warning
+
+CI run [38613420293](https://github.com/takatakca/revers-canada-hope/actions/runs/38613420293) failed because the package-lock.json does not satisfy package.json (`npm ci` EUSAGE, missing @supabase/supabase-js, nitro, stripe and transitive dependencies). We have temporarily restored the previously passing `npm install` step. On an authorized Node 22/npm 10 environment, regenerate and commit the correct lockfile, then change both workflows back to `npm ci` and verify the build. Do not claim deterministic supply-chain locking until this succeeds.
