@@ -1,3 +1,9 @@
+# Work log
+
+Newest first, one line per piece of work. Rule: `AGENTS.md` › Work log rule.
+Format: `YYYY-MM-DD | agent | branch → PR | status | what | next step`
+
+- 2026-10-14 | ChatGPT/GitHub agent | main → direct commit | done; live deployment blocked | Introduce strict CAD amount unit tests, improve Stripe/TAKATAK safety and MochaHost release retention; consolidate full handoff | verify exact-head CI, repair npm lockfile and obtain authorized MochaHost/Supabase access
 - 2026-10-14 | ChatGPT/GitHub agent | main → direct commit | done; remote staging test blocked | Make MochaHost CURRENT pointer atomic and preserve rollback releases during cleanup | CI then live SSH deployment and rollback drill
 - 2026-10-14 | ChatGPT/GitHub agent | main → direct commit | done; Stripe live test pending | Validate signed Stripe session matches stored donation intent/amount/currency/frequency; scope failed/expired webhook events and carry payment metadata | CI, signed Stripe test-mode events and recurring invoice ledger
 - 2026-10-14 | ChatGPT/GitHub agent | main → direct commit | done; live tests blocked | Enforce 10-minute signed TAKATAK session expiry, reject malformed upstream expiry, constant-time outbox token, redact worker errors | CI and production TAKATAK integration tests
@@ -12,11 +18,6 @@
 - 2026-10-14 | ChatGPT/GitHub agent | main → direct commit | done; prod blocked | Searchable bilingual resource directory and verified external reference links (211, JuridiQC) | CI; add verified partner organization inventory later
 - 2026-10-14 | ChatGPT/GitHub agent | main → direct commit | done; prod blocked | Bilingual privacy cleanup, legacy GAR noindex, remove dead social links, publish sitemap/robots and document Stripe/webhook setup | CI then configure missing MOCHAHOST_HOST secret
 - 2026-10-14 | ChatGPT/GitHub agent | main → direct commit | done; production unverified | Correct RêvPÈRE SEO, require durable newsletter opt-in, prevent false donation success, implement recurring Stripe Checkout with paid-only webhook handling, update production-domain handoff | GitHub CI and deployment checks; configure DNS/TLS/secrets, review Stripe recurring reconciliation
-- 2026-10-10 | ChatGPT/GitHub agent | feat/github-takatak-migration → PR #1 | TESTED / CI IN PROGRESS | Removed provider-coupled build/auth paths, kept Node/Nitro + MochaHost deployment, fixed route-tree/server-only/typecheck gates | wait for lint/build; owner merges PR #1 only after CI is green
-# Work log
-
-Newest first, one line per piece of work. Rule: `AGENTS.md` › Work log rule.
-Format: `YYYY-MM-DD | agent | branch → PR | status | what | next step`
-
-- 2026-10-10 | ChatGPT/GitHub agent | feat/github-takatak-migration → PR pending | active | Disconnect REVERS from Lovable, migrate deployment/build to direct GitHub + Cloudflare, and establish TAKATAK integration boundary | implement adapter, remove Lovable-only code, add CI/deploy, validate and open PR
+- 2026-10-10 | ChatGPT/GitHub agent | feat/github-takatak-migration → PR #1 | done (PR #1 merged) | Removed provider-coupled build/auth paths, kept Node/Nitro + MochaHost deployment, fixed route-tree/server-only/typecheck gates | wait for lint/build; owner merges PR #1 only after CI is green
+- 2026-10-10 | ChatGPT/GitHub agent | feat/github-takatak-migration → PR pending | done (PR #1 merged 2026-10-10) | Disconnect REVERS from Lovable, migrate deployment/build to GitHub/MochaHost and establish TAKATAK boundary | continue deployment verification
 - 2026-10-08 | claude (owner setup) | default branch | done | Added the work log rule, this log and the stop reminder | every agent follows AGENTS.md › Work log rule

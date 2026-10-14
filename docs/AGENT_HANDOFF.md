@@ -1,57 +1,44 @@
-# REVERS CANADA — Agent handoff
+# REVERS CANADA — Agent handoff (canonical)
 
-**Captured:** 2026-10-14. **Repository:** `takatakca/revers-canada-hope`. **Publication branch:** `main`.
-**Last GitHub head independently confirmed at start of this batch:** `ede77977b686057c657ae1e9bdf6707aa692e21b`. This handoff is committed with subsequent changes: for the actual last pushed SHA consult `git rev-parse origin/main` or the GitHub `main` ref; the final assistant report records the newly pushed commit.
+**Updated:** 2026-10-14. **Repository:** `takatakca/revers-canada-hope` — **branch:** `main`.
 
-## Last finished task
-- Improved CI-to-deploy gating and SHA-aware health verification; attempted deterministic `npm ci`; temporarily reverted to `npm install` after CI proved lockfile drift.
-- Added standardized five-document status, task queue, deployment, decisions and agent-handoff continuity.
-- Prior existing batch finished father-focused support categories and privacy warning.
+**Last independently confirmed pushed code commit before this handoff update:** `193e729c76ad60e40b3b9fb8086fca23e8efaa15`. This file is itself committed after that SHA; the final published handoff commit is the current GitHub `main` head (`git rev-parse origin/main`, or [GitHub main](https://github.com/takatakca/revers-canada-hope/commits/main)). Avoid confusing the captured predecessor SHA with the current head.
 
-## Current task
-- Verify CI on the latest commit; address any workflow issues.
-- Follow the P0 list in `docs/TASK_QUEUE.md`.
+## Latest completed development
 
-## Files in this batch
-- `.github/workflows/deploy-mochahost.yml`, `.github/workflows/ci.yml`, `AGENTS.md`, `WORKLOG.md`.
-- `docs/PROJECT_STATUS.md`, `docs/TASK_QUEUE.md`, `docs/AGENT_HANDOFF.md`, `docs/DEPLOYMENT.md`, `docs/DECISIONS.md`.
+1. CI-only automatic MochaHost deployment using `workflow_run` only after a successful `main` push, checking out the validated SHA. Failed CI prevents deployment.
+2. Immutable Nitro release activates with an atomic `CURRENT` pointer, rollback on failed health, protects `CURRENT`/`PREVIOUS` from cleanup, and checks exact `/healthz.release` SHA and `/readyz`.
+3. Donation intent creation moved from browser Supabase insert to server-only function. `/readyz` now probes the operational Supabase `contacts` table within 3.5s, fails closed and hides config diagnostics.
+4. TAKATAK derived product session has a signed maximum ten-minute validity and rejects bad expiry; worker bearer token is constant-time checked, with sanitized API errors.
+5. Signed Stripe initial payment webhook validates intent ID, checkout session, amount, currency, mode and project metadata before marking paid; one-time PaymentIntent carries project metadata. Recurring renewals remain a separate unimplemented ledger task.
+6. Added `tests/validation.test.mjs` (Node.js 22 built-in runner), a `npm run test` script, and mandatory test steps to both CI and deployment. CAD donations reject exponent/hex/sub-cent amounts; custom amount UI has a 0.01 step.
 
-## Technical verification evidence at start of batch
-- GitHub `main` SHA read via Git refs API: `ede77977b686057c657ae1e9bdf6707aa692e21b`.
-- GitHub CI `38610837318`: **success** (migration, typecheck, lint, Nitro build).
-- Deploy `38610837590`: **failure** at Validate deployment configuration, no SSH/production transfer.
-- No open GitHub issues or PRs in initial search.
-- Initial new CI [38613420293](https://github.com/takatakca/revers-canada-hope/actions/runs/38613420293) failed during `npm ci`: lockfile missing current Supabase/Nitro/Stripe packages and outdated transitive versions. Regenerate lockfile with Node 22/npm 10, then restore `npm ci`. The next commit restores previously working `npm install` to unblock other checks.
+## Current task / next exact action
 
-## Blocking issues (no invented access)
-- GitHub `production` environment missing `MOCHAHOST_HOST` (proven from earlier logs); remaining deployment secrets unverified.
-- Public `reverscanada.ca` health and TLS not successfully checked; external browsing could not fetch the site.
-- Supabase migration state, TAKATAK credentials, Stripe webhook and newsletter provider integrations not verified.
-- Remote server login and live smoke tests cannot be performed through GitHub Actions until secrets are configured.
+1. Read this file, `AGENTS.md`, `WORKLOG.md` and `docs/TASK_QUEUE.md`.
+2. Check current `main` SHA and GitHub Actions **REVERS CI** result for that exact SHA; retrieve failed job logs and fix if needed. Initial unit-test run `38615246341` was **queued** at the last observation (commit `193e729c`), not a verified success.
+3. If green, inspect the corresponding `workflow_run` deployment. It should still stop in `Validate deployment configuration` until authorized production secrets are set.
+4. Continue executable source tasks without retrying missing credentials. For live deployment, obtain the correct REVERS MochaHost and Supabase access; apply/verify scoped RLS and migrations, Stripe test webhooks and real TAKATAK exchange.
+5. Run `/healthz` and `/readyz` checks against `https://reverscanada.ca` and verify the release SHA before declaring production live.
 
-## Next exact action
-1. Read this file, `AGENTS.md` and the top of `WORKLOG.md`.
-2. Check latest `main` SHA and latest `REVERS CI` result; if CI fails, retrieve failed job logs and fix.
-3. Confirm workflow-run deploy only fires after successful `REVERS CI`, and that the deployment config gate reports missing secrets.
-4. Configure the named secrets in `docs/DEPLOYMENT.md` with authorized cPanel/GitHub access; never commit secret values.
-5. Verify production `/healthz.release` equals exact SHA and `/readyz` returns 200, then continue TAKATAK/Stripe/Supabase P0 gates.
+## Verification and errors
 
-## Donation service hardening, 2026-10-14
+- CI successful for [`6b2e92b` run 38613967661](https://github.com/takatakca/revers-canada-hope/actions/runs/38613967661) and [`44a0f272` run 38614682169](https://github.com/takatakca/revers-canada-hope/actions/runs/38614682169).
+- Several intermediate CI runs were **cancelled** by push concurrency; cancellation is not a test failure or success.
+- [`npm ci` run 38613420293](https://github.com/takatakca/revers-canada-hope/actions/runs/38613420293) failed EUSAGE because `package-lock.json` is out of sync (Supabase/Nitro/Stripe dependencies and transitives). Temporarily reverted to `npm install`; proper lockfile regeneration remains P0.
+- Multiple automatic deploy runs failed before upload at missing `MOCHAHOST_HOST` in GitHub `production`. The new success-only trigger works but does not create credentials.
+- `reverscanada.ca` DNS/TLS and production HTTP checks were not verified from current tools.
+- Connected Supabase workspace does **not** include the repository's REVERS project `cmcbsbjxrrwtmxvcsbsg`. Do not apply REVERS migrations to other listed projects.
+- No live Stripe service credentials or TAKATAK service/HMAC token exchange verified. No live authenticated support admin portal or newsletter provider connected.
 
-Donation intent creation has been moved from the browser Supabase client to a TanStack server function using server-only `supabaseAdmin`. This removes the browser's dependency on direct operational writes for donations. **The live database privilege revocation is still a P0 action.** The repository points to Supabase project `cmcbsbjxrrwtmxvcsbsg` (public project ref only), which is not present in the currently connected Supabase project's list; do not modify unrelated databases. Add the server-only policy after accessing the correct project, then test anon/authenticated insert is denied, and service_role insert succeeds. No real database changes were claimed in this batch.
+## Files touched during this session
 
-## Operational readiness health update (2026-10-14)
+`.github/workflows/ci.yml`, `.github/workflows/deploy-mochahost.yml`, `AGENTS.md`, `package.json`, `src/lib/donation.functions.ts`, `src/lib/donationService.ts`, `src/lib/checkout.functions.ts`, `src/lib/validation.ts`, `src/lib/takatak/session.ts`, `src/lib/takatak/client.ts`, `src/routes/api/internal/takatak/outbox.ts`, `src/routes/api/public/stripe-webhook.ts`, `src/routes/readyz.ts`, `src/routes/donate.tsx`, `tests/validation.test.mjs`, `WORKLOG.md`, documentation files.
 
-`src/routes/readyz.ts` now performs a real low-cost Supabase `contacts` table query with a 3.5s timeout and fails closed with HTTP 503 when the DB/table is unreachable. This is a public endpoint with no secret-status details. The live REVERS Supabase project remains inaccessible through the connected account, so this check is code-only until the correct project can be verified. It is **not** a reason to bypass the readiness gate.
+## Required authorized configuration (never commit secret values)
 
-## TAKATAK security hardening (2026-10-14)
+**GitHub environment `production`:** `MOCHAHOST_HOST`, `MOCHAHOST_USER`, `MOCHAHOST_SSH_PORT`, `MOCHAHOST_APP_ROOT`, `MOCHAHOST_SSH_PRIVATE_KEY`, `MOCHAHOST_KNOWN_HOSTS`, `REVERS_PRODUCTION_URL`.
 
-Signed product cookies now reject invalid expiration values, reject already expired upstream sessions, cap signed payload expiration at ten minutes, and require a session signing secret at least 32 characters long. The HMAC outbox worker requires a strong token and uses constant-time comparison, with error details logged server-side only. Files: `src/lib/takatak/session.ts`, `src/lib/takatak/client.ts`, `src/routes/api/internal/takatak/outbox.ts`. Verify a real TAKATAK launch and worker authorization after connection is configured.
+**cPanel runtime:** `PUBLIC_SITE_URL`, operational `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `REVERS_SESSION_SECRET`, TAKATAK launch/service/HMAC/outbox credentials, Stripe secret and webhook signing secret when donations are enabled. Set build-time Vite publishable configuration separately.
 
-## Stripe verification guard (2026-10-14)
-
-Initial payment webhook checks signed Stripe Checkout project metadata against REVERS, verifies session-id/amount/currency/frequency match the stored donation intent before marking paid, and applies failure/expiry only to that session. One-time Stripe PaymentIntent now carries the same metadata for failure handling. Needs actual Stripe test-mode event verification; no production keys available in GitHub documents.
-
-## Release-pointer safety, 2026-10-14
-
-Changed `.github/workflows/deploy-mochahost.yml` to atomically switch `CURRENT` and never prune a release referenced by `CURRENT`/`PREVIOUS`. This is source-side CI/CD hardening, not evidence that MochaHost accepted a release. Check that the YAML quality gates still pass and remote upload remains blocked only by missing deployment secrets.
+**Real status:** CODE ADVANCING. CI for latest release requires fresh verification. PRODUCTION NOT DEPLOYED/NOT VERIFIED. The project is **not 100% complete**; consult `docs/TASK_QUEUE.md`.

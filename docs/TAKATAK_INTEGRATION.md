@@ -14,7 +14,7 @@ GET https://takatak.ca/api/experiences/revers/launch
 
 TAKATAK authenticates the user with its existing authentication flow, checks the REVERS entitlement, and redirects to the configured REVERS callback with a one-time code.
 
-The final REVERS callback URL is configured by environment variable and is not hardcoded because the production domain has not been confirmed.
+The owner confirmed the target production domain as `reverscanada.ca` on 2026-10-14. The planned callback is `https://reverscanada.ca/api/auth/takatak/callback`, but TAKATAK's allowlist, production TLS and an actual exchange must be verified before claiming it is live.
 
 ## Server exchange
 

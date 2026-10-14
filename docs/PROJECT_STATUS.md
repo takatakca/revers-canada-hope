@@ -11,7 +11,7 @@ Updated: 2026-10-14. Source: GitHub `takatakca/revers-canada-hope`, default bran
 - Newsletter with explicit consent and backend save acknowledgement (provider not connected).
 - Stripe one-time and recurring Checkout code with signed payment webhook and a verified status screen (no live transaction verified).
 - SEO cleanup, canonical sitemap, privacy corrections, searchable community resources.
-- **Last completed CI at initial resumption:** [REVERS CI run 38610837318](https://github.com/takatakca/revers-canada-hope/actions/runs/38610837318) succeeded for `ede77977b686057c657ae1e9bdf6707aa692e21b`.
+- **First completed CI at initial resumption:** [REVERS CI run 38610837318](https://github.com/takatakca/revers-canada-hope/actions/runs/38610837318) succeeded for `ede77977b686057c657ae1e9bdf6707aa692e21b`.
 
 ## Incomplete / not verified
 - Production deployment: **BLOCKED** by missing `MOCHAHOST_HOST` in GitHub `production` environment; no release uploaded in observed workflow run [38610837590](https://github.com/takatakca/revers-canada-hope/actions/runs/38610837590).
@@ -27,3 +27,10 @@ The repository is **not 100% complete** and the website must **not** be called d
 ## Database account access finding (2026-10-14)
 
 Connected Supabase currently lists TAKATAK STAGING, FESTI ICE, TAKATAK Dashboard, foodhub and ALKAO, but **does not list the operational REVERS project ref `cmcbsbjxrrwtmxvcsbsg`** found in repository configuration. The live REVERS database cannot be migrated or verified from this connection. Do not apply REVERS SQL to other TAKATAK projects.
+
+## Incremental verification, 2026-10-14
+
+- [CI 38613967661](https://github.com/takatakca/revers-canada-hope/actions/runs/38613967661) passed after server-only donation intent migration to TanStack server functions.
+- [CI 38614682169](https://github.com/takatakca/revers-canada-hope/actions/runs/38614682169) passed after TAKATAK session and Stripe payment validation hardening.
+- New `node:test` validation checks were introduced after those runs. At the time of capture, CI `38615246341` for `193e729c` was queued, so their success is **not yet claimed**.
+- CI-triggered deploys still fail before SSH due to missing `MOCHAHOST_HOST`; exact production release unverified.
