@@ -1,3 +1,4 @@
+- 2026-10-14 | ChatGPT/GitHub agent | main → direct commit | done; prod blocked | Stripe idempotency for donation intents and async payment failure reconciliation | CI, deploy secrets and signed Stripe webhook configuration
 - 2026-10-14 | ChatGPT/GitHub agent | main → direct commit | done; prod blocked | Server-verified Stripe payment status on donation confirmation page, privacy-minimized response | CI and MochaHost deployment pending secret setup
 - 2026-10-14 | ChatGPT/GitHub agent | main → direct commit | done; prod blocked | Searchable bilingual resource directory and verified external reference links (211, JuridiQC) | CI; add verified partner organization inventory later
 - 2026-10-14 | ChatGPT/GitHub agent | main → direct commit | done; prod blocked | Bilingual privacy cleanup, legacy GAR noindex, remove dead social links, publish sitemap/robots and document Stripe/webhook setup | CI then configure missing MOCHAHOST_HOST secret

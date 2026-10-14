@@ -115,6 +115,6 @@ TAKATAK integration code is implemented but production connection is not claimed
 
 ## Additional integration steps (2026-10-14)
 
-Configure `STRIPE_WEBHOOK_SECRET` and `STRIPE_SECRET_KEY` before enabling donations. Once DNS/TLS are verified, register `https://reverscanada.ca/api/public/stripe-webhook` for `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.expired`, and `payment_intent.payment_failed`. Stripe is the authoritative renewal ledger for monthly subscriptions until local invoice reconciliation is implemented; a Checkout success page is not an official tax receipt.
+Configure `STRIPE_WEBHOOK_SECRET` and `STRIPE_SECRET_KEY` before enabling donations. Once DNS/TLS are verified, register `https://reverscanada.ca/api/public/stripe-webhook` for `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed`, `checkout.session.expired`, and `payment_intent.payment_failed`. Stripe is the authoritative renewal ledger for monthly subscriptions until local invoice reconciliation is implemented; a Checkout success page is not an official tax receipt.
 
 [Deployment run 38609307186](https://github.com/takatakca/revers-canada-hope/actions/runs/38609307186) failed *before upload* due to missing `MOCHAHOST_HOST` in the `production` secrets. [CI run 38609307457](https://github.com/takatakca/revers-canada-hope/actions/runs/38609307457) succeeded. Configure all deployment/runtime secrets then rerun.

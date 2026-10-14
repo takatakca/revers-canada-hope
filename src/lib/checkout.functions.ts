@@ -84,6 +84,9 @@ export const createDonationCheckout = createServerFn({ method: "POST" })
         locale: language === "en" ? "en" : "fr",
         success_url: `${siteUrl}/donate/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${siteUrl}/donate/cancelled`,
+      }, {
+        // A repeated request for this donation intent must not create another charge.
+        idempotencyKey: `revers-donation-intent-${intent.id}`,
       });
 
       if (!session.url) return { ok: false, error: "stripe_failed" };

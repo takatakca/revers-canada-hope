@@ -76,6 +76,19 @@ export const Route = createFileRoute("/api/public/stripe-webhook")({
               break;
             }
 
+            case "checkout.session.async_payment_failed": {
+              const session = event.data.object as import("stripe").Stripe.Checkout.Session;
+              const intentId = session.metadata?.donation_intent_id;
+              if (!intentId) break;
+              const { error } = await supabaseAdmin
+                .from("donation_intents")
+                .update({ status: "failed" })
+                .eq("id", intentId)
+                .neq("status", "paid");
+              if (error) throw new Error(`Could not record failed checkout: ${error.code ?? "unknown"}`);
+              break;
+            }
+
             case "checkout.session.expired": {
               const session = event.data.object as import("stripe").Stripe.Checkout.Session;
               const intentId = session.metadata?.donation_intent_id;
