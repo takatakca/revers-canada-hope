@@ -44,3 +44,7 @@ Apply migrations separately in the **correct project**, verify RLS and outbox wo
 ## Lockfile drift warning
 
 CI run [38613420293](https://github.com/takatakca/revers-canada-hope/actions/runs/38613420293) failed because the package-lock.json does not satisfy package.json (`npm ci` EUSAGE, missing @supabase/supabase-js, nitro, stripe and transitive dependencies). We have temporarily restored the previously passing `npm install` step. On an authorized Node 22/npm 10 environment, regenerate and commit the correct lockfile, then change both workflows back to `npm ci` and verify the build. Do not claim deterministic supply-chain locking until this succeeds.
+
+## Real database readiness gate
+
+`/readyz` now checks the operational `contacts` table using server-side credentials with a 3.5-second abort timeout. It returns HTTP 503 on failed connectivity or missing migration instead of claiming readiness from the presence of environment variables. The public response reveals no secret configuration detail or contact record. Ensure the correct REVERS Supabase project is ready before deploying; this is intentional and may block activation until migration and network access are fixed.

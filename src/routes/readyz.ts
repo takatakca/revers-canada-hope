@@ -1,35 +1,56 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-function has(value: string | undefined): boolean {
+function configured(value: string | undefined): boolean {
   return Boolean(value?.trim());
+}
+
+/**
+ * Readiness must prove that the *operational* REVERS database is reachable.
+ * Returning 200 merely because a Supabase URL and key exist masks outages
+ * and risks activating a broken production release.
+ */
+async function isOperationalDatabaseReady(): Promise<boolean> {
+  if (!configured(process.env.SUPABASE_URL) || !configured(process.env.SUPABASE_SERVICE_ROLE_KEY)) {
+    return false;
+  }
+
+  try {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin
+      .from("contacts")
+      .select("id")
+      .limit(1)
+      .abortSignal(AbortSignal.timeout(3_500));
+    return !error;
+  } catch {
+    return false;
+  }
 }
 
 export const Route = createFileRoute("/readyz")({
   server: {
     handlers: {
       GET: async () => {
-        const checks = {
-          publicOrigin: has(process.env.PUBLIC_SITE_URL),
-          supabase: has(process.env.SUPABASE_URL) && has(process.env.SUPABASE_SERVICE_ROLE_KEY),
-          sessionSecret: has(process.env.REVERS_SESSION_SECRET),
-          takatak: has(process.env.TAKATAK_REVERS_SERVICE_TOKEN) &&
-            has(process.env.TAKATAK_REVERS_HMAC_SECRET)
-            ? "configured"
-            : "not_configured",
-        };
+        const environmentReady =
+          configured(process.env.PUBLIC_SITE_URL) &&
+          configured(process.env.REVERS_SESSION_SECRET);
+        const ready = environmentReady && await isOperationalDatabaseReady();
 
-        const ready = checks.publicOrigin && checks.supabase && checks.sessionSecret;
-        const response = Response.json(
-          {
+        // No sensitive config diagnostics or donor records in a public endpoint.
+        return new Response(
+          JSON.stringify({
             ok: ready,
             service: "revers-canada-web",
-            ready,
-            checks,
+            release: process.env.RELEASE_SHA ?? null,
+          }),
+          {
+            status: ready ? 200 : 503,
+            headers: {
+              "Content-Type": "application/json",
+              "Cache-Control": "no-store",
+            },
           },
-          { status: ready ? 200 : 503 },
         );
-        response.headers.set("Cache-Control", "no-store");
-        return response;
       },
     },
   },

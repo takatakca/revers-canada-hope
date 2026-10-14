@@ -39,3 +39,7 @@
 ## Donation service hardening, 2026-10-14
 
 Donation intent creation has been moved from the browser Supabase client to a TanStack server function using server-only `supabaseAdmin`. This removes the browser's dependency on direct operational writes for donations. **The live database privilege revocation is still a P0 action.** The repository points to Supabase project `cmcbsbjxrrwtmxvcsbsg` (public project ref only), which is not present in the currently connected Supabase project's list; do not modify unrelated databases. Add the server-only policy after accessing the correct project, then test anon/authenticated insert is denied, and service_role insert succeeds. No real database changes were claimed in this batch.
+
+## Operational readiness health update (2026-10-14)
+
+`src/routes/readyz.ts` now performs a real low-cost Supabase `contacts` table query with a 3.5s timeout and fails closed with HTTP 503 when the DB/table is unreachable. This is a public endpoint with no secret-status details. The live REVERS Supabase project remains inaccessible through the connected account, so this check is code-only until the correct project can be verified. It is **not** a reason to bypass the readiness gate.
