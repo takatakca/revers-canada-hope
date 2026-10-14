@@ -121,3 +121,26 @@ export const isStripeConfigured = createServerFn({ method: "GET" }).handler(asyn
     ),
   };
 });
+
+const CheckoutStatusInput = z.object({
+  session_id: z.string().max(300).regex(/^cs_(test|live)_[A-Za-z0-9]+$/),
+});
+
+/**
+ * Check a Stripe session on the server; never trust the success URL as proof
+ * of settlement. Return no donor name, email, payment method or card details.
+ */
+export const getDonationCheckoutStatus = createServerFn({ method: "GET" })
+  .inputValidator((input: unknown) => CheckoutStatusInput.parse(input))
+  .handler(async ({ data }): Promise<{ status: "paid" | "pending" | "unavailable" }> => {
+    const secret = process.env.STRIPE_SECRET_KEY;
+    if (!secret) return { status: "unavailable" };
+    try {
+      const Stripe = (await import("stripe")).default;
+      const session = await new Stripe(secret).checkout.sessions.retrieve(data.session_id);
+      if (session.metadata?.project !== "REVERS_CANADA") return { status: "unavailable" };
+      return { status: session.payment_status === "paid" ? "paid" : "pending" };
+    } catch {
+      return { status: "unavailable" };
+    }
+  });
