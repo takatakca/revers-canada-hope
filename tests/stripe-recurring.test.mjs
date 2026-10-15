@@ -18,7 +18,10 @@ const paid = {
 
 test("Stripe Basil+ parent identifies correct recurring subscription", () => {
   assert.equal(invoiceSubscriptionId(paid), "sub_test123");
-  assert.equal(invoiceSubscriptionId({ ...paid, parent: undefined, subscription: "sub_old" }), "sub_old");
+  assert.equal(
+    invoiceSubscriptionId({ ...paid, parent: undefined, subscription: "sub_old" }),
+    "sub_old",
+  );
   assert.equal(invoiceSubscriptionId({ ...paid, parent: { type: "invoiceitem_details" } }), null);
 });
 
