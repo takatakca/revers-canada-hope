@@ -69,6 +69,8 @@ export type Database = {
           paid_at: string | null
           source: string
           status: string
+          stripe_subscription_id: string | null
+          subscription_status: string | null
           stripe_checkout_session_id: string | null
           stripe_customer_id: string | null
           stripe_payment_intent_id: string | null
@@ -106,6 +108,48 @@ export type Database = {
           stripe_checkout_session_id?: string | null
           stripe_customer_id?: string | null
           stripe_payment_intent_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      revers_recurring_invoices: {
+        Row: {
+          id: string
+          donation_intent_id: string
+          stripe_invoice_id: string
+          stripe_subscription_id: string
+          stripe_event_id: string
+          currency: string
+          amount_cents: number
+          status: string
+          paid_at: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          donation_intent_id: string
+          stripe_invoice_id: string
+          stripe_subscription_id: string
+          stripe_event_id: string
+          currency: string
+          amount_cents: number
+          status: string
+          paid_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          donation_intent_id?: string
+          stripe_invoice_id?: string
+          stripe_subscription_id?: string
+          stripe_event_id?: string
+          currency?: string
+          amount_cents?: number
+          status?: string
+          paid_at?: string | null
+          created_at?: string
           updated_at?: string
         }
         Relationships: []
