@@ -54,3 +54,8 @@ Last objectively green source CI: [38617278856](https://github.com/takatakca/rev
 ## Recurring-donation development (2026-10-15)
 
 A signed Stripe invoice and subscription event handler plus unique recurring-invoice ledger migration were committed under `8165bd3bb4476f70ee28aef6550ea55c66f5a154`. TypeScript database types and unit tests were added. This is **code implementation**, not proof that recurring payments run in production. REVERS migration, live webhook event, billing renewal and cancellation testing are not yet possible without the operational REVERS Supabase project and Stripe test-mode configuration. Public release remains unverified.
+
+## CI confirmation (2026-10-15)
+- [REVERS CI 38775784157](https://github.com/takatakca/revers-canada-hope/actions/runs/38775784157) **success** on commit `0be884a53bc1bbe139607f02950745ab78f390fb`: npm ci, migration check, typecheck, lint, unit tests including recurring invoices, production build and artifact inspection.
+- [MochaHost deployment 38775967756](https://github.com/takatakca/revers-canada-hope/actions/runs/38775967756) **failed before upload**: missing `MOCHAHOST_HOST` production secret, explicitly verified in job log.
+- Added fail-closed billing guard: monthly Stripe Checkout is disabled until the server can query the new recurring-invoice table. One-time checkout can remain independent. The guard itself requires CI verification on the next SHA.

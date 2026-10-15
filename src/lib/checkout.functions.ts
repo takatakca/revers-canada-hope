@@ -40,7 +40,21 @@ export const createDonationCheckout = createServerFn({ method: "POST" })
     const siteUrl = process.env.PUBLIC_SITE_URL?.trim();
     if (!siteUrl) return { ok: false, error: "stripe_not_configured" };
 
-    // 3) Create Stripe Checkout session
+    // 3) Do not start recurring billing until the private invoice ledger is installed.
+    // Failing closed protects donors if production migrations have not been applied.
+    if (intent.frequency === "monthly") {
+      try {
+        const { error: ledgerError } = await supabaseAdmin
+          .from("revers_recurring_invoices")
+          .select("id")
+          .limit(1);
+        if (ledgerError) return { ok: false, error: "stripe_not_configured" };
+      } catch {
+        return { ok: false, error: "stripe_not_configured" };
+      }
+    }
+
+    // 4) Create Stripe Checkout session
     try {
       const Stripe = (await import("stripe")).default;
       const stripe = new Stripe(secret);
@@ -112,17 +126,23 @@ export const createDonationCheckout = createServerFn({ method: "POST" })
     }
   });
 
-/** Public flag for the UI — true when Stripe is wired on the server. */
+/** Return actual server configuration without exposing any secret to the browser. */
 export const isStripeConfigured = createServerFn({ method: "GET" }).handler(async () => {
-  return {
-    configured: Boolean(
-      process.env.STRIPE_SECRET_KEY &&
-        process.env.STRIPE_WEBHOOK_SECRET &&
-        process.env.PUBLIC_SITE_URL &&
-        process.env.SUPABASE_URL &&
-        process.env.SUPABASE_SERVICE_ROLE_KEY,
-    ),
-  };
+  const configured = Boolean(
+    process.env.STRIPE_SECRET_KEY &&
+      process.env.STRIPE_WEBHOOK_SECRET &&
+      process.env.PUBLIC_SITE_URL &&
+      process.env.SUPABASE_URL &&
+      process.env.SUPABASE_SERVICE_ROLE_KEY,
+  );
+  if (!configured) return { configured: false, monthlyConfigured: false };
+  try {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin.from("revers_recurring_invoices").select("id").limit(1);
+    return { configured: true, monthlyConfigured: !error };
+  } catch {
+    return { configured: true, monthlyConfigured: false };
+  }
 });
 
 const CheckoutStatusInput = z.object({

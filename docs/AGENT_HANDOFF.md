@@ -42,3 +42,8 @@ The actual REVERS Supabase instance must become accessible before applying migra
 Read `AGENTS.md`, this handoff and `docs/TASK_QUEUE.md`, retrieve the latest GitHub CI jobs. Fix anything red on `main`. When production secrets and correct REVERS Supabase are available, apply migration, verify signed Stripe invoice success/failure/cancel and run MochaHost deployment; prove exact `/healthz.release` SHA and `/readyz` HTTP 200 before marking deployed.
 
 **Status: source progressing; migration pending; production unverified; NOT 100%.**
+
+## Verified pipeline follow-up (2026-10-15)
+- The recurring-ledger code and test formatting fix at `0be884a53bc1bbe139607f02950745ab78f390fb` passed [CI 38775784157](https://github.com/takatakca/revers-canada-hope/actions/runs/38775784157): dependency installation, typecheck, lint, unit tests, build and output check all succeeded.
+- Automatic production release [38775967756](https://github.com/takatakca/revers-canada-hope/actions/runs/38775967756) started only after that successful CI but **failed before upload at missing `MOCHAHOST_HOST`**, verified from logs.
+- Additional safety code on the following commit disables monthly Stripe Checkout until the new private ledger table is present in the operational REVERS database. The latest post-guard CI must be checked before any release.

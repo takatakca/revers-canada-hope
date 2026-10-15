@@ -12,7 +12,7 @@
 | P0 | Schedule durable TAKATAK outbox delivery | workflow added; live blocked | New GitHub scheduled outbox job every 30 minutes; requires verified production worker token in GitHub environment and successful live HMAC delivery |
 | P0 | Prove TAKATAK launch/exchange & entitlement | blocked: live integration secrets | Full real server exchange and a denied unauthorized user |
 | P0 | Test Stripe webhook and recurring billing end to end | blocked: Stripe credentials | Signed event replay + renewal/cancel/failed payment; no official tax receipt unless entitled |
-| P1 | Implement monthly recurring-payment reconciliation ledger | code committed; migration/Stripe tests blocked | Idempotent monthly invoice record, retries and status sync tested |
+| P1 | Implement monthly recurring-payment reconciliation ledger | CI validated on 0be884a; live migration/Stripe tests blocked | Idempotent monthly invoice record, retries and status sync tested |
 | P1 | Newsletter provider opt-in/opt-out lifecycle | pending | Consent and unsubscribe recorded, actual delivery verified |
 | P1 | Private support-request admin operations | pending | Server-enforced TAKATAK entitlement and scoped permissions, no exposed case data |
 | P1 | Verified father/family partner-resource directory | partial | Vet real partner names, locations and services, add links without fabricated availability |

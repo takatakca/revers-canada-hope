@@ -35,12 +35,16 @@ function DonatePage() {
   const [other, setOther] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [stripeReady, setStripeReady] = useState(false);
+  const [monthlyReady, setMonthlyReady] = useState(false);
 
   const checkConfig = useServerFn(isStripeConfigured);
   const createCheckout = useServerFn(createDonationCheckout);
 
   useEffect(() => {
-    checkConfig().then((r) => setStripeReady(Boolean(r?.configured))).catch(() => {});
+    checkConfig().then((r) => {
+      setStripeReady(Boolean(r?.configured));
+      setMonthlyReady(Boolean(r?.monthlyConfigured));
+    }).catch(() => {});
   }, [checkConfig]);
 
   const handleDonate = async (e: React.FormEvent) => {
@@ -60,7 +64,7 @@ function DonatePage() {
       }
 
       // If Stripe is configured AND we have a DB id, try Checkout.
-      if (stripeReady && result.intentId) {
+      if ((type === "monthly" ? monthlyReady : stripeReady) && result.intentId) {
         toast.loading(t.donate.preparing, { id: "checkout" });
         try {
           const checkout = await createCheckout({
@@ -143,6 +147,14 @@ function DonatePage() {
               ))}
             </div>
 
+            {type === "monthly" && !monthlyReady && (
+              <p role="status" className="mt-4 text-xs leading-5 text-muted-foreground">
+                {lang === "fr"
+                  ? "Le paiement mensuel en ligne n’est pas encore activé. Vous pouvez enregistrer une intention de soutien sans être débité."
+                  : "Monthly online billing is not yet active. You can record an intention to support us without being charged."}
+              </p>
+            )}
+
             <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
               {t.donate.amounts.map((a) => (
                 <button
@@ -195,7 +207,7 @@ function DonatePage() {
                 <Heart className="mr-2 h-4 w-4" aria-hidden />
               )}
               {type === "monthly"
-                ? stripeReady ? t.donate.monthlyBtnSecure : t.donate.monthlyBtn
+                ? monthlyReady ? t.donate.monthlyBtnSecure : t.donate.monthlyBtn
                 : stripeReady ? t.donate.donateBtnSecure : t.donate.donateBtn}
             </Button>
           </form>
