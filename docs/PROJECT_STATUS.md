@@ -79,3 +79,11 @@ Untrusted public contact and Stripe webhook bodies now pass through a bounded st
 - `GET/PATCH /api/internal/revers/support` accesses **only** `source=REVERS_CANADA_GAR`; all reads/writes require a valid cryptographically signed TAKATAK derived product session and a server-configured delegated TAKATAK UUID.
 - Mutation validates the expected current status, current legal status constraint (`new/reviewed/archived`), JSON origin and request-size cap. No anonymous or general REVERS member receives case-management privileges.
 - New authorization tests: `tests/support-admin.test.mjs`. Code commit [e8991116](https://github.com/takatakca/revers-canada-hope/commit/e89911160766e7e798bf7027f04bc3a7780e7f43). Production operator delegation and private data workflow **not tested live**.
+
+
+## Most recent verified results (2026-10-15)
+- **Support console compiled/tested:** [CI 38791380042](https://github.com/takatakca/revers-canada-hope/actions/runs/38791380042), commit `9a75362e`, successful.
+- **Newsletter opt-out compiled/tested:** [CI 38791857874](https://github.com/takatakca/revers-canada-hope/actions/runs/38791857874), code `460992911d43b153ca3c6b7624384c032cf1fbe5`, successful. Includes HMAC token verification, POST-only confirmed unsubscribe, no mutation on GET preview and consent false after unsubscribe. Existing unsubscribed subscriber cannot silently resubscribe by repeating signup.
+- **MochaHost:** [deploy 38792000621](https://github.com/takatakca/revers-canada-hope/actions/runs/38792000621) failed *before upload* at missing GitHub secret `MOCHAHOST_HOST`. No production release verified.
+- **Database:** current connected Supabase projects do **not** include the REVERS-specific operational project; do not apply migrations to a neighboring TAKATAK project.
+- **Email:** provider and sender not connected, so opt-out link rendering in real email remains pending. Do not claim email delivery exists.

@@ -87,3 +87,12 @@ Apply the file `supabase/migrations/20261015133000_lock_down_public_form_writes.
 - `/admin/support` is deliberately unlisted and `noindex`. Its GET/PATCH API reads/writes the REVERS `contacts` table with the server-only service role, filters `source=REVERS_CANADA_GAR` and checks operator authorization for every request. PATCH requires `Origin` matching `PUBLIC_SITE_URL`.
 - Do not enable the console until the correct REVERS Supabase migrations and RLS restrictions are verified. Acceptance: an anonymous caller and ordinary TAKATAK user both receive 403, a delegated authenticated operator can read and update `new → reviewed → archived`, and stale status updates return 409.
 - Revocation: remove the UUID from the server setting and restart Passenger, or expire the signed REVERS product session (max ten minutes). Confirm revocation with an API 403.
+
+
+## Newsletter unsubscribe integration
+- Configure cPanel server-only `REVERS_NEWSLETTER_UNSUBSCRIBE_SECRET` with a **stable 32+ character high-entropy secret**. Do not expose it in a Vite/browser variable or GitHub source. Rotation invalidates issued unsub links until old-version verification is implemented.
+- For each verified outgoing email, the REVERS server creates `createUnsubscribeToken(subscriber.id, process.env.REVERS_NEWSLETTER_UNSUBSCRIBE_SECRET)` from `src/lib/newsletter/unsubscribe-token.ts`. Link to `https://reverscanada.ca/newsletter/unsubscribe?token=<signed token>`.
+- Preview GET is non-mutating. Explicit POST to `/api/public/newsletter/unsubscribe` verifies the signed token, scopes `newsletter_subscribers` to `REVERS_CANADA_GAR`, and saves `consent=false`, `status=unsubscribed`. Replays are idempotent and anonymous email address guesses cannot unsubscribe anyone.
+- A newsletter sender/ESP **is not yet integrated or configured**. Verify its list suppression, double opt-in as appropriate, and ability to include the per-subscriber signed unsubscribe link **before sending**.
+- Existing opted-out emails are not reactivated by unauthenticated repeated footer submissions; reconfirmation with verified email ownership must be designed before permitting resubscription.
+- Acceptance when REVERS Supabase is available: valid token changes real row; GET preview does not; invalid/tampered token cannot change any row; database service-role permissions and error behavior tested.

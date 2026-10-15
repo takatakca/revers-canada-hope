@@ -21,3 +21,5 @@
 | 2026-10-15 | Remove public database writes for REVERS contact, newsletter and donation intents | These operations now persist using server-only service credentials; unrestricted public DML is unnecessary exposure | Apply `20261015133000_lock_down_public_form_writes.sql` on correct REVERS project only and confirm anonymous negative permission tests |
 
 | 2026-10-15 | Support cases are administered by signed TAKATAK identities with an explicit server-only REVERS operator UUID delegation | `revers_access` is only a general product entitlement; it cannot alone authorize reading private family-support messages | Fail closed with empty allowlist, never create secondary identity accounts or trust browser role flags; replace delegation with a verified TAKATAK administration entitlement when supported |
+
+| 2026-10-15 | Newsletter opt-out uses a 32+ character server-only HMAC secret and opaque subscriber UUID | Avoid an email-in-URL token, unauthenticated address-based revocation and automatic link-scan unsubscribes | Explicit POST required, fail-closed without secret, durable status/consent update, manual provider wiring and stable key management required |

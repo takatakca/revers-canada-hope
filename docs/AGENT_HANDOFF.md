@@ -79,3 +79,25 @@ Read `AGENTS.md`, this handoff and `docs/TASK_QUEUE.md`, retrieve the latest Git
 - **Checks at start:** CI [38777285234](https://github.com/takatakca/revers-canada-hope/actions/runs/38777285234) successful for prior SHA `a76c9db218c04bd0e00ceb3f3297ba22b8d2a036`; deploy [38777430045](https://github.com/takatakca/revers-canada-hope/actions/runs/38777430045) failed. Live `https://reverscanada.ca/healthz` and `/readyz` could not be read from web; no successful release verified.
 - **Blocking:** cPanel and REVERS Supabase access absent, `MOCHAHOST_HOST` previously missing in GitHub `production`, live Stripe/TAKATAK flow unverified. Do not set operator UUIDs from public inputs or expose case details in logs.
 - **Next exact action:** check latest `main` and CI for the handoff successor SHA; inspect failed step logs and fix red gates. Then configure an authorized TAKATAK master identity UUID in cPanel `REVERS_SUPPORT_ADMIN_IDENTITY_IDS`, deploy after GitHub secrets/DNS are correctly configured, sign in through TAKATAK, prove non-operator 403 and operator case read/update in the actual REVERS environment. Verify full production /healthz SHA and /readyz 200 before claiming deployment.
+
+
+## Verified handoff after support + newsletter work — October 15, 2026
+**Current branch:** `main`. **Latest tested code SHA:** `460992911d43b153ca3c6b7624384c032cf1fbe5`. A documentation commit follows this SHA; obtain the exact final head from the GitHub main ref rather than interpreting the code SHA as the last documentation commit.
+
+**Last completed tasks and files:**
+- Support administration code `e89911160766e7e798bf7027f04bc3a7780e7f43`: `src/lib/support/access.ts`, `src/routes/api/internal/revers/support.ts`, `src/routes/admin/support.tsx`, `tests/support-admin.test.mjs` and `src/routeTree.gen.ts`.
+- Newsletter privacy lifecycle code `460992911d43b153ca3c6b7624384c032cf1fbe5`: `src/lib/newsletter/unsubscribe-token.ts`, `src/routes/api/public/newsletter/unsubscribe.ts`, `src/routes/newsletter/unsubscribe.tsx`, `src/lib/newsletter.functions.ts`, `tests/newsletter-unsubscribe.test.mjs`, `src/routeTree.gen.ts`, `.env.example`.
+- Supporting changes: `WORKLOG.md` and all five canonical status/decision/deployment/handoff files.
+
+**Commands/checks executed through GitHub Actions:**
+- [CI 38791380042](https://github.com/takatakca/revers-canada-hope/actions/runs/38791380042) **SUCCESS** for the updated support route tree (`9a75362eb3c3c72f3ec56e8ced40e575f7ffae54`). Typecheck, lint, Node tests, Nitro build, output artifact all passed.
+- [CI 38791857874](https://github.com/takatakca/revers-canada-hope/actions/runs/38791857874) **SUCCESS** for new newsletter code (`46099291...`), including signed-token tests, typecheck, lint, Nitro build and artifact.
+- [Deployment 38792000621](https://github.com/takatakca/revers-canada-hope/actions/runs/38792000621) **FAILURE**, validated in the failed job's log: `Missing required deployment secret: MOCHAHOST_HOST`. The gate stopped before SSH, upload or health verification. **Production not deployed or verified**.
+- Connected Supabase `list_projects` still does not include operational REVERS project `cmcbsbjxrrwtmxvcsbsg`; do not run pending REVERS migration SQL on any visible TAKATAK/FESTI ICE/ALKAO project.
+- Direct public `https://reverscanada.ca/healthz` and `/readyz` requests remained inaccessible; no TLS/release proof.
+
+**Current task:** live deployment, correct database security migrations, authorized admin browser test, Stripe monthly billing, TAKATAK exchange and newsletter sender setup; these depend on external authorized access.
+
+**Configuration still required, values never committed:** GitHub `production` environment `MOCHAHOST_HOST`, `MOCHAHOST_USER`, `MOCHAHOST_SSH_PORT`, `MOCHAHOST_APP_ROOT`, `MOCHAHOST_SSH_PRIVATE_KEY`, `MOCHAHOST_KNOWN_HOSTS`, `REVERS_PRODUCTION_URL`; cPanel `REVERS_SUPPORT_ADMIN_IDENTITY_IDS` (delegated TAKATAK UUID list) and stable 32+ char `REVERS_NEWSLETTER_UNSUBSCRIBE_SECRET` plus prior SUPABASE/TAKATAK/Stripe settings. Newsletter provider not yet connected; **no mailing capability claimed**.
+
+**Next exact action:** verify GitHub head and CI for handoff's new documentation SHA; if green, do not rerun MochaHost deployment without filling missing credentials. Obtain access to **the exact REVERS** Supabase project and verify/apply `20261015131500` then `20261015133000`; check anon write denial and service role. Configure correct authorized operator identity and newsletter HMAC key on cPanel. Verify anonymous/user 403 vs delegated user access to `/api/internal/revers/support`, newsletter signed link opt-out and prevention of accidental GET changes. Integrate actual email sender and include HMAC opt-out links. Verify domain/TLS, successful CI-triggered deploy exact release SHA and /readyz 200 before declaring production.

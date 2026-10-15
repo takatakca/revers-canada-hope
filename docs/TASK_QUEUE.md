@@ -13,8 +13,8 @@
 | P0 | Prove TAKATAK launch/exchange & entitlement | blocked: live integration secrets | Full real server exchange and a denied unauthorized user |
 | P0 | Test Stripe webhook and recurring billing end to end | blocked: Stripe credentials | Signed event replay + renewal/cancel/failed payment; no official tax receipt unless entitled |
 | P1 | Implement monthly recurring-payment reconciliation ledger | CI validated on 0be884a; live migration/Stripe tests blocked | Idempotent monthly invoice record, retries and status sync tested |
-| P1 | Newsletter provider opt-in/opt-out lifecycle | pending | Consent and unsubscribe recorded, actual delivery verified |
-| P1 | Private support-request admin operations | source implemented (e8991116), deployment/live authorization blocked | Signed TAKATAK session + server-only REVERS operator UUID delegation, private /admin/support and GET/PATCH API with optimistic updates; live operator and RLS tests still required |
+| P1 | Newsletter provider opt-in/opt-out lifecycle | signed opt-out code/test CI green (46099291); sender blocked | HMAC-confirmed unsubscribe changes consent/status in REVERS; link must be included in real verified email provider delivery; sender and reactivation-confirmation remain pending |
+| P1 | Private support-request admin operations | CI green (9a75362e); deployment/live authorization blocked | Signed TAKATAK session + server-only REVERS operator UUID delegation, private /admin/support and GET/PATCH API with optimistic updates; live operator and RLS tests still required |
 | P1 | Verified father/family partner-resource directory | partial | Vet real partner names, locations and services, add links without fabricated availability |
 | P2 | Unit tests for money and input validation | complete in CI 38617278856 | Node 22 `node:test` added, test step in CI/deploy; inspect latest CI outcome |
 | P2 | Mobile/accessibility/performance/security checks | partial: bounded public requests and Node tests implemented; live validation pending | Automated and real-device evidence, no dead controls |
