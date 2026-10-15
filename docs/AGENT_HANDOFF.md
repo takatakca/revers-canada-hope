@@ -52,3 +52,8 @@ Read `AGENTS.md`, this handoff and `docs/TASK_QUEUE.md`, retrieve the latest Git
 - After confirming the server-only form handlers and successful main CI on `a0feb15c` (run 38776251714), added pending REVERS-only SQL migration `20261015133000_lock_down_public_form_writes.sql` to revoke old `anon` and `authenticated` form-table INSERT privileges/policies.
 - Next action on correct REVERS Supabase access: verify migration history; apply recurring ledger migration first, then public-form grant revocation; run negative anon tests and positive server-handler smoke tests before enabling production billing.
 - The upcoming commit has not been locally applied to Supabase. CI and deployment must be inspected on its exact SHA.
+
+## Subsequent request-size safeguard (2026-10-15)
+- [REVERS CI 38776537435](https://github.com/takatakca/revers-canada-hope/actions/runs/38776537435) passed the preceding REVERS-only public-write revoke migration commit `c29737a9` (source only; migration unapplied).
+- Implemented `src/lib/http/read-limited-body.ts` with new `tests/http-body.test.mjs`: contact limit 16 KiB and Stripe webhook 256 KiB; oversized requests receive HTTP 413 before parsing. No real production runtime verification yet.
+- After this commit, inspect the exact commit CI, deploy failure and logs, then pursue only tasks independent of missing hosting/Supabase/Stripe secrets.

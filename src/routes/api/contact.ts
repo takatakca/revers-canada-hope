@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { readLimitedBody } from "@/lib/http/read-limited-body";
 import { z } from "zod";
 
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
@@ -27,7 +28,11 @@ export const Route = createFileRoute("/api/contact")({
         let body: unknown;
 
         try {
-          body = await request.json();
+          const raw = await readLimitedBody(request, 16 * 1024);
+          if (raw === null) {
+            return Response.json({ ok: false, error: "payload_too_large" }, { status: 413 });
+          }
+          body = JSON.parse(raw);
         } catch {
           return Response.json(
             { ok: false, error: "invalid_json" },

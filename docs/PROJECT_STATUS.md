@@ -63,3 +63,7 @@ A signed Stripe invoice and subscription event handler plus unique recurring-inv
 ## Server-only form RLS hardening (2026-10-15)
 
 Prepared migration `supabase/migrations/20261015133000_lock_down_public_form_writes.sql` revokes `anon`/`authenticated` direct DML and the old public write RLS policies on contacts, newsletter subscribers and donation intents. This is the required database half of the server-only form transition. **The migration is not applied** because the connected Supabase account does not expose the REVERS operational project. No existing unrelated project's tables were touched. Latest Stripe ledger guard passed [REVERS CI 38776251714](https://github.com/takatakca/revers-canada-hope/actions/runs/38776251714) on `a0feb15c`.
+
+## API payload safety (2026-10-15)
+
+Untrusted public contact and Stripe webhook bodies now pass through a bounded stream reader. Contact requests are capped at 16 KiB; signed Stripe webhook payloads are capped at 256 KiB, returning HTTP 413 on excess. New Node tests verify exact boundaries and UTF-8 byte lengths. This code requires a fresh CI run after push. The prior RLS migration source passed [CI 38776537435](https://github.com/takatakca/revers-canada-hope/actions/runs/38776537435), but was not applied to the missing REVERS Supabase connection.

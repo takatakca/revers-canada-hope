@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { readLimitedBody } from "@/lib/http/read-limited-body";
 import { invoiceSubscriptionId, matchesMonthlyInvoice, validFailedMonthlyInvoice } from "@/lib/stripe/recurring";
 import type { RecurringInvoice } from "@/lib/stripe/recurring";
 
@@ -15,7 +16,10 @@ export const Route = createFileRoute("/api/public/stripe-webhook")({
         const signature = request.headers.get("stripe-signature");
         if (!signature) return new Response("Missing signature", { status: 400 });
 
-        const rawBody = await request.text();
+        const rawBody = await readLimitedBody(request, 256 * 1024);
+        if (rawBody === null) {
+          return new Response("Payload exceeds allowed size", { status: 413 });
+        }
 
         const Stripe = (await import("stripe")).default;
         const stripe = new Stripe(secret);

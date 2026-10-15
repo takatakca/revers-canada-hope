@@ -17,7 +17,7 @@
 | P1 | Private support-request admin operations | pending | Server-enforced TAKATAK entitlement and scoped permissions, no exposed case data |
 | P1 | Verified father/family partner-resource directory | partial | Vet real partner names, locations and services, add links without fabricated availability |
 | P2 | Unit tests for money and input validation | complete in CI 38617278856 | Node 22 `node:test` added, test step in CI/deploy; inspect latest CI outcome |
-| P2 | Mobile/accessibility/performance/security checks | pending | Automated and real-device evidence, no dead controls |
+| P2 | Mobile/accessibility/performance/security checks | partial: bounded public requests and Node tests implemented; live validation pending | Automated and real-device evidence, no dead controls |
 | P2 | Post-release operations and rollback drill | pending | Healthy exact SHA, rollback to known-good release, incident playbook |
 
 Do not reorder around secrets by inventing values. Independently executable source tasks can advance while deployment awaits credentials.
