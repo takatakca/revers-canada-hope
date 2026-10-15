@@ -2,10 +2,11 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { readLimitedBody } from "../src/lib/http/read-limited-body.ts";
 
-const request = (body) => new Request("https://reverscanada.ca/api/contact", {
-  method: "POST",
-  body,
-});
+const request = (body) =>
+  new Request("https://reverscanada.ca/api/contact", {
+    method: "POST",
+    body,
+  });
 
 test("accepts bodies exactly at the public API limit", async () => {
   assert.equal(await readLimitedBody(request("12345678"), 8), "12345678");
