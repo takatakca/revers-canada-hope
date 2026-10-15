@@ -47,3 +47,8 @@ Read `AGENTS.md`, this handoff and `docs/TASK_QUEUE.md`, retrieve the latest Git
 - The recurring-ledger code and test formatting fix at `0be884a53bc1bbe139607f02950745ab78f390fb` passed [CI 38775784157](https://github.com/takatakca/revers-canada-hope/actions/runs/38775784157): dependency installation, typecheck, lint, unit tests, build and output check all succeeded.
 - Automatic production release [38775967756](https://github.com/takatakca/revers-canada-hope/actions/runs/38775967756) started only after that successful CI but **failed before upload at missing `MOCHAHOST_HOST`**, verified from logs.
 - Additional safety code on the following commit disables monthly Stripe Checkout until the new private ledger table is present in the operational REVERS database. The latest post-guard CI must be checked before any release.
+
+## Public database access follow-up (2026-10-15)
+- After confirming the server-only form handlers and successful main CI on `a0feb15c` (run 38776251714), added pending REVERS-only SQL migration `20261015133000_lock_down_public_form_writes.sql` to revoke old `anon` and `authenticated` form-table INSERT privileges/policies.
+- Next action on correct REVERS Supabase access: verify migration history; apply recurring ledger migration first, then public-form grant revocation; run negative anon tests and positive server-handler smoke tests before enabling production billing.
+- The upcoming commit has not been locally applied to Supabase. CI and deployment must be inspected on its exact SHA.

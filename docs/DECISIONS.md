@@ -17,3 +17,5 @@
 | 2026-10-14 | Fail closed when a CI-validated SHA is no longer current `main` | Avoid delayed workflow_run deployments reverting the active release | No automatic force push or stale publication; fresh CI required on latest head |
 
 | 2026-10-15 | Record monthly Stripe charges by immutable invoice ID in REVERS-only private table | Signed Stripe invoice webhooks may retry or arrive out of order; checkout success alone covers only first payment | Unique `stripe_invoice_id`; paid-wins upsert; failed-only insert; separate subscription lifecycle from initial paid donation; migration awaits correct Supabase access |
+
+| 2026-10-15 | Remove public database writes for REVERS contact, newsletter and donation intents | These operations now persist using server-only service credentials; unrestricted public DML is unnecessary exposure | Apply `20261015133000_lock_down_public_form_writes.sql` on correct REVERS project only and confirm anonymous negative permission tests |

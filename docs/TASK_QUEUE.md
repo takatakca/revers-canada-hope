@@ -7,7 +7,7 @@
 | P0 | Configure MochaHost production environment secrets | blocked: human credentials | Set `MOCHAHOST_HOST` and other names in `docs/DEPLOYMENT.md` via GitHub UI, not git |
 | P0 | Verify real database readiness health gate | code implemented; production pending | `/readyz` returns HTTP 200 only if configured and operational contacts-table query succeeds; test failure mode against correct REVERS instance |
 | P0 | Verify DNS/TLS and actual MochaHost root | blocked: hosting access | Browser and curl checks show correct production health and version |
-| P0 | Revoke direct anonymous Supabase table insertion grants | blocked: REVERS Supabase project not connected | Donation, contact and newsletter now save server-side; after confirming correct project, revoke anon/authenticated INSERT and update policies and verify negative RLS checks |
+| P0 | Revoke direct anonymous Supabase table insertion grants | migration committed; applying blocked: REVERS Supabase project not connected | Donation/contact/newsletter now save server-side; REVERS-only migration 20261015133000 revokes public writes. After confirming database, verify denied anon/authenticated inserts and working server submissions |
 | P0 | Apply/verify Supabase migrations | blocked: project access/credentials | Migration history and service-role-only policies reviewed, no public cross-tenant data |
 | P0 | Schedule durable TAKATAK outbox delivery | workflow added; live blocked | New GitHub scheduled outbox job every 30 minutes; requires verified production worker token in GitHub environment and successful live HMAC delivery |
 | P0 | Prove TAKATAK launch/exchange & entitlement | blocked: live integration secrets | Full real server exchange and a denied unauthorized user |

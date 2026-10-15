@@ -59,3 +59,7 @@ A signed Stripe invoice and subscription event handler plus unique recurring-inv
 - [REVERS CI 38775784157](https://github.com/takatakca/revers-canada-hope/actions/runs/38775784157) **success** on commit `0be884a53bc1bbe139607f02950745ab78f390fb`: npm ci, migration check, typecheck, lint, unit tests including recurring invoices, production build and artifact inspection.
 - [MochaHost deployment 38775967756](https://github.com/takatakca/revers-canada-hope/actions/runs/38775967756) **failed before upload**: missing `MOCHAHOST_HOST` production secret, explicitly verified in job log.
 - Added fail-closed billing guard: monthly Stripe Checkout is disabled until the server can query the new recurring-invoice table. One-time checkout can remain independent. The guard itself requires CI verification on the next SHA.
+
+## Server-only form RLS hardening (2026-10-15)
+
+Prepared migration `supabase/migrations/20261015133000_lock_down_public_form_writes.sql` revokes `anon`/`authenticated` direct DML and the old public write RLS policies on contacts, newsletter subscribers and donation intents. This is the required database half of the server-only form transition. **The migration is not applied** because the connected Supabase account does not expose the REVERS operational project. No existing unrelated project's tables were touched. Latest Stripe ledger guard passed [REVERS CI 38776251714](https://github.com/takatakca/revers-canada-hope/actions/runs/38776251714) on `a0feb15c`.
