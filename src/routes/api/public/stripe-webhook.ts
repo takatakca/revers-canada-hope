@@ -79,7 +79,7 @@ export const Route = createFileRoute("/api/public/stripe-webhook")({
                 paid_at: paidAt,
               }, { onConflict: "stripe_invoice_id" });
               if (error) throw new Error(`Failed recording recurring invoice: ${error.code ?? "unknown"}`);
-            } else if (validFailedMonthlyInvoice(invoice)) {
+            } else if (validFailedMonthlyInvoice(invoice) && invoice.amount_due === intent.amount_cents) {
               const { error } = await supabaseAdmin.from("revers_recurring_invoices").insert({
                 donation_intent_id: intent.id,
                 stripe_invoice_id: invoice.id,

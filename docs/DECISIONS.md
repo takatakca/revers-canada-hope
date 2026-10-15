@@ -15,3 +15,5 @@
 | 2026-10-14 | Use constant-time worker token comparison and generic public errors | Reduce secret-timing and error-disclosure risk | Worker token should have at least 32 bytes; operational failures logged only server-side |
 
 | 2026-10-14 | Fail closed when a CI-validated SHA is no longer current `main` | Avoid delayed workflow_run deployments reverting the active release | No automatic force push or stale publication; fresh CI required on latest head |
+
+| 2026-10-15 | Record monthly Stripe charges by immutable invoice ID in REVERS-only private table | Signed Stripe invoice webhooks may retry or arrive out of order; checkout success alone covers only first payment | Unique `stripe_invoice_id`; paid-wins upsert; failed-only insert; separate subscription lifecycle from initial paid donation; migration awaits correct Supabase access |

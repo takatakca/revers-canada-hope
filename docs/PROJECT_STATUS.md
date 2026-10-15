@@ -50,3 +50,7 @@ Connected Supabase currently lists TAKATAK STAGING, FESTI ICE, TAKATAK Dashboard
 Latest source verification: [CI 38616907443](https://github.com/takatakca/revers-canada-hope/actions/runs/38616907443) passed for `090e55d5`; [deploy 38617055204](https://github.com/takatakca/revers-canada-hope/actions/runs/38617055204) failed before upload at `MOCHAHOST_HOST`. A direct DNS/curl probe for `reverscanada.ca` in this environment could not resolve the host. The site remains **unverified / not deployed by this session**.
 
 Last objectively green source CI: [38617278856](https://github.com/takatakca/revers-canada-hope/actions/runs/38617278856), commit `cb03c7a9`, including Node tests and production build. Deployment [38617413243](https://github.com/takatakca/revers-canada-hope/actions/runs/38617413243) still fails missing `MOCHAHOST_HOST` before file transfer. Documentation-only successors require a new SHA-specific CI check.
+
+## Recurring-donation development (2026-10-15)
+
+A signed Stripe invoice and subscription event handler plus unique recurring-invoice ledger migration were committed under `8165bd3bb4476f70ee28aef6550ea55c66f5a154`. TypeScript database types and unit tests were added. This is **code implementation**, not proof that recurring payments run in production. REVERS migration, live webhook event, billing renewal and cancellation testing are not yet possible without the operational REVERS Supabase project and Stripe test-mode configuration. Public release remains unverified.

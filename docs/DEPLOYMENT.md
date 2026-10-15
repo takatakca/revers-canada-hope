@@ -66,3 +66,7 @@ A separate [scheduled GitHub Actions workflow](../.github/workflows/deliver-taka
 ## Stale-release guard
 
 The deploy workflow compares the *validated* CI head SHA with the **current** `origin/main` SHA before reading secrets or uploading a build. If another agent has already pushed a newer main commit, the old release is rejected rather than rolling production backward. An explicit operator dispatch also needs to target the current main release. `MOCHAHOST_APP_ROOT` must point to an application subdirectory **below** the account's home directory, not directly to `/home/<account>`.
+
+## Required recurring-donation migration (2026-10-15)
+
+Before enabling monthly Stripe subscriptions, apply `supabase/migrations/20261015131500_revers_recurring_invoices.sql` to **REVERS operational Supabase only**, after confirming migration history. This creates server-only `revers_recurring_invoices` with unique Stripe invoice IDs and adds Stripe subscription identity/status to the donation intent. Update the signed Stripe webhook subscriptions to `invoice.payment_succeeded`, `invoice.payment_failed`, `customer.subscription.updated`, `customer.subscription.deleted` in addition to previously configured events. Test live signed webhook delivery in Stripe test mode and duplicate/out-of-order invoice events. If the database schema is missing, handlers return 500 so Stripe can retry; do not silence these failures.

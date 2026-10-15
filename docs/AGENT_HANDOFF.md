@@ -1,75 +1,44 @@
-# REVERS CANADA — Agent handoff (canonical)
+# REVERS CANADA — Canonical agent handoff
 
-**Updated:** 2026-10-14. **Repository:** `takatakca/revers-canada-hope` — **branch:** `main`.
+**Updated:** 2026-10-15. **Repository:** `takatakca/revers-canada-hope`. **Branch:** `main`.
+**Last completed pushed code commit verified at handoff preparation:** `8165bd3bb4476f70ee28aef6550ea55c66f5a154` (recurring ledger). This handoff commit itself follows that SHA; inspect GitHub `main` for actual latest SHA.
 
-**Last independently confirmed pushed code commit before this handoff update:** `193e729c76ad60e40b3b9fb8086fca23e8efaa15`. This file is itself committed after that SHA; the final published handoff commit is the current GitHub `main` head (`git rev-parse origin/main`, or [GitHub main](https://github.com/takatakca/revers-canada-hope/commits/main)). Avoid confusing the captured predecessor SHA with the current head.
+## Last completed work
+- Recurring donation invoice ledger implemented with private RLS, per-invoice uniqueness and paid-wins handling.
+- Stripe signed event handler now processes `invoice.payment_succeeded` / `invoice.payment_failed` and subscription lifecycle events. Validation checks subscription metadata and exact expected CAD amount, Stripe customer and source intent; a delayed failed event cannot overwrite an already paid invoice.
+- Added typed REVERS Supabase schema and pure Node unit tests for invoice shapes and amount rules.
+- Migration file `supabase/migrations/20261015131500_revers_recurring_invoices.sql` is **prepared but not applied**. The correct REVERS database remains inaccessible. Do not apply to another TAKATAK project.
+- Original validated public site and deployment architecture remain intact.
 
-## Latest completed development
+## Current task
+1. Check `main` SHA; GitHub Actions `REVERS CI` outcome for this handoff commit (typecheck, lint, Node tests and Vite/Nitro build); fix any reported errors.
+2. Verify deployed-production credentials and DNS; production remains blocked, **not live-verified**.
+3. Apply REVERS-only migration to the correct connected Supabase project after verifying migration history, then test signed Stripe events with test-mode account; do not enable production recurring payments until then.
+4. Continue P1 newsletter unsubscribe/delivery and authenticated case management if independent of unavailable external credentials.
 
-1. CI-only automatic MochaHost deployment using `workflow_run` only after a successful `main` push, checking out the validated SHA. Failed CI prevents deployment.
-2. Immutable Nitro release activates with an atomic `CURRENT` pointer, rollback on failed health, protects `CURRENT`/`PREVIOUS` from cleanup, and checks exact `/healthz.release` SHA and `/readyz`.
-3. Donation intent creation moved from browser Supabase insert to server-only function. `/readyz` now probes the operational Supabase `contacts` table within 3.5s, fails closed and hides config diagnostics.
-4. TAKATAK derived product session has a signed maximum ten-minute validity and rejects bad expiry; worker bearer token is constant-time checked, with sanitized API errors.
-5. Signed Stripe initial payment webhook validates intent ID, checkout session, amount, currency, mode and project metadata before marking paid; one-time PaymentIntent carries project metadata. Recurring renewals remain a separate unimplemented ledger task.
-6. Added `tests/validation.test.mjs` (Node.js 22 built-in runner), a `npm run test` script, and mandatory test steps to both CI and deployment. CAD donations reject exponent/hex/sub-cent amounts; custom amount UI has a 0.01 step.
+## Changed files in this batch
+- `src/routes/api/public/stripe-webhook.ts`
+- `src/lib/stripe/recurring.ts` (new)
+- `supabase/migrations/20261015131500_revers_recurring_invoices.sql` (new)
+- `src/integrations/supabase/types.ts`
+- `tests/stripe-recurring.test.mjs` (new)
+- `docs/AGENT_HANDOFF.md`, `docs/PROJECT_STATUS.md`, `docs/TASK_QUEUE.md`, `docs/DEPLOYMENT.md`, `docs/DECISIONS.md`, `docs/GITHUB_TAKATAK_DEPLOYMENT.md`, `WORKLOG.md`.
 
-## Current task / next exact action
+## Checks and evidence
+- GitHub latest starting source SHA: `f0fb45493309d845206975b9d76ce5d8e4c74ebe`.
+- CI [38617635439](https://github.com/takatakca/revers-canada-hope/actions/runs/38617635439) **success** for the previous main commit.
+- Deploy [38617755402](https://github.com/takatakca/revers-canada-hope/actions/runs/38617755402) **failure** before live deployment; GitHub production `MOCHAHOST_HOST` missing as documented by prior logs.
+- New recurring ledger code commit `8165bd3bb4476f70ee28aef6550ea55c66f5a154` pushed to `main`.
+- No direct `npm ci` or live Stripe event was executed in this workspace: use resulting GitHub Actions logs to validate.
+- No access to REVERS operational Supabase project `cmcbsbjxrrwtmxvcsbsg` confirmed; do not migrate unrelated datasets.
+- No confirmed `https://reverscanada.ca/healthz` release SHA, DNS or production TLS.
 
-1. Read this file, `AGENTS.md`, `WORKLOG.md` and `docs/TASK_QUEUE.md`.
-2. Check current `main` SHA and GitHub Actions **REVERS CI** result for that exact SHA; retrieve failed job logs and fix if needed. Initial unit-test run `38615246341` was **queued** at the last observation (commit `193e729c`), not a verified success.
-3. If green, inspect the corresponding `workflow_run` deployment. It should still stop in `Validate deployment configuration` until authorized production secrets are set.
-4. Continue executable source tasks without retrying missing credentials. For live deployment, obtain the correct REVERS MochaHost and Supabase access; apply/verify scoped RLS and migrations, Stripe test webhooks and real TAKATAK exchange.
-5. Run `/healthz` and `/readyz` checks against `https://reverscanada.ca` and verify the release SHA before declaring production live.
+## Production configuration required (secret names only)
+GitHub `production`: `MOCHAHOST_HOST`, `MOCHAHOST_USER`, `MOCHAHOST_SSH_PORT`, `MOCHAHOST_APP_ROOT`, `MOCHAHOST_SSH_PRIVATE_KEY`, `MOCHAHOST_KNOWN_HOSTS`, `REVERS_PRODUCTION_URL`.
+cPanel: `PUBLIC_SITE_URL`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `REVERS_SESSION_SECRET`, TAKATAK token/HMAC/outbox worker, Stripe key/webhook signing secret.
+The actual REVERS Supabase instance must become accessible before applying migrations or validating RLS.
 
-## Verification and errors
+## Exact next action
+Read `AGENTS.md`, this handoff and `docs/TASK_QUEUE.md`, retrieve the latest GitHub CI jobs. Fix anything red on `main`. When production secrets and correct REVERS Supabase are available, apply migration, verify signed Stripe invoice success/failure/cancel and run MochaHost deployment; prove exact `/healthz.release` SHA and `/readyz` HTTP 200 before marking deployed.
 
-- CI successful for [`6b2e92b` run 38613967661](https://github.com/takatakca/revers-canada-hope/actions/runs/38613967661) and [`44a0f272` run 38614682169](https://github.com/takatakca/revers-canada-hope/actions/runs/38614682169).
-- Several intermediate CI runs were **cancelled** by push concurrency; cancellation is not a test failure or success.
-- [`npm ci` run 38613420293](https://github.com/takatakca/revers-canada-hope/actions/runs/38613420293) failed EUSAGE because `package-lock.json` is out of sync (Supabase/Nitro/Stripe dependencies and transitives). Temporarily reverted to `npm install`; proper lockfile regeneration remains P0.
-- Multiple automatic deploy runs failed before upload at missing `MOCHAHOST_HOST` in GitHub `production`. The new success-only trigger works but does not create credentials.
-- `reverscanada.ca` DNS/TLS and production HTTP checks were not verified from current tools.
-- Connected Supabase workspace does **not** include the repository's REVERS project `cmcbsbjxrrwtmxvcsbsg`. Do not apply REVERS migrations to other listed projects.
-- No live Stripe service credentials or TAKATAK service/HMAC token exchange verified. No live authenticated support admin portal or newsletter provider connected.
-
-## Files touched during this session
-
-`.github/workflows/ci.yml`, `.github/workflows/deploy-mochahost.yml`, `AGENTS.md`, `package.json`, `src/lib/donation.functions.ts`, `src/lib/donationService.ts`, `src/lib/checkout.functions.ts`, `src/lib/validation.ts`, `src/lib/takatak/session.ts`, `src/lib/takatak/client.ts`, `src/routes/api/internal/takatak/outbox.ts`, `src/routes/api/public/stripe-webhook.ts`, `src/routes/readyz.ts`, `src/routes/donate.tsx`, `tests/validation.test.mjs`, `WORKLOG.md`, documentation files.
-
-## Required authorized configuration (never commit secret values)
-
-**GitHub environment `production`:** `MOCHAHOST_HOST`, `MOCHAHOST_USER`, `MOCHAHOST_SSH_PORT`, `MOCHAHOST_APP_ROOT`, `MOCHAHOST_SSH_PRIVATE_KEY`, `MOCHAHOST_KNOWN_HOSTS`, `REVERS_PRODUCTION_URL`.
-
-**cPanel runtime:** `PUBLIC_SITE_URL`, operational `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `REVERS_SESSION_SECRET`, TAKATAK launch/service/HMAC/outbox credentials, Stripe secret and webhook signing secret when donations are enabled. Set build-time Vite publishable configuration separately.
-
-**Real status:** CODE ADVANCING. CI for latest release requires fresh verification. PRODUCTION NOT DEPLOYED/NOT VERIFIED. The project is **not 100% complete**; consult `docs/TASK_QUEUE.md`.
-
-## Lockfile and mobile UI remediation (2026-10-14)
-
-The dedicated GitHub [repair workflow](https://github.com/takatakca/revers-canada-hope/actions/runs/38615786073) succeeded and bot committed synchronized `package-lock.json` at `8f3ba2b67f50ec83913c2caf40f7be7c9dc583ab` after passing `npm ci --ignore-scripts`. Both main CI and deployment workflows have been restored to `npm ci --no-audit --no-fund` (with normal scripts); verify on the resulting commit. `src/components/PlatformExtras.tsx` now implements a real PWA install prompt/fallback instructions and removes invented workshop/ad placeholders; `src/components/SiteLayout.tsx` removes the unsolicited welcome popup and misleading announcement strip.
-
-
-## Outbox scheduler and verified CI (2026-10-14)
-
-- After Prettier repair, **CI run [38616454152](https://github.com/takatakca/revers-canada-hope/actions/runs/38616454152) succeeded** on `d55a2b139903f83e310c7839399dc4c7f3d5ca6d`.
-- **Deploy run [38616599494](https://github.com/takatakca/revers-canada-hope/actions/runs/38616599494) failed before upload**; logs confirm missing `MOCHAHOST_HOST`. Production is not verified.
-- New `.github/workflows/deliver-takatak-outbox.yml` runs scheduled or manual delivery, gated by matching `REVERS_OUTBOX_WORKER_TOKEN` in GitHub `production` and in cPanel runtime. Missing tokens skip safely. No live delivery has been verified.
-- Next agent must check CI for the latest `main`, configure authorized production secrets, test a queued TAKATAK event end-to-end, and keep the scheduler disabled by missing secrets until the server is verified.
-
-
-## Latest verified CI and stale deploy guard (2026-10-14)
-
-- [REVERS CI run 38616907443](https://github.com/takatakca/revers-canada-hope/actions/runs/38616907443) **succeeded** for `090e55d53955b835b3dbcf2d54fc8b65e8e677eb` (migration check, `npm ci`, typecheck, lint, tests, build).
-- [Deployment 38617055204](https://github.com/takatakca/revers-canada-hope/actions/runs/38617055204) **failed** before SSH due to missing GitHub `production` secret `MOCHAHOST_HOST`, confirmed in workflow logs.
-- `curl -sSIL --max-time 8 https://reverscanada.ca/healthz` could not resolve the host from this execution environment; production DNS is **unverified** and must be checked independently from the host / registrar. Do not conclude a successful live release.
-- The TAKATAK callback `src/routes/api/auth/takatak/callback.ts` was fixed to redirect via absolute HTTPS `PUBLIC_SITE_URL`; a Node 22 `Response.redirect("/")` call otherwise throws `TypeError`.
-- The deploy workflow now rejects old CI SHAs after a newer push to `main`, and insists on a subdirectory of `/home/<account>` for safe artifact removal.
-- **Next step:** verify CI for the newest main commit, configure the authorized `production` GitHub secrets and cPanel runtime, confirm DNS, then run SSH deploy with `/healthz.release` and `/readyz`.
-
-## Final live evidence captured on 2026-10-14
-
-1. Last non-documentation code/pipeline commit `cb03c7a99f8ad4c84abe2d48d076cf57e0159c56`: stale-CI release guard and safe app-root validation.
-2. [REVERS CI run 38617278856](https://github.com/takatakca/revers-canada-hope/actions/runs/38617278856) **success** for `cb03c7a9`: `npm ci`, migration check, typecheck, lint, Node validation tests, Vite/Nitro production build and artifact existence check.
-3. [Deploy run 38617413243](https://github.com/takatakca/revers-canada-hope/actions/runs/38617413243) **failure** at `Validate deployment configuration` before upload; same missing `MOCHAHOST_HOST` environment secret as all earlier attempts. No successful real deployment observed.
-4. Latest verified `main` at documentation refresh start: `cb03c7a99f8ad4c84abe2d48d076cf57e0159c56`. This document's commit will be newer; read the current main ref and verify CI for that SHA.
-5. Next practical action: configure `production` secrets in GitHub, confirm REVERS DNS resolves and TLS is valid, connect the actual REVERS Supabase project `cmcbsbjxrrwtmxvcsbsg`, configure runtime secrets, then validate deploy `/healthz.release` & `/readyz` and actual TAKATAK/Stripe flows.
-6. **Not done:** domain availability, online deployment, Supabase migration/permissions audit, real TAKATAK exchange, Stripe test-mode webhook, recurring reconciliation, newsletter sender, restricted case-management portal. Do not report 100%.
+**Status: source progressing; migration pending; production unverified; NOT 100%.**

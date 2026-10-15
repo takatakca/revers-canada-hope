@@ -1,3 +1,4 @@
+- 2026-10-15 | ChatGPT/GitHub agent | main → direct commit | done; CI and migration pending | Implement private monthly Stripe invoice ledger, signed invoice/subscription events, validation unit tests, typed schema and updated canonical handoff | verify latest GitHub CI; apply REVERS-only migration after correct Supabase access; verify live Stripe test events
 - 2026-10-14 | ChatGPT/GitHub agent | main → direct commit | done; browser/production QA pending | Restore reproducible npm ci after lockfile bot repair; implement real install button, remove fake ads, popups and unverified event claims | latest CI and mobile-browser smoke, then production secrets
 # Work log
 
