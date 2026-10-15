@@ -79,3 +79,11 @@ Apply the file `supabase/migrations/20261015133000_lock_down_public_form_writes.
 
 ## Most recent pipeline evidence (2026-10-15)
 [CI 38776928312](https://github.com/takatakca/revers-canada-hope/actions/runs/38776928312) passed for `dcd339c04cb19f138c0e4ccc0e28a66c2d4881a6`. [Deploy 38777067780](https://github.com/takatakca/revers-canada-hope/actions/runs/38777067780) failed at missing `MOCHAHOST_HOST` before upload. No live version switch, rollback, or production health check occurred. Do not confuse a queued deployment or scheduled outbox workflow with a verified publication.
+
+
+## Restricted support console runtime settings
+- Optional server-only `REVERS_SUPPORT_ADMIN_IDENTITY_IDS`: comma-separated **TAKATAK master identity UUIDs** assigned by the REVERS operator. Empty means no admin can view any requests. This is a temporary, explicit product-role delegation until TAKATAK's REVERS-specific administration entitlement is available; TAKATAK remains sole identity issuer.
+- The assigned operator must first complete the ordinary TAKATAK `revers_access` launch/exchange and hold a valid ten-minute signed REVERS product cookie. An arbitrary matching UUID in the browser is never sufficient.
+- `/admin/support` is deliberately unlisted and `noindex`. Its GET/PATCH API reads/writes the REVERS `contacts` table with the server-only service role, filters `source=REVERS_CANADA_GAR` and checks operator authorization for every request. PATCH requires `Origin` matching `PUBLIC_SITE_URL`.
+- Do not enable the console until the correct REVERS Supabase migrations and RLS restrictions are verified. Acceptance: an anonymous caller and ordinary TAKATAK user both receive 403, a delegated authenticated operator can read and update `new → reviewed → archived`, and stale status updates return 409.
+- Revocation: remove the UUID from the server setting and restart Passenger, or expire the signed REVERS product session (max ten minutes). Confirm revocation with an API 403.

@@ -72,3 +72,10 @@ Untrusted public contact and Stripe webhook bodies now pass through a bounded st
 - Source SHA `dcd339c04cb19f138c0e4ccc0e28a66c2d4881a6`: [CI 38776928312](https://github.com/takatakca/revers-canada-hope/actions/runs/38776928312) **success** for Node unit tests, typecheck, lint and Nitro build.
 - [Deployment 38777067780](https://github.com/takatakca/revers-canada-hope/actions/runs/38777067780) **failure before upload** from absent `MOCHAHOST_HOST`. Production unverified.
 - Recurring invoice and public-table restriction SQL migrations remain **unapplied** to REVERS Supabase; live Stripe and TAKATAK integrations remain unverified.
+
+
+## Restricted support-operations source (2026-10-15)
+- Added `/admin/support` with bilingual case list, status filtering, pagination and real status updates backed by `contacts`.
+- `GET/PATCH /api/internal/revers/support` accesses **only** `source=REVERS_CANADA_GAR`; all reads/writes require a valid cryptographically signed TAKATAK derived product session and a server-configured delegated TAKATAK UUID.
+- Mutation validates the expected current status, current legal status constraint (`new/reviewed/archived`), JSON origin and request-size cap. No anonymous or general REVERS member receives case-management privileges.
+- New authorization tests: `tests/support-admin.test.mjs`. Code commit [e8991116](https://github.com/takatakca/revers-canada-hope/commit/e89911160766e7e798bf7027f04bc3a7780e7f43). Production operator delegation and private data workflow **not tested live**.
