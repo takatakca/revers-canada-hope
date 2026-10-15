@@ -9,6 +9,8 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AdminSupportRouteImport } from './routes/admin/support'
+import { Route as ApiInternalReversSupportRouteImport } from './routes/api/internal/revers/support'
 import { Route as RevpereRouteImport } from './routes/revpere'
 import { Route as RessourcesRouteImport } from './routes/ressources'
 import { Route as ProgramsRouteImport } from './routes/programs'
@@ -37,6 +39,16 @@ import { Route as ApiInternalTakatakOutboxRouteImport } from './routes/api/inter
 import { Route as HealthzRouteImport } from './routes/healthz'
 import { Route as ReadyzRouteImport } from './routes/readyz'
 
+const AdminSupportRoute = AdminSupportRouteImport.update({
+  id: '/admin/support',
+  path: '/admin/support',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiInternalReversSupportRoute = ApiInternalReversSupportRouteImport.update({
+  id: '/api/internal/revers/support',
+  path: '/api/internal/revers/support',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RevpereRoute = RevpereRouteImport.update({
   id: '/revpere',
   path: '/revpere',
@@ -175,6 +187,8 @@ const ReadyzRoute = ReadyzRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/admin/support': typeof AdminSupportRoute
+  '/api/internal/revers/support': typeof ApiInternalReversSupportRoute
   '/': typeof IndexRoute
   '/GAR': typeof GARRoute
   '/about': typeof AboutRoute
@@ -204,6 +218,8 @@ export interface FileRoutesByFullPath {
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
 }
 export interface FileRoutesByTo {
+  '/admin/support': typeof AdminSupportRoute
+  '/api/internal/revers/support': typeof ApiInternalReversSupportRoute
   '/': typeof IndexRoute
   '/GAR': typeof GARRoute
   '/about': typeof AboutRoute
@@ -225,6 +241,8 @@ export interface FileRoutesByTo {
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
 }
 export interface FileRoutesById {
+  '/admin/support': typeof AdminSupportRoute
+  '/api/internal/revers/support': typeof ApiInternalReversSupportRoute
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/GAR': typeof GARRoute
@@ -250,6 +268,8 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin/support'
+    | '/api/internal/revers/support'
     | '/GAR'
     | '/about'
     | '/alimentaire'
@@ -271,6 +291,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin/support'
+    | '/api/internal/revers/support'
     | '/GAR'
     | '/about'
     | '/alimentaire'
@@ -291,6 +313,8 @@ export interface FileRouteTypes {
     | '/api/public/stripe-webhook'
   id:
     | '__root__'
+    | '/admin/support'
+    | '/api/internal/revers/support'
     | '/'
     | '/GAR'
     | '/about'
@@ -313,6 +337,8 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  AdminSupportRoute: typeof AdminSupportRoute
+  ApiInternalReversSupportRoute: typeof ApiInternalReversSupportRoute
   IndexRoute: typeof IndexRoute
   GARRoute: typeof GARRoute
   AboutRoute: typeof AboutRoute
@@ -342,6 +368,20 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/admin/support': {
+      id: '/admin/support'
+      path: '/admin/support'
+      fullPath: '/admin/support'
+      preLoaderRoute: typeof AdminSupportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/internal/revers/support': {
+      id: '/api/internal/revers/support'
+      path: '/api/internal/revers/support'
+      fullPath: '/api/internal/revers/support'
+      preLoaderRoute: typeof ApiInternalReversSupportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/revpere': {
       id: '/revpere'
       path: '/revpere'
@@ -548,6 +588,8 @@ const DonateRouteWithChildren =
   DonateRoute._addFileChildren(DonateRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
+  AdminSupportRoute: AdminSupportRoute,
+  ApiInternalReversSupportRoute: ApiInternalReversSupportRoute,
   IndexRoute: IndexRoute,
   GARRoute: GARRoute,
   AboutRoute: AboutRoute,
