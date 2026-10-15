@@ -4,7 +4,7 @@
 | --- | --- | --- | --- |
 | P0 | Gate deployment on successful CI SHA and check production SHA | code implemented; live verify pending | `workflow_run` on successful push, `/healthz.release` matches validated Git SHA, rollback on failure |
 | P0 | Regenerate and commit a synchronized npm lockfile | complete; `npm ci` verified in CI 38617278856 | `npm ci` fails with EUSAGE: missing Nitro/Supabase/Stripe packages and invalid transitive versions; regenerate with Node 22/npm 10, commit lockfile, restore `npm ci` |
-| P0 | Configure MochaHost production environment secrets | blocked: human credentials | Set `MOCHAHOST_HOST` and other names in `docs/DEPLOYMENT.md` via GitHub UI, not git |
+| P0 | Configure MochaHost production environment secrets | blocked: missing MOCHAHOST_HOST (deploy 38777067780) | Set `MOCHAHOST_HOST` and other names in `docs/DEPLOYMENT.md` via GitHub UI, not git |
 | P0 | Verify real database readiness health gate | code implemented; production pending | `/readyz` returns HTTP 200 only if configured and operational contacts-table query succeeds; test failure mode against correct REVERS instance |
 | P0 | Verify DNS/TLS and actual MochaHost root | blocked: hosting access | Browser and curl checks show correct production health and version |
 | P0 | Revoke direct anonymous Supabase table insertion grants | migration committed; applying blocked: REVERS Supabase project not connected | Donation/contact/newsletter now save server-side; REVERS-only migration 20261015133000 revokes public writes. After confirming database, verify denied anon/authenticated inserts and working server submissions |

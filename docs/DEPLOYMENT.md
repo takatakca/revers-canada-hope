@@ -76,3 +76,6 @@ Before enabling monthly Stripe subscriptions, apply `supabase/migrations/2026101
 ## Public-form database lockdown
 
 Apply the file `supabase/migrations/20261015133000_lock_down_public_form_writes.sql` after `20261015131500_revers_recurring_invoices.sql`, **only in REVERS operational Supabase**, never shared TAKATAK production. Then verify browser anon INSERT is denied for `contacts`, `newsletter_subscribers` and `donation_intents`; repeat legitimate server-only contact/newsletter/donation submissions to confirm service-role writes and no confidential read access. Keep service-role secret in runtime only. The SQL is committed but was **not applied** from this agent session.
+
+## Most recent pipeline evidence (2026-10-15)
+[CI 38776928312](https://github.com/takatakca/revers-canada-hope/actions/runs/38776928312) passed for `dcd339c04cb19f138c0e4ccc0e28a66c2d4881a6`. [Deploy 38777067780](https://github.com/takatakca/revers-canada-hope/actions/runs/38777067780) failed at missing `MOCHAHOST_HOST` before upload. No live version switch, rollback, or production health check occurred. Do not confuse a queued deployment or scheduled outbox workflow with a verified publication.

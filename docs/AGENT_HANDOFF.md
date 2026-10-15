@@ -57,3 +57,15 @@ Read `AGENTS.md`, this handoff and `docs/TASK_QUEUE.md`, retrieve the latest Git
 - [REVERS CI 38776537435](https://github.com/takatakca/revers-canada-hope/actions/runs/38776537435) passed the preceding REVERS-only public-write revoke migration commit `c29737a9` (source only; migration unapplied).
 - Implemented `src/lib/http/read-limited-body.ts` with new `tests/http-body.test.mjs`: contact limit 16 KiB and Stripe webhook 256 KiB; oversized requests receive HTTP 413 before parsing. No real production runtime verification yet.
 - After this commit, inspect the exact commit CI, deploy failure and logs, then pursue only tasks independent of missing hosting/Supabase/Stripe secrets.
+
+## Verified closing evidence — 2026-10-15
+
+- **Latest independently verified source SHA:** `dcd339c04cb19f138c0e4ccc0e28a66c2d4881a6`. This handoff update itself is committed after that code SHA; consult the current GitHub main ref for the exact latest head.
+- [REVERS CI 38776928312](https://github.com/takatakca/revers-canada-hope/actions/runs/38776928312) **SUCCESS** for the above SHA. All gates passed: npm ci, migration QA, TypeScript, lint, Node unit tests including Stripe invoices and bounded bodies, Nitro build and release-artifact validation.
+- [MochaHost deploy 38777067780](https://github.com/takatakca/revers-canada-hope/actions/runs/38777067780) **FAILURE**, before uploading files, at Validate deployment configuration. Verified job log: `Missing required deployment secret: MOCHAHOST_HOST`.
+- Both REVERS-only migrations (`20261015131500_revers_recurring_invoices.sql` and `20261015133000_lock_down_public_form_writes.sql`) are prepared in source, **not applied**. The operational REVERS Supabase project `cmcbsbjxrrwtmxvcsbsg` is not in the available connected project list; never run these on another TAKATAK project.
+- Live `https://reverscanada.ca/healthz` and `/readyz` could not be verified. The production site must not be reported as deployed or 100% finished.
+- Latest finished work: monthly Stripe renewal invoice ledger and fail-closed activation, server-only form write-lockdown migration, and 16 KiB contact / 256 KiB webhook request body caps. Exact affected files are identified in recent WORKLOG and commits.
+- Current unresolved tasks: production credentials and DNS, REVERS database migrations/RLS validation, signed Stripe webhook tests, TAKATAK service-token exchange/HMAC delivery, newsletter provider/opt-out, scoped support admin portal and production QA.
+
+**Next exact action:** check the GitHub main SHA and latest CI. Configure production secret `MOCHAHOST_HOST` and the other named MochaHost credentials through approved GitHub environment settings (never source); connect correct REVERS Supabase, apply both migrations and test negative anon permissions; test Stripe/TakataK; deploy and prove both /healthz.release SHA and /readyz 200. Do not rerun the unchanged failed deploy.

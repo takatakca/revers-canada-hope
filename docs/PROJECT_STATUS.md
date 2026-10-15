@@ -67,3 +67,8 @@ Prepared migration `supabase/migrations/20261015133000_lock_down_public_form_wri
 ## API payload safety (2026-10-15)
 
 Untrusted public contact and Stripe webhook bodies now pass through a bounded stream reader. Contact requests are capped at 16 KiB; signed Stripe webhook payloads are capped at 256 KiB, returning HTTP 413 on excess. New Node tests verify exact boundaries and UTF-8 byte lengths. This code requires a fresh CI run after push. The prior RLS migration source passed [CI 38776537435](https://github.com/takatakca/revers-canada-hope/actions/runs/38776537435), but was not applied to the missing REVERS Supabase connection.
+
+## Latest verified code and deployment (2026-10-15)
+- Source SHA `dcd339c04cb19f138c0e4ccc0e28a66c2d4881a6`: [CI 38776928312](https://github.com/takatakca/revers-canada-hope/actions/runs/38776928312) **success** for Node unit tests, typecheck, lint and Nitro build.
+- [Deployment 38777067780](https://github.com/takatakca/revers-canada-hope/actions/runs/38777067780) **failure before upload** from absent `MOCHAHOST_HOST`. Production unverified.
+- Recurring invoice and public-table restriction SQL migrations remain **unapplied** to REVERS Supabase; live Stripe and TAKATAK integrations remain unverified.
