@@ -9,6 +9,8 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as NewsletterUnsubscribeRouteImport } from './routes/newsletter/unsubscribe'
+import { Route as ApiPublicNewsletterUnsubscribeRouteImport } from './routes/api/public/newsletter/unsubscribe'
 import { Route as AdminSupportRouteImport } from './routes/admin/support'
 import { Route as ApiInternalReversSupportRouteImport } from './routes/api/internal/revers/support'
 import { Route as RevpereRouteImport } from './routes/revpere'
@@ -39,6 +41,16 @@ import { Route as ApiInternalTakatakOutboxRouteImport } from './routes/api/inter
 import { Route as HealthzRouteImport } from './routes/healthz'
 import { Route as ReadyzRouteImport } from './routes/readyz'
 
+const NewsletterUnsubscribeRoute = NewsletterUnsubscribeRouteImport.update({
+  id: '/newsletter/unsubscribe',
+  path: '/newsletter/unsubscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicNewsletterUnsubscribeRoute = ApiPublicNewsletterUnsubscribeRouteImport.update({
+  id: '/api/public/newsletter/unsubscribe',
+  path: '/api/public/newsletter/unsubscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminSupportRoute = AdminSupportRouteImport.update({
   id: '/admin/support',
   path: '/admin/support',
@@ -187,6 +199,8 @@ const ReadyzRoute = ReadyzRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/newsletter/unsubscribe': typeof NewsletterUnsubscribeRoute
+  '/api/public/newsletter/unsubscribe': typeof ApiPublicNewsletterUnsubscribeRoute
   '/admin/support': typeof AdminSupportRoute
   '/api/internal/revers/support': typeof ApiInternalReversSupportRoute
   '/': typeof IndexRoute
@@ -218,6 +232,8 @@ export interface FileRoutesByFullPath {
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
 }
 export interface FileRoutesByTo {
+  '/newsletter/unsubscribe': typeof NewsletterUnsubscribeRoute
+  '/api/public/newsletter/unsubscribe': typeof ApiPublicNewsletterUnsubscribeRoute
   '/admin/support': typeof AdminSupportRoute
   '/api/internal/revers/support': typeof ApiInternalReversSupportRoute
   '/': typeof IndexRoute
@@ -241,6 +257,8 @@ export interface FileRoutesByTo {
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
 }
 export interface FileRoutesById {
+  '/newsletter/unsubscribe': typeof NewsletterUnsubscribeRoute
+  '/api/public/newsletter/unsubscribe': typeof ApiPublicNewsletterUnsubscribeRoute
   '/admin/support': typeof AdminSupportRoute
   '/api/internal/revers/support': typeof ApiInternalReversSupportRoute
   __root__: typeof rootRouteImport
@@ -268,6 +286,8 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/newsletter/unsubscribe'
+    | '/api/public/newsletter/unsubscribe'
     | '/admin/support'
     | '/api/internal/revers/support'
     | '/GAR'
@@ -291,6 +311,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/newsletter/unsubscribe'
+    | '/api/public/newsletter/unsubscribe'
     | '/admin/support'
     | '/api/internal/revers/support'
     | '/GAR'
@@ -313,6 +335,8 @@ export interface FileRouteTypes {
     | '/api/public/stripe-webhook'
   id:
     | '__root__'
+    | '/newsletter/unsubscribe'
+    | '/api/public/newsletter/unsubscribe'
     | '/admin/support'
     | '/api/internal/revers/support'
     | '/'
@@ -337,6 +361,8 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  NewsletterUnsubscribeRoute: typeof NewsletterUnsubscribeRoute
+  ApiPublicNewsletterUnsubscribeRoute: typeof ApiPublicNewsletterUnsubscribeRoute
   AdminSupportRoute: typeof AdminSupportRoute
   ApiInternalReversSupportRoute: typeof ApiInternalReversSupportRoute
   IndexRoute: typeof IndexRoute
@@ -368,6 +394,20 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/newsletter/unsubscribe': {
+      id: '/newsletter/unsubscribe'
+      path: '/newsletter/unsubscribe'
+      fullPath: '/newsletter/unsubscribe'
+      preLoaderRoute: typeof NewsletterUnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/newsletter/unsubscribe': {
+      id: '/api/public/newsletter/unsubscribe'
+      path: '/api/public/newsletter/unsubscribe'
+      fullPath: '/api/public/newsletter/unsubscribe'
+      preLoaderRoute: typeof ApiPublicNewsletterUnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/support': {
       id: '/admin/support'
       path: '/admin/support'
@@ -588,6 +628,8 @@ const DonateRouteWithChildren =
   DonateRoute._addFileChildren(DonateRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
+  NewsletterUnsubscribeRoute: NewsletterUnsubscribeRoute,
+  ApiPublicNewsletterUnsubscribeRoute: ApiPublicNewsletterUnsubscribeRoute,
   AdminSupportRoute: AdminSupportRoute,
   ApiInternalReversSupportRoute: ApiInternalReversSupportRoute,
   IndexRoute: IndexRoute,

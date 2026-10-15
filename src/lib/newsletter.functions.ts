@@ -29,6 +29,17 @@ export const submitNewsletterSignup = createServerFn({ method: "POST" })
       });
 
       if (error?.code === "23505") {
+        const { data: existing, error: lookupError } = await supabaseAdmin
+          .from("newsletter_subscribers")
+          .select("status,consent")
+          .eq("email", email)
+          .eq("source", "REVERS_CANADA_GAR")
+          .maybeSingle();
+        // Never silently re-enable addresses that opted out. A confirmed
+        // email-based resubscription flow is required before reactivation.
+        if (lookupError || !existing || !existing.consent || existing.status === "unsubscribed") {
+          return { ok: false, saved: false, error: "save_failed" };
+        }
         return { ok: true, saved: true, alreadySubscribed: true };
       }
       if (error) {
