@@ -101,3 +101,26 @@ Read `AGENTS.md`, this handoff and `docs/TASK_QUEUE.md`, retrieve the latest Git
 **Configuration still required, values never committed:** GitHub `production` environment `MOCHAHOST_HOST`, `MOCHAHOST_USER`, `MOCHAHOST_SSH_PORT`, `MOCHAHOST_APP_ROOT`, `MOCHAHOST_SSH_PRIVATE_KEY`, `MOCHAHOST_KNOWN_HOSTS`, `REVERS_PRODUCTION_URL`; cPanel `REVERS_SUPPORT_ADMIN_IDENTITY_IDS` (delegated TAKATAK UUID list) and stable 32+ char `REVERS_NEWSLETTER_UNSUBSCRIBE_SECRET` plus prior SUPABASE/TAKATAK/Stripe settings. Newsletter provider not yet connected; **no mailing capability claimed**.
 
 **Next exact action:** verify GitHub head and CI for handoff's new documentation SHA; if green, do not rerun MochaHost deployment without filling missing credentials. Obtain access to **the exact REVERS** Supabase project and verify/apply `20261015131500` then `20261015133000`; check anon write denial and service role. Configure correct authorized operator identity and newsletter HMAC key on cPanel. Verify anonymous/user 403 vs delegated user access to `/api/internal/revers/support`, newsletter signed link opt-out and prevention of accidental GET changes. Integrate actual email sender and include HMAC opt-out links. Verify domain/TLS, successful CI-triggered deploy exact release SHA and /readyz 200 before declaring production.
+
+
+## Latest operator handoff (2026-10-15; post-status-audit work)
+
+**Repository / branch:** `takatakca/revers-canada-hope` / `main`. **Last verified pushed code SHA:** `98295aa1e3541bfe04a956c6d432dc0a05e39c2e`. This handoff's documentation commit succeeds that SHA: use GitHub `main` as the authoritative latest pushed commit.
+
+**Last task finished:**
+- Case-status changes now use atomic `public.revers_transition_support_status(...)` invoker RPC, writing `revers_support_status_audit` with the signed TAKATAK operator UUID. No case narratives/emails/phones in the audit.
+- Authorized support operators can view each case's recorded status history via the same private endpoint, with no-store responses, explicit `REVERS_CANADA_GAR` contact verification, and a 50-entry limit. Anonymous and ordinary product users remain 403 by default.
+- Migration prepared: `supabase/migrations/20261015235500_support_status_audit.sql`. **Not applied** anywhere; REVERS database access is still missing. Existing changes are not backfilled.
+
+**Files modified (code):** `src/routes/api/internal/revers/support.ts`, `src/routes/admin/support.tsx`, `src/integrations/supabase/types.ts`, `tests/support-admin.test.mjs`, new audit SQL file. **Documentation:** `WORKLOG.md` and all five canonical `docs/` files.
+
+**Commands and verification:** GitHub API source/head/PR/issue inspections, GitHub CI jobs and failed logs reviewed. New integration SQL syntax was researched against current Supabase function/grant documentation, but could not be executed without the real database. First source CI lint identified three Prettier errors (runs `38848126533` and `38848213037`); fixed by code commit `98295aa1`. [CI 38848287271](https://github.com/takatakca/revers-canada-hope/actions/runs/38848287271) **succeeded** through installation, migration QA, TS, lint, Node tests, build and Nitro artifact. [deployment 38848381314](https://github.com/takatakca/revers-canada-hope/actions/runs/38848381314) **failed** at `Validate deployment configuration`: `Missing required deployment secret: MOCHAHOST_HOST`; no transfer occurred.
+
+**Current task:** production connection, database schema/RLS application and signed application smoke tests. Never claim audit behavior was verified in live Postgres. Live `https://reverscanada.ca/healthz` and `/readyz` could not be fetched in the current web environment, so production release SHA and readiness remain unverified.
+
+**Access required (names only, no secret values):**
+- GitHub `production`: `MOCHAHOST_HOST` (confirmed missing), `MOCHAHOST_USER`, `MOCHAHOST_SSH_PORT`, `MOCHAHOST_APP_ROOT`, `MOCHAHOST_SSH_PRIVATE_KEY`, `MOCHAHOST_KNOWN_HOSTS`, `REVERS_PRODUCTION_URL`.
+- cPanel Node runtime: existing `PUBLIC_SITE_URL`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `REVERS_SESSION_SECRET`, TAKATAK service/HMAC/outbox credentials, Stripe secrets, `REVERS_SUPPORT_ADMIN_IDENTITY_IDS` and newsletter signing secret as applicable.
+- The actual REVERS-only Supabase instance `cmcbsbjxrrwtmxvcsbsg` must be connected; do not apply SQL to any other visible project.
+
+**Next exact action:** verify latest `main` SHA and new documentation-commit CI. Obtain authorized REVERS Supabase access; inspect migration history and apply `20261015131500`, `20261015133000`, then `20261015235500`, verifying RLS/EXECUTE denials and atomic status/audit rollback. Set authorized TAKATAK operator UUID at runtime; verify real 403 vs authorized list/update/history. Resolve GitHub `production` secrets tracked by [issue #2](https://github.com/takatakca/revers-canada-hope/issues/2), fix DNS/TLS and run a *successful* CI-triggered MochaHost deploy. Check exact `/healthz.release` SHA and HTTP-200 `/readyz`, then test Stripe signed events, live TAKATAK exchange and newsletters. Until then **NOT 100% / NOT LIVE-VERIFIED**.

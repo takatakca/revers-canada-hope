@@ -96,3 +96,14 @@ Apply the file `supabase/migrations/20261015133000_lock_down_public_form_writes.
 - A newsletter sender/ESP **is not yet integrated or configured**. Verify its list suppression, double opt-in as appropriate, and ability to include the per-subscriber signed unsubscribe link **before sending**.
 - Existing opted-out emails are not reactivated by unauthenticated repeated footer submissions; reconfirmation with verified email ownership must be designed before permitting resubscription.
 - Acceptance when REVERS Supabase is available: valid token changes real row; GET preview does not; invalid/tampered token cannot change any row; database service-role permissions and error behavior tested.
+
+
+## Case-change audit migration (2026-10-15)
+1. In the authorized **REVERS operational** Supabase project only, verify `contacts` has the known `new/reviewed/archived` status constraint. Do not run this SQL against TAKATAK STAGING, FESTI ICE, ALKAO or other shared tenants.
+2. Apply prepared SQL `supabase/migrations/20261015235500_support_status_audit.sql` **after** `20261015131500_revers_recurring_invoices.sql` and `20261015133000_lock_down_public_form_writes.sql`, with the correct migration history.
+3. Verify `revers_support_status_audit` RLS enabled and no `anon`/`authenticated` SELECT, INSERT, UPDATE or DELETE grants. Confirm `has_function_privilege('anon','public.revers_transition_support_status(uuid,text,text,uuid)','EXECUTE')` and the same for `authenticated` are both false.
+4. With an authorized, delegated TAKATAK operator in a nonproduction test environment, transition a `REVERS_CANADA_GAR` case `new → reviewed`. Confirm exactly one audit row with old/new status and the verified server-side TAKATAK identity UUID. Repeat with stale expected status; expect HTTP 409 and no extra row. Simulate audit insertion failure in an isolated transaction; the status update must roll back. Unauthorized callers must see HTTP 403.
+5. Confirm `GET /api/internal/revers/support?history=<contact UUID>` gives a private, no-store history of at most 50 entries solely to authorized operators; other REVERS source records must not appear.
+6. Deploy only after correct GitHub MochaHost secrets, runtime settings, migrations and domain DNS/TLS are verified. Source CI [CI 38848287271](https://github.com/takatakca/revers-canada-hope/actions/runs/38848287271) passed; production [deployment 38848381314](https://github.com/takatakca/revers-canada-hope/actions/runs/38848381314) **failed before upload**, `MOCHAHOST_HOST` absent. Do not treat the scheduled TAKATAK outbox's success as production confirmation.
+
+The SQL migration is committed but **not applied**; the Supabase CLI/database client was not available for a real Postgres execution in this session.

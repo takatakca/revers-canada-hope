@@ -31,3 +31,10 @@ MochaHost deployment safety: live `CURRENT` activation is atomic, and cleanup pr
 Public-interface honesty: replaced the fake mobile download button with a real browser install prompt or device instructions, removed unverified workshop announcements and ad-slot placeholders, and removed the blocking welcome popup. Verify accessibility on actual browsers before calling the PWA fully supported.
 
 Deployment safety added: **reject stale CI builds** whose SHA does not equal current `main` before touching SSH; require app root subdirectory. Verify CI and production after secrets are configured. Known DNS probe from this runner did not resolve `reverscanada.ca`.
+
+
+## Additional independently completed work — 2026-10-15
+- **Source complete / CI green:** status-change audit migration `20261015235500_support_status_audit.sql`, private RPC with atomic case transition and audit insertion, typed client, protected audit GET API, operator history interface. Verified [CI 38848287271](https://github.com/takatakca/revers-canada-hope/actions/runs/38848287271) for `98295aa1`.
+- **P0 database dependency:** apply the audit migration *after* baseline REVERS schema and prior `20261015131500` and `20261015133000` migrations; confirm `anon` and `authenticated` have no table access or function EXECUTE privilege, `service_role` can transition and log once, and stale transitions return a conflict without history entry.
+- **P1 pending:** operational cross-browser testing, audit retention policy, and authenticated role/entitlement improvements when TAKATAK supplies dedicated REVERS admin entitlement.
+- **P0 hosting dependency:** [deployment 38848381314](https://github.com/takatakca/revers-canada-hope/actions/runs/38848381314) failed before upload with missing `MOCHAHOST_HOST`. Keep [issue #2](https://github.com/takatakca/revers-canada-hope/issues/2) open until real production health.

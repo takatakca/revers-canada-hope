@@ -87,3 +87,12 @@ Untrusted public contact and Stripe webhook bodies now pass through a bounded st
 - **MochaHost:** [deploy 38792000621](https://github.com/takatakca/revers-canada-hope/actions/runs/38792000621) failed *before upload* at missing GitHub secret `MOCHAHOST_HOST`. No production release verified.
 - **Database:** current connected Supabase projects do **not** include the REVERS-specific operational project; do not apply migrations to a neighboring TAKATAK project.
 - **Email:** provider and sender not connected, so opt-out link rendering in real email remains pending. Do not claim email delivery exists.
+
+
+## Case-management accountability — verified source only (2026-10-15)
+- Added `revers_support_status_audit` **REVERS-only** SQL migration `20261015235500_support_status_audit.sql`; private, RLS enabled, table DML removed from `anon` and `authenticated`. No contact message, name, phone, email, or child/family content is copied into the audit.
+- Atomic `SECURITY INVOKER` RPC `revers_transition_support_status` changes a case status only from the expected previous status and writes the responsible TAKATAK operator UUID in the same transaction. Only `service_role` receives execute; the API requires a valid signed product session and explicit REVERS operator UUID delegation.
+- `/admin/support` now displays the last 50 recorded changes for each case on operator request; the private API filters contact records to `REVERS_CANADA_GAR`.
+- [CI 38848287271](https://github.com/takatakca/revers-canada-hope/actions/runs/38848287271) **success** on `98295aa1e3541bfe04a956c6d432dc0a05e39c2e`: typecheck, lint, unit tests and Nitro build. New tests are static safety checks, **not** a real Postgres migration proof.
+- [deployment 38848381314](https://github.com/takatakca/revers-canada-hope/actions/runs/38848381314) **failure** at missing `MOCHAHOST_HOST`, before SSH/upload. No live release.
+- REVERS operational Supabase `cmcbsbjxrrwtmxvcsbsg` is absent from connected projects; audit and earlier migrations remain **unapplied**, so live case mutations cannot be claimed working. Existing status changes made before this migration have no retroactive audit.
