@@ -5,6 +5,7 @@ import { randomUUID } from "node:crypto";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import type { Json } from "@/integrations/supabase/types";
 import { postTakatakEvent, type TakatakEventEnvelope } from "./client";
+import { requireOutboxMutation, retryDelaySeconds } from "./outbox-state";
 
 export type EnqueueTakatakEventInput = {
   eventType: string;
@@ -54,17 +55,13 @@ export async function enqueueTakatakEvent(
   return { eventId };
 }
 
-function retryDelaySeconds(attempts: number): number {
-  return Math.min(3_600, 30 * 2 ** Math.max(0, attempts - 1));
-}
-
 export async function deliverPendingTakatakEvents(
   limit = 25,
 ): Promise<{ delivered: number; retried: number; failed: number }> {
   const result = { delivered: 0, retried: 0, failed: 0 };
 
   // Recover work left in processing by a worker that died.
-  await supabaseAdmin
+  const { error: recoveryError } = await supabaseAdmin
     .from("takatak_outbox")
     .update({
       status: "retrying",
@@ -76,6 +73,9 @@ export async function deliverPendingTakatakEvents(
       "updated_at",
       new Date(Date.now() - 10 * 60_000).toISOString(),
     );
+  if (recoveryError) {
+    throw new Error("Unable to recover stalled TAKATAK outbox rows.");
+  }
 
   const { data, error } = await supabaseAdmin
     .from("takatak_outbox")
@@ -98,7 +98,9 @@ export async function deliverPendingTakatakEvents(
       .select("id")
       .maybeSingle();
 
-    if (claim.error || !claim.data) continue;
+    if (claim.error) throw new Error("Unable to claim pending TAKATAK outbox event.");
+    // Another worker can claim the same candidate first; this is not an error.
+    if (!claim.data) continue;
 
     const event: TakatakEventEnvelope = {
       eventId: row.event_id,
@@ -115,15 +117,20 @@ export async function deliverPendingTakatakEvents(
 
     try {
       await postTakatakEvent(event);
-      await supabaseAdmin
+      const acknowledgement = await supabaseAdmin
         .from("takatak_outbox")
         .update({
           status: "delivered",
           delivered_at: new Date().toISOString(),
           last_error: null,
         })
-        .eq("id", row.id);
-
+        .eq("id", row.id)
+        .eq("status", "processing")
+        .select("id")
+        .maybeSingle();
+      // The remote POST alone is not a durable acknowledgement. If this
+      // fails, retry with the same event_id (TAKATAK must deduplicate it).
+      requireOutboxMutation("delivery acknowledgement", acknowledgement);
       result.delivered += 1;
     } catch (error) {
       const attempts = row.attempts + 1;
@@ -131,7 +138,7 @@ export async function deliverPendingTakatakEvents(
       const message =
         error instanceof Error ? error.message.slice(0, 1000) : "Unknown error";
 
-      await supabaseAdmin
+      const retryState = await supabaseAdmin
         .from("takatak_outbox")
         .update({
           status: permanent ? "failed" : "retrying",
@@ -141,8 +148,13 @@ export async function deliverPendingTakatakEvents(
             Date.now() + retryDelaySeconds(attempts) * 1000,
           ).toISOString(),
         })
-        .eq("id", row.id);
-
+        .eq("id", row.id)
+        .eq("status", "processing")
+        .select("id")
+        .maybeSingle();
+      // If even retry persistence fails, return HTTP 503 to the scheduler.
+      // Never report successful delivery/retry for a missing DB write.
+      requireOutboxMutation("retry state", retryState);
       if (permanent) result.failed += 1;
       else result.retried += 1;
     }
