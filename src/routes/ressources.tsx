@@ -100,9 +100,33 @@ function ResourcesPage() {
                   {lang === "fr" ? "Information sur la séparation, les enfants et la médiation familiale." : "Information on separation, children and family mediation."}
                 </p>
               </a>
+              <a href="https://www.quebec.ca/famille-et-soutien-aux-personnes/separation-divorce/mediation-familiale" target="_blank" rel="noopener noreferrer"
+                className="border border-ink/20 p-6 transition hover:border-teal-deep focus-visible:outline focus-visible:outline-2 focus-visible:outline-teal-deep">
+                <h3 className="flex items-center gap-2 text-xl font-semibold text-ink">
+                  {lang === "fr" ? "Québec — Médiation familiale" : "Québec — Family mediation"}
+                  <ExternalLink className="h-4 w-4" aria-hidden />
+                </h3>
+                <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                  {lang === "fr"
+                    ? "Information officielle sur la médiation, les ententes parentales et les séances couvertes par le programme."
+                    : "Official information on mediation, parenting agreements and sessions covered by the program."}
+                </p>
+              </a>
+              <a href="https://www.retraitequebec.gouv.qc.ca/fr/citoyens/enfants/allocation-famille/je-partage-garde-enfant" target="_blank" rel="noopener noreferrer"
+                className="border border-ink/20 p-6 transition hover:border-teal-deep focus-visible:outline focus-visible:outline-2 focus-visible:outline-teal-deep">
+                <h3 className="flex items-center gap-2 text-xl font-semibold text-ink">
+                  {lang === "fr" ? "Retraite Québec — Garde partagée" : "Retraite Québec — Shared custody"}
+                  <ExternalLink className="h-4 w-4" aria-hidden />
+                </h3>
+                <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                  {lang === "fr"
+                    ? "Démarches officielles pour déclarer un changement de garde et vérifier l'Allocation famille."
+                    : "Official steps for reporting custody changes and reviewing Family Allowance information."}
+                </p>
+              </a>
             </div>
             <p className="mt-4 text-sm text-muted-foreground">
-              {lang === "fr" ? "Ces services sont indépendants de REVERS CANADA." : "These services are independent of REVERS CANADA."}
+              {lang === "fr" ? "Ces services sont indépendants de REVERS CANADA. Vérifiez directement les conditions et les délais auprès de chaque organisme." : "These services are independent of REVERS CANADA. Check eligibility and timing with each provider directly."}
             </p>
           </section>
           <p className="mt-10 max-w-3xl text-sm leading-6 text-ink/70">{r.note}</p>
