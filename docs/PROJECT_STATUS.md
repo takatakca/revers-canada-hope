@@ -104,3 +104,10 @@ Untrusted public contact and Stripe webhook bodies now pass through a bounded st
 - `src/lib/takatak/outbox-state.ts` exports a small side-effect-free persistence assertion and bounded exponential retry policy; `tests/takatak-outbox-state.test.mjs` covers empty/error updates and boundary retries. [CI 38942916738](https://github.com/takatakca/revers-canada-hope/actions/runs/38942916738) **SUCCESS** (npm ci, migration QA, TypeScript, lint, unit tests, Nitro production build).
 - [MochaHost 38943041446](https://github.com/takatakca/revers-canada-hope/actions/runs/38943041446) **FAILURE** at pre-transfer secret gate: `Missing required deployment secret: MOCHAHOST_HOST`. No SSH/upload/release health check occurred.
 - `curl https://reverscanada.ca/healthz` and `/readyz` from this runner returned DNS resolution failure (`Could not resolve host`). The operational REVERS Supabase project remains absent from the connected project list. **Production still unverified.**
+
+
+## Public family-resource directory (2026-10-16)
+- The bilingual `/ressources` directory now links to the official Gouvernement du Québec family mediation guide and Retraite Québec shared-custody/Family Allowance instructions, in addition to the existing verified 211 Grand Montréal and JuridiQC external pages.
+- The page explicitly states these external services are independent from REVERS CANADA and eligibility/timing must be checked with each provider. It makes no unverified partner or availability claim.
+- Code: `src/routes/ressources.tsx`, `tests/resource-directory.test.mjs` (basic URL/disclaimer regression tests). Pushed source SHA `48bf4f4534c8bd9b16faf22fe16419f02eda74d9`. [CI 38943633417](https://github.com/takatakca/revers-canada-hope/actions/runs/38943633417) **SUCCESS** after Prettier-only test fixes, including lint, unit tests, TypeScript and build.
+- This is source QA only: real-browser usability, provider availability and hosting remain unverified. Automatic [Deploy 38943739162](https://github.com/takatakca/revers-canada-hope/actions/runs/38943739162) was initiated after successful CI; its terminal result must be inspected, never inferred.

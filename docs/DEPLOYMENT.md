@@ -114,3 +114,9 @@ The SQL migration is committed but **not applied**; the Supabase CLI/database cl
 - Production [MochaHost 38943041446](https://github.com/takatakca/revers-canada-hope/actions/runs/38943041446) **failed** at `Validate deployment configuration`: `Missing required deployment secret: MOCHAHOST_HOST`. **No files uploaded.** The scheduled workflow's green run may only mean it skipped due to missing `REVERS_PRODUCTION_URL` or worker token; it is not proof events were delivered.
 - Once the correct REVERS host and database are connected, check: (1) generated event enqueued `pending`, (2) authorized worker POST changes row to `delivered`, (3) deliberate TAKATAK or Supabase failure increments `attempts` and schedules retry, (4) repeated same `event_id` cannot create two TAKATAK records, (5) failed database persistence makes worker endpoint 503; no worker-token or personal-data leak in logs.
 - The 2026-10-16 direct DNS check for `https://reverscanada.ca/healthz` and `/readyz` failed name resolution in this runtime. Fix/verify authoritative DNS, TLS, MochaHost runtime configuration before declaring `/healthz.release` and `/readyz` successful.
+
+
+## Directory update follow-up (2026-10-16)
+- The verified-resource source changes on `48bf4f4534c8bd9b16faf22fe16419f02eda74d9` passed [CI 38943633417](https://github.com/takatakca/revers-canada-hope/actions/runs/38943633417). Publication is not implied by CI.
+- Automatic [Deploy 38943739162](https://github.com/takatakca/revers-canada-hope/actions/runs/38943739162) was triggered as a consequence. Inspect its **terminal status and validation-step logs** before claiming any upload. If it again fails at `MOCHAHOST_HOST`, stop retrying unchanged secrets.
+- After a real release, check `/ressources` in French/English, responsive/mobile keyboard navigation, external links (211, JuridiQC, Québec family mediation, Retraite Québec shared custody), and the explicit no-partnership/eligibility disclaimer.
