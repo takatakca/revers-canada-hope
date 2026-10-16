@@ -116,6 +116,33 @@ export type Database = {
         }
         Relationships: []
       }
+      revers_support_status_audit: {
+        Row: {
+          id: string
+          contact_id: string
+          previous_status: string
+          new_status: string
+          actor_takatak_identity_id: string
+          changed_at: string
+        }
+        Insert: {
+          id?: string
+          contact_id: string
+          previous_status: string
+          new_status: string
+          actor_takatak_identity_id: string
+          changed_at?: string
+        }
+        Update: {
+          id?: string
+          contact_id?: string
+          previous_status?: string
+          new_status?: string
+          actor_takatak_identity_id?: string
+          changed_at?: string
+        }
+        Relationships: []
+      }
       revers_recurring_invoices: {
         Row: {
           id: string
@@ -286,7 +313,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      revers_transition_support_status: {
+        Args: {
+          p_contact_id: string
+          p_expected_status: string
+          p_new_status: string
+          p_actor_takatak_identity_id: string
+        }
+        Returns: {
+          contact_id: string
+          status: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

@@ -22,15 +22,15 @@ function response(body: Record<string, unknown>, status = 200): Response {
   });
 }
 
-function operatorAuthorized(request: Request): boolean {
+function authorizedOperatorId(request: Request): string | null {
   try {
     const session = readReversSession(request);
     return canManageSupport(
       session?.identityId,
       process.env.REVERS_SUPPORT_ADMIN_IDENTITY_IDS,
-    );
+    ) ? session!.identityId : null;
   } catch {
-    return false;
+    return null;
   }
 }
 
@@ -50,8 +50,35 @@ export const Route = createFileRoute("/api/internal/revers/support")({
   server: {
     handlers: {
       GET: async ({ request }) => {
-        if (!operatorAuthorized(request)) return response({ ok: false, error: "forbidden" }, 403);
+        if (!authorizedOperatorId(request)) return response({ ok: false, error: "forbidden" }, 403);
         const url = new URL(request.url);
+        const historyId = url.searchParams.get("history");
+        if (historyId !== null) {
+          const uuid = z.string().uuid().safeParse(historyId);
+          if (!uuid.success) return response({ ok: false, error: "invalid_id" }, 400);
+          try {
+            // Prove the record belongs to REVERS before returning its audit.
+            const { data: contact, error: contactError } = await supabaseAdmin
+              .from("contacts")
+              .select("id")
+              .eq("id", historyId)
+              .eq("source", "REVERS_CANADA_GAR")
+              .maybeSingle();
+            if (contactError) throw contactError;
+            if (!contact) return response({ ok: false, error: "not_found" }, 404);
+            const { data, error } = await supabaseAdmin
+              .from("revers_support_status_audit")
+              .select("id,previous_status,new_status,actor_takatak_identity_id,changed_at")
+              .eq("contact_id", historyId)
+              .order("changed_at", { ascending: false })
+              .limit(50);
+            if (error) throw error;
+            return response({ ok: true, history: data ?? [] });
+          } catch (error) {
+            console.error("[support] audit-list failure:", error instanceof Error ? error.message : "unknown");
+            return response({ ok: false, error: "unavailable" }, 503);
+          }
+        }
         const pageRaw = url.searchParams.get("page") ?? "0";
         const filterRaw = url.searchParams.get("status") ?? "all";
         if (!/^(0|[1-9][0-9]?)$/.test(pageRaw)) {
@@ -86,7 +113,8 @@ export const Route = createFileRoute("/api/internal/revers/support")({
         }
       },
       PATCH: async ({ request }) => {
-        if (!operatorAuthorized(request)) return response({ ok: false, error: "forbidden" }, 403);
+        const operatorId = authorizedOperatorId(request);
+        if (!operatorId) return response({ ok: false, error: "forbidden" }, 403);
         // Cookie-authenticated writes must also prove their originating site.
         if (!allowedOrigin(request)) return response({ ok: false, error: "origin_denied" }, 403);
         if (!request.headers.get("content-type")?.startsWith("application/json")) {
@@ -104,17 +132,20 @@ export const Route = createFileRoute("/api/internal/revers/support")({
           return response({ ok: false, error: "invalid_transition" }, 400);
         }
         try {
-          const { data, error } = await supabaseAdmin
-            .from("contacts")
-            .update({ status: parsed.data.status })
-            .eq("id", parsed.data.id)
-            .eq("source", "REVERS_CANADA_GAR")
-            .eq("status", parsed.data.expectedStatus)
-            .select("id,status")
-            .maybeSingle();
+          // Database function updates the contact and inserts its actor audit
+          // atomically. A missing migration fails closed with HTTP 503.
+          const { data, error } = await supabaseAdmin.rpc("revers_transition_support_status", {
+            p_contact_id: parsed.data.id,
+            p_expected_status: parsed.data.expectedStatus,
+            p_new_status: parsed.data.status,
+            p_actor_takatak_identity_id: operatorId,
+          });
           if (error) throw error;
-          if (!data) return response({ ok: false, error: "conflict" }, 409);
-          return response({ ok: true, request: data });
+          if (!data?.length) return response({ ok: false, error: "conflict" }, 409);
+          return response({ ok: true, request: {
+            id: data[0].contact_id,
+            status: data[0].status,
+          } });
         } catch (error) {
           console.error("[support] case-update failure:", error instanceof Error ? error.message : "unknown");
           return response({ ok: false, error: "unavailable" }, 503);
