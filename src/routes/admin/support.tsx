@@ -20,6 +20,14 @@ type ListResponse = {
   requests?: SupportCase[];
   hasMore?: boolean;
 };
+type CaseHistory = {
+  id: string;
+  previous_status: CaseStatus;
+  new_status: CaseStatus;
+  actor_takatak_identity_id: string;
+  changed_at: string;
+};
+type HistoryResponse = { ok: boolean; history?: CaseHistory[] };
 type UpdateResponse = {
   ok: boolean;
   request?: { id: string; status: CaseStatus };
@@ -48,6 +56,10 @@ function SupportAdminPage() {
   const [forbidden, setForbidden] = useState(false);
   const [error, setError] = useState("");
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [expandedHistoryId, setExpandedHistoryId] = useState<string | null>(null);
+  const [history, setHistory] = useState<Record<string, CaseHistory[]>>({});
+  const [historyLoadingId, setHistoryLoadingId] = useState<string | null>(null);
+  const [historyErrorId, setHistoryErrorId] = useState<string | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
@@ -120,6 +132,13 @@ function SupportAdminPage() {
           entry.id === item.id ? { ...entry, status: data.request?.status ?? status } : entry,
         ).filter((entry) => filter === "all" || entry.status === filter),
       );
+      // History must be re-read after a successful change, never inferred.
+      setExpandedHistoryId(null);
+      setHistory((previous) => {
+        const next = { ...previous };
+        delete next[item.id];
+        return next;
+      });
     } catch (cause) {
       setError(
         cause instanceof Error && cause.message === "conflict"
@@ -132,6 +151,33 @@ function SupportAdminPage() {
       );
     } finally {
       setUpdatingId(null);
+    }
+  }
+
+  async function toggleHistory(itemId: string) {
+    if (expandedHistoryId === itemId) {
+      setExpandedHistoryId(null);
+      return;
+    }
+    setExpandedHistoryId(itemId);
+    setHistoryErrorId(null);
+    if (history[itemId]) return;
+    setHistoryLoadingId(itemId);
+    try {
+      const response = await fetch(
+        `/api/internal/revers/support?history=${encodeURIComponent(itemId)}`,
+        { cache: "no-store", credentials: "same-origin" },
+      );
+      if (!response.ok) throw new Error("history_unavailable");
+      const data = (await response.json()) as HistoryResponse;
+      if (!data.ok || !Array.isArray(data.history)) {
+        throw new Error("history_unavailable");
+      }
+      setHistory((previous) => ({ ...previous, [itemId]: data.history ?? [] }));
+    } catch {
+      setHistoryErrorId(itemId);
+    } finally {
+      setHistoryLoadingId(null);
     }
   }
 
@@ -239,6 +285,52 @@ function SupportAdminPage() {
                       <option key={value} value={value}>{labels[value]}</option>
                     ))}
                   </select>
+                </div>
+                <div className="mt-5 border-t border-border pt-4">
+                  <button
+                    type="button"
+                    className="text-sm font-semibold text-teal-deep underline"
+                    aria-expanded={expandedHistoryId === item.id}
+                    onClick={() => void toggleHistory(item.id)}
+                  >
+                    {expandedHistoryId === item.id
+                      ? fr ? "Masquer l’historique" : "Hide history"
+                      : fr ? "Voir l’historique des statuts" : "View status history"}
+                  </button>
+                  {expandedHistoryId === item.id && (
+                    <div className="mt-3 text-sm text-ink" aria-live="polite">
+                      {historyLoadingId === item.id && (
+                        <p>{fr ? "Chargement de l’historique…" : "Loading status history…"}</p>
+                      )}
+                      {historyErrorId === item.id && (
+                        <p role="alert" className="text-red-700">
+                          {fr ? "Historique indisponible. Réessayez." : "History unavailable. Please retry."}
+                        </p>
+                      )}
+                      {history[item.id]?.length === 0 && (
+                        <p>{fr ? "Aucun changement enregistré." : "No status changes recorded."}</p>
+                      )}
+                      {history[item.id] && history[item.id].length > 0 && (
+                        <ol className="space-y-3">
+                          {history[item.id].map((event) => (
+                            <li key={event.id} className="rounded-md bg-cream px-4 py-3">
+                              <p className="font-semibold">
+                                {labels[event.previous_status] ?? event.previous_status}
+                                {" → "}
+                                {labels[event.new_status] ?? event.new_status}
+                              </p>
+                              <p className="mt-1 text-xs text-muted-foreground">
+                                {new Date(event.changed_at).toLocaleString(fr ? "fr-CA" : "en-CA")}
+                                {" · "}
+                                {fr ? "Opérateur TAKATAK " : "TAKATAK operator "}
+                                {event.actor_takatak_identity_id.slice(0, 8)}
+                              </p>
+                            </li>
+                          ))}
+                        </ol>
+                      )}
+                    </div>
+                  )}
                 </div>
               </li>
             ))}
