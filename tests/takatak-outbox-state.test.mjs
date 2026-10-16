@@ -1,10 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import {
-  requireOutboxMutation,
-  retryDelaySeconds,
-} from "../src/lib/takatak/outbox-state.ts";
+import { requireOutboxMutation, retryDelaySeconds } from "../src/lib/takatak/outbox-state.ts";
 
 test("outbox acknowledges only a persisted matching row", () => {
   assert.doesNotThrow(() =>
