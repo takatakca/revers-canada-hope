@@ -20,9 +20,13 @@ jobs:
     timeout-minutes: 30
     environment: production
     # Only release an actual successful push to our own main, or an authorized manual dispatch.
+    # Since 2026-10-26 Coolify builds main itself (confirm-coolify.yml), so automatic MochaHost
+    # publication is opt-in: set the repository variable REVERS_MOCHAHOST_DEPLOY=true together
+    # with the production secrets below. Without it, pushes skip this job instead of failing.
     if: >-
       github.event_name == 'workflow_dispatch' ||
-      (github.event_name == 'workflow_run' &&
+      (vars.REVERS_MOCHAHOST_DEPLOY == 'true' &&
+       github.event_name == 'workflow_run' &&
        github.event.workflow_run.conclusion == 'success' &&
        github.event.workflow_run.event == 'push' &&
        github.event.workflow_run.head_repository.full_name == github.repository)

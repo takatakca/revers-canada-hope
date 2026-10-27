@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { releaseSha } from "@/lib/release";
 
 export const Route = createFileRoute("/healthz")({
   server: {
@@ -7,7 +8,7 @@ export const Route = createFileRoute("/healthz")({
         const response = Response.json({
           ok: true,
           service: "revers-canada-web",
-          release: process.env.RELEASE_SHA ?? null,
+          release: releaseSha(),
         });
         response.headers.set("Cache-Control", "no-store");
         return response;
