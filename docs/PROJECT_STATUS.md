@@ -118,3 +118,6 @@ Untrusted public contact and Stripe webhook bodies now pass through a bounded st
 
 ## Pipeline status (2026-10-27)
 - Pushes to `main` no longer fail at the missing MochaHost secrets: MochaHost publication is opt-in (`REVERS_MOCHAHOST_DEPLOY=true`). `confirm-coolify.yml` verifies that Coolify serves each CI-validated commit, on the preview until the domain is released.
+
+## Hosting status (2026-10-27)
+- `reverscanada.ca` is served by Coolify (`reverscanada`, vps2), release `2f4754c` verified on `/healthz`. Server secrets and migrations are still missing, so forms, donations and sign-in are not operational and `/readyz` is 503.
