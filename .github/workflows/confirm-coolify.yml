@@ -1,0 +1,59 @@
+name: Confirm REVERS CANADA on Coolify
+
+# Coolify (application reverscanada-preview, server vps2) builds main itself on every push.
+# This workflow uploads nothing: once REVERS CI passes for a push to main, it waits until the
+# Coolify origin reports that exact commit on /healthz (Coolify supplies SOURCE_COMMIT).
+# The repository variable REVERS_COOLIFY_ORIGIN overrides the origin; set it to
+# https://reverscanada.ca once the domain is released to Coolify, and /readyz must then be 200.
+on:
+  workflow_run:
+    workflows: ["REVERS CI"]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: revers-coolify-confirm
+  cancel-in-progress: false
+
+jobs:
+  confirm:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      ORIGIN: ${{ vars.REVERS_COOLIFY_ORIGIN || 'http://awgyeyiknkiq2vwshfdlg3f6.209.145.49.63.sslip.io' }}
+      RELEASE_SHA: ${{ github.event.workflow_run.head_sha }}
+    steps:
+      # A newer push to main ends the wait without failing: its own CI run confirms the newer build.
+      - name: Wait until Coolify serves the CI-validated commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 60); do
+            current="$(git ls-remote --exit-code "https://github.com/${GITHUB_REPOSITORY}.git" refs/heads/main | cut -f1)"
+            if [[ "$current" != "$RELEASE_SHA" ]]; then
+              echo "::notice::main moved on to ${current}; its own CI run confirms the newer build."
+              exit 0
+            fi
+            health="$(curl -fsS --max-time 15 "${ORIGIN}/healthz?release=${RELEASE_SHA}" 2>/dev/null || true)"
+            if jq -e --arg sha "$RELEASE_SHA" '.ok == true and .release == $sha' <<<"$health" >/dev/null 2>&1; then
+              ready="$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 "${ORIGIN}/readyz" || true)"
+              if [[ "$ORIGIN" == "https://reverscanada.ca" && "$ready" != "200" ]]; then
+                echo "::error::Production serves ${RELEASE_SHA} but /readyz answered HTTP ${ready}."
+                exit 1
+              fi
+              echo "Coolify serves ${RELEASE_SHA} at ${ORIGIN} (/readyz HTTP ${ready})."
+              exit 0
+            fi
+            served="$(jq -r '.release // "none"' <<<"$health" 2>/dev/null || echo none)"
+            echo "Attempt ${attempt}/60: ${ORIGIN} serves ${served}, waiting for ${RELEASE_SHA}."
+            sleep 15
+          done
+          echo "::error::${ORIGIN} did not serve ${RELEASE_SHA} within 15 minutes. Check the reverscanada-preview deployment in Coolify."
+          exit 1

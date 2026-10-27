@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { releaseSha } from "@/lib/release";
 
 function configured(value: string | undefined): boolean {
   return Boolean(value?.trim());
@@ -41,7 +42,7 @@ export const Route = createFileRoute("/readyz")({
           JSON.stringify({
             ok: ready,
             service: "revers-canada-web",
-            release: process.env.RELEASE_SHA ?? null,
+            release: releaseSha(),
           }),
           {
             status: ready ? 200 : 503,
