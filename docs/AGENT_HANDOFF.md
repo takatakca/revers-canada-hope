@@ -168,3 +168,15 @@ Read `AGENTS.md`, this handoff and `docs/TASK_QUEUE.md`, retrieve the latest Git
 - **No domain change was made.** The owner chose to keep the live site as is until they approve the release. The domain also exists as an addon in the bolonca cPanel account (not authoritative: the cluster still serves the reseller zone, serial `2026090300`), prepared for retiring the reseller account.
 
 **Next exact action:** owner decides between (a) keeping MochaHost (configure `MOCHAHOST_*` secrets) or (b) releasing on Coolify: add the server secrets in Coolify, apply the pending migrations to the correct project, attach `reverscanada.ca` + `www` to `reverscanada-preview`, point only the website A records to `209.145.49.63`, then verify `/healthz`, HTTP-200 `/readyz` and TLS on the real domain before retiring the reseller account.
+
+## 2026-10-27 — MochaHost deploy failures replaced by a Coolify check (Claude)
+- **Problem:** after the merge of PR #3, [Deploy #48](https://github.com/takatakca/revers-canada-hope/actions/runs/40450106727) failed again at `Missing required deployment secret: MOCHAHOST_HOST`, as #46 and #47 did. The MochaHost secrets were never configured, and the reseller account they would target is being retired in favour of Coolify.
+- **Change (branch `claude/coolify-release-check`):**
+  - `deploy-mochahost.yml` runs automatically only when the repository variable `REVERS_MOCHAHOST_DEPLOY=true`; manual dispatch is unchanged.
+  - New `confirm-coolify.yml`: after `REVERS CI` passes on a push to `main`, it waits up to 15 minutes until the Coolify origin's `/healthz` reports that exact commit. The default origin is the preview; the variable `REVERS_COOLIFY_ORIGIN` overrides it, and `/readyz` must be 200 when the origin is `https://reverscanada.ca`.
+  - `/healthz` and `/readyz` report `SOURCE_COMMIT` when `RELEASE_SHA` (the MochaHost loader) is absent, via `src/lib/release.ts`, tested in `tests/release.test.mjs`.
+- **Coolify:** "include source commit in build" is now on for `reverscanada-preview`.
+- **Evidence:** the branch head `161222da6fbf11dde89bcd902c0ddc4fd63cf020` built on the preview and served `{"ok":true,"service":"revers-canada-web","release":"161222da…"}`. The application was then switched back to `main`.
+  - Local runs: migration QA, typecheck, lint (no errors; warnings only on lines already present on `main`), 22/22 Node tests, and the Nitro build.
+  - One Coolify build failed with esbuild `ETXTBSY` during `npm ci` (a transient overlay-filesystem race); the rebuild passed. If `confirm-coolify.yml` fails, open the Coolify deployment log first and redeploy.
+- **Next exact action:** after merge, check that `REVERS CI` and "Confirm REVERS CANADA on Coolify" pass on the merge commit and that "Deploy REVERS CANADA to MochaHost" is **skipped**. Production `reverscanada.ca` is still the older MochaHost build until the owner approves the Coolify release (steps in `docs/DEPLOYMENT.md`).

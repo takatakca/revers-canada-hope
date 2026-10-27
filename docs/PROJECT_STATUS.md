@@ -115,3 +115,6 @@ Untrusted public contact and Stripe webhook bodies now pass through a bounded st
 ## Hosting status (2026-10-26)
 - Live `reverscanada.ca` = MochaHost reseller account `reverscanada` (`209.42.24.129`), serving an **older** build than `main` (no `/readyz` route). `deploy-mochahost.yml` has never uploaded (missing `MOCHAHOST_HOST`).
 - Non-production Coolify preview `reverscanada-preview` (vps2) auto-builds `main`; `bea8bfd` built and passed `/healthz`. Domain **not** switched; release awaits owner approval and the server secrets/migrations listed in `docs/DEPLOYMENT.md`.
+
+## Pipeline status (2026-10-27)
+- Pushes to `main` no longer fail at the missing MochaHost secrets: MochaHost publication is opt-in (`REVERS_MOCHAHOST_DEPLOY=true`). `confirm-coolify.yml` verifies that Coolify serves each CI-validated commit, on the preview until the domain is released.
