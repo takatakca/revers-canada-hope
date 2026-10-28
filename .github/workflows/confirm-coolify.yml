@@ -1,6 +1,6 @@
 name: Confirm REVERS CANADA on Coolify
 
-# Coolify (application reverscanada-preview, server vps2) builds main itself on every push.
+# Coolify (application reverscanada, server vps2) builds main itself on every push.
 # This workflow uploads nothing: once REVERS CI passes for a push to main, it waits until the
 # Coolify origin reports that exact commit on /healthz (Coolify supplies SOURCE_COMMIT).
 # The repository variable REVERS_COOLIFY_ORIGIN overrides the origin; set it to
@@ -55,5 +55,5 @@ jobs:
             echo "Attempt ${attempt}/60: ${ORIGIN} serves ${served}, waiting for ${RELEASE_SHA}."
             sleep 15
           done
-          echo "::error::${ORIGIN} did not serve ${RELEASE_SHA} within 15 minutes. Check the reverscanada-preview deployment in Coolify."
+          echo "::error::${ORIGIN} did not serve ${RELEASE_SHA} within 15 minutes. Check the reverscanada deployment in Coolify."
           exit 1

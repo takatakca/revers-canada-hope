@@ -2,7 +2,7 @@
 
 | Priority | Task | State | Evidence / acceptance |
 | --- | --- | --- | --- |
-| P0 | Release `main` on Coolify (or configure MochaHost) | preview ready; owner approval and server secrets pending | `reverscanada-preview` on vps2 auto-builds `main` (bea8bfd healthy). Add server secrets, apply migrations, attach the domain, switch only website A records, prove `/healthz` and HTTP-200 `/readyz` on the real domain |
+| P0 | Release `main` on Coolify (or configure MochaHost) | domain switched 2026-10-27; server secrets + migrations pending | `reverscanada.ca` serves `2f4754c` from Coolify. Add the runtime secrets listed in `docs/DEPLOYMENT.md`, apply migrations, set `REVERS_COOLIFY_ORIGIN`, prove HTTP-200 `/readyz` |
 | P0 | Gate deployment on successful CI SHA and check production SHA | code implemented; live verify pending | `workflow_run` on successful push, `/healthz.release` matches validated Git SHA, rollback on failure |
 | P0 | Regenerate and commit a synchronized npm lockfile | complete; `npm ci` verified in CI 38617278856 | `npm ci` fails with EUSAGE: missing Nitro/Supabase/Stripe packages and invalid transitive versions; regenerate with Node 22/npm 10, commit lockfile, restore `npm ci` |
 | P0 | Configure MochaHost production environment secrets | superseded 2026-10-27: MochaHost deploy is opt-in (`REVERS_MOCHAHOST_DEPLOY`); Coolify builds main and `confirm-coolify.yml` verifies the SHA | Set `MOCHAHOST_HOST` and other names in `docs/DEPLOYMENT.md` via GitHub UI, not git |
