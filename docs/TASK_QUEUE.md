@@ -18,6 +18,7 @@
 | P1 | Private support-request admin operations | CI green (9a75362e); deployment/live authorization blocked | Signed TAKATAK session + server-only REVERS operator UUID delegation, private /admin/support and GET/PATCH API with optimistic updates; live operator and RLS tests still required |
 | P1 | Verified father/family partner-resource directory | partial | Vet real partner names, locations and services, add links without fabricated availability |
 | P2 | Unit tests for money and input validation | complete in CI 38617278856 | Node 22 `node:test` added, test step in CI/deploy; inspect latest CI outcome |
+| P2 | Header and hero layout at laptop widths | fixed on `claude/header-laptop-width` (2026-10-28) | Full menu only from 1280 px, never wraps; readable over the hero photo; hero copy aligned with the logo. Verified with Playwright at 768–1600 px on a local build |
 | P2 | Mobile/accessibility/performance/security checks | partial: bounded public requests and Node tests implemented; live validation pending | Automated and real-device evidence, no dead controls |
 | P2 | Post-release operations and rollback drill | pending | Healthy exact SHA, rollback to known-good release, incident playbook |
 

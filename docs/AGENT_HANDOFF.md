@@ -191,3 +191,10 @@ Read `AGENTS.md`, this handoff and `docs/TASK_QUEUE.md`, retrieve the latest Git
   1. The owner adds those variables in Coolify and applies the pending migrations to the correct project, then restarts the application.
   2. Set the repository variable `REVERS_COOLIFY_ORIGIN=https://reverscanada.ca`; `confirm-coolify.yml` then requires `/readyz` 200 on production.
   3. Remove the reseller account `reverscanada` only after downloading its backup (`backup-10.26.2026_16-26-25_reverscanada.tar.gz` in its home folder).
+
+## 2026-10-28 — header and hero at laptop widths (Claude)
+- **Problem (live, release 2f4754c):** from 1024 to 1366 px the desktop menu did not fit: `REVERS CANADA` and `FR / en` wrapped, and at 1024 px `TAKATAK` and `Commencer` were cut off at the right edge. Light links were hard to read over the photo, and below 1408 px the hero copy touched the left edge (`.home-shell` has no side margin there and the column used `lg:px-0`).
+- **Fix:** `src/components/SiteHeader.tsx` shows the full menu from `xl` (1280 px), with `whitespace-nowrap` and tighter gaps below `2xl`; below 1280 px the menu button opens the existing panel. The transparent header gets a navy scrim. `src/routes/index.tsx` pads the hero copy with `clamp(0px, 46rem - 50vw, 2rem)` so it lines up with the logo.
+- **Checks:** lint 0 errors (same 53 pre-existing warnings), `npm test` pass, `npm run build` pass, Playwright screenshots of a local production build at 768, 1024, 1280, 1366, 1440 and 1600 px, no horizontal scroll.
+- **Next exact action:** merge, then confirm on https://reverscanada.ca once Coolify serves the merge commit.
+

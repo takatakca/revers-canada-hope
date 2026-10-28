@@ -46,12 +46,12 @@ export function SiteHeader() {
         "fixed inset-x-0 top-0 z-50 text-white transition-[background-color,height,border-color,backdrop-filter] duration-[280ms]",
         solid
           ? "border-b border-white/12 bg-ink/95 backdrop-blur-md"
-          : "border-b border-transparent bg-transparent",
+          : "border-b border-transparent bg-gradient-to-b from-ink/80 via-ink/45 to-transparent bg-origin-border",
       ].join(" ")}
     >
       <div
         className={[
-          "mx-auto flex max-w-[110rem] items-center justify-between gap-8 px-5 transition-all duration-[280ms] sm:px-8",
+          "mx-auto flex max-w-[110rem] items-center justify-between gap-6 px-5 transition-all duration-[280ms] sm:px-8 2xl:gap-8",
           solid ? "h-[68px]" : "h-[96px]",
         ].join(" ")}
       >
@@ -64,12 +64,12 @@ export function SiteHeader() {
           >
             REVERS<span className="text-[color:var(--leaf)]">CANADA</span>
           </span>
-          <span className="hidden text-[10px] font-semibold uppercase tracking-[0.3em] text-white/45 sm:inline">
+          <span className="hidden text-[10px] font-semibold uppercase tracking-[0.3em] text-white/45 sm:inline xl:hidden 2xl:inline">
             RêvPÈRE
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-9 lg:flex">
+        <nav className="hidden items-center gap-6 whitespace-nowrap xl:flex 2xl:gap-9">
           <div className="group relative">
             <Link
               to="/revpere"
@@ -109,7 +109,7 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-5 whitespace-nowrap">
           <button
             onClick={() => setLang(lang === "fr" ? "en" : "fr")}
             className="text-[12px] font-semibold uppercase tracking-[0.16em] text-white/60 transition hover:text-white"
@@ -136,7 +136,7 @@ export function SiteHeader() {
             {lang === "fr" ? "Commencer" : "Get started"}
           </Link>
           <button
-            className="-mr-2 p-2 text-white lg:hidden"
+            className="-mr-2 p-2 text-white xl:hidden"
             onClick={() => setOpen((v) => !v)}
             aria-label="Menu"
             aria-expanded={open}
@@ -147,7 +147,7 @@ export function SiteHeader() {
       </div>
 
       {open && (
-        <div className="max-h-[calc(100vh-68px)] overflow-y-auto border-t border-white/12 bg-ink lg:hidden">
+        <div className="max-h-[calc(100vh-68px)] overflow-y-auto border-t border-white/12 bg-ink xl:hidden">
           <div className="px-5 py-6">
             <div className="text-[10px] font-semibold uppercase tracking-[0.3em] text-white/40">
               RêvPÈRE
