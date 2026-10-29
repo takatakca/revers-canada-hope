@@ -104,7 +104,7 @@ export function HomePage() {
     <>
       <section className="home-hero bg-ink text-primary-foreground">
         <div className="home-shell grid min-h-[760px] grid-cols-1 lg:grid-cols-12">
-          <div className="relative z-10 flex flex-col justify-end px-5 pb-14 pt-32 sm:px-8 lg:col-span-5 lg:px-0 lg:pb-20 lg:pr-14 lg:pt-40">
+          <div className="relative z-10 flex flex-col justify-end px-5 pb-14 pt-32 sm:px-8 lg:col-span-5 lg:pb-20 lg:pl-[clamp(0px,calc(46rem_-_50vw),2rem)] lg:pr-14 lg:pt-40">
             <p className="hero-step text-[11px] font-bold uppercase tracking-[0.18em] text-leaf">
               {copy.hero.eyebrow}
             </p>
