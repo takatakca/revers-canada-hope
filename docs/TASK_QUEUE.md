@@ -51,3 +51,5 @@ Deployment safety added: **reject stale CI builds** whose SHA does not equal cur
 - **P1 partially completed:** official family mediation and shared-custody/Allocation famille information linked with bilingual text and no false partner claims. [CI 38943633417](https://github.com/takatakca/revers-canada-hope/actions/runs/38943633417) green on `48bf4f4534c8bd9b16faf22fe16419f02eda74d9`.
 - **Next P1:** audit remaining claims, check external-link accessibility and accessibility UX on real mobile browsers; maintain stable sources and avoid implying REVERS partnerships. Continue vetting additional real support organizations before listing them.
 - **P0 deployment:** [Deploy 38943739162](https://github.com/takatakca/revers-canada-hope/actions/runs/38943739162) triggered by CI; still requires terminal result and then release health SHA. GitHub `production` `MOCHAHOST_HOST`, operational REVERS Supabase and DNS remain unverified/blocking until proven otherwise.
+
+**2026-10-29:** the owner's manual steps (keys, Stripe webhook, migrations, GitHub secrets, reseller account) are numbered in `docs/OWNER_ACTIONS.md` (O-09 → O-13); the agent's steps are C-08 → C-10.
