@@ -1,6 +1,6 @@
 # Owner actions — reverscanada.ca
 
-Updated 2026-10-29. Hands-on checklist for the hosting move (MochaHost → Coolify). The main file for all sites is in Google Drive › 00 — Opérations TAKATAK: “2026-10-29 — TAKATAK hosting (MochaHost → Coolify) — MAIN FILE — OWNER and CLAUDE actions”. Item numbers are the same everywhere. No secret values are written here, only key names and where to find them.
+Updated 2026-10-29. Hands-on checklist for the hosting move (MochaHost → Coolify). The main file for all sites is in Google Drive › 00 — Opérations TAKATAK: “2026-10-29 — TAKATAK hosting (MochaHost → Coolify) — MAIN FILE — OWNER and CLAUDE actions”. Item numbers are the same everywhere. This repository is public: no secret values and no hosting-account details are written here, only key names, settings and steps; account-level steps are in the private Drive main file.
 
 **Labels**
 
@@ -10,9 +10,9 @@ Updated 2026-10-29. Hands-on checklist for the hosting move (MochaHost → Cooli
 
 ## Where this site runs
 
-- Website: https://reverscanada.ca (www redirects) — Coolify server vps2 (209.145.49.63), project REVERS CANADA, app `reverscanada`, auto-deploys `main`; `confirm-coolify.yml` checks every commit
+- Website: https://reverscanada.ca (www redirects) — Coolify server vps2, project REVERS CANADA, app `reverscanada`, auto-deploys `main`; `confirm-coolify.yml` checks every commit
 - Supabase project: `cmcbsbjxrrwtmxvcsbsg`. `/readyz` is 503 until O-09 and O-11 are done
-- DNS zone: MochaHost reseller account `reverscanada` until O-13, then bolonca (copy prepared). Mail stays at MochaHost
+- DNS zone: the old MochaHost account until O-13, then the main MochaHost account (copy prepared). Mail stays at MochaHost
 - MochaHost deploy (`deploy-mochahost.yml`) is opt-in only (REVERS_MOCHAHOST_DEPLOY)
 
 ## 🔧 OWNER — manual work
@@ -47,15 +47,10 @@ Updated 2026-10-29. Hands-on checklist for the hosting move (MochaHost → Cooli
 - Variable REVERS_COOLIFY_ORIGIN = https://reverscanada.ca — only after Claude confirms /readyz is OK (C-09)
 - *Waits on:* O-09, C-09
 
-### O-13 · 🔧 OWNER · ⬜ TO DO — Back up, then remove the 4 reseller accounts in WHM
-- First download each backup from that account's cPanel → File Manager → home folder: backup-10.26.2026_16-26-14_droneair.tar.gz, backup-10.26.2026_16-26-23_ocarinaspa.tar.gz, backup-10.26.2026_16-26-25_r2nette.tar.gz, backup-10.26.2026_16-26-25_reverscanada.tar.gz
-- WHM (reseller takatakc) → Terminate Accounts — one at a time, only after that site works on Coolify
-- r2nette can go first (website already on vps1; its 3 forwarders already exist in bolonca). Its mailboxes evaluation@ and recouvrement@ (~1.5 MB each) exist only in the backup.
-- Tell Claude after each removal (C-10) — bolonca then holds the domain, its DNS and its mail
+### O-13 · 🔧 OWNER · ⬜ TO DO — Retire the old MochaHost account of this domain
+- Only after this site works on Coolify; first download that account's backup
+- The exact account, backup file and WHM steps are in the private Drive main file (item O-13)
 - *Waits on:* each site working (O-02…O-11)
-
-### O-17 · 🔧 OWNER · ⬜ TO DO — Rotate every token shared in the chat
-- bolonca cPanel API token, Coolify API token, reseller WHM token (takatakc), the 4 reseller cPanel tokens (droneair, ocarinaspa, r2nette, reverscanada), the new_server SSH key
 
 ## 🤖 CLAUDE — agent work
 
@@ -71,8 +66,8 @@ Updated 2026-10-29. Hands-on checklist for the hosting move (MochaHost → Cooli
 - Then you set REVERS_COOLIFY_ORIGIN (O-12)
 - *Waits on:* O-09, O-11
 
-### C-10 · 🤖 CLAUDE · ⏳ WAITING — After each reseller account removal: check bolonca's zone is the one served
-- Compare the served SOA serial with bolonca's, re-save the zone if needed, check website + mail
+### C-10 · 🤖 CLAUDE · ⏳ WAITING — After the old account is retired, check that DNS and mail are served by the main MochaHost account
+- Compare the served zone with the prepared copy, re-save it if needed, then check the website and mail
 - *Waits on:* O-13
 
 ### C-12 · 🤖 CLAUDE · 🔁 ONGOING — Keep the notes current
