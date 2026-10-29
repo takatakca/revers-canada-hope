@@ -191,3 +191,12 @@ Read `AGENTS.md`, this handoff and `docs/TASK_QUEUE.md`, retrieve the latest Git
   1. The owner adds those variables in Coolify and applies the pending migrations to the correct project, then restarts the application.
   2. Set the repository variable `REVERS_COOLIFY_ORIGIN=https://reverscanada.ca`; `confirm-coolify.yml` then requires `/readyz` 200 on production.
   3. Remove the reseller account `reverscanada` only after downloading its backup (`backup-10.26.2026_16-26-25_reverscanada.tar.gz` in its home folder).
+
+## 2026-10-29 — Owner checklist and header fix (Claude)
+- **`docs/OWNER_ACTIONS.md`** is the hands-on checklist, with the same item numbers as the Drive main file. Every item is labelled 🔧 OWNER (manual) or 🤖 CLAUDE (agent). Start there.
+- **Done (C-01):** `REVERS_SESSION_SECRET` and `REVERS_NEWSLETTER_UNSUBSCRIBE_SECRET` are set in Coolify (random, runtime-only). They take effect at the next restart.
+- **Done (C-02):** `SiteHeader` shows the full menu from 1280 px, keeps each item on one line, and adds a soft dark fade behind the transparent header.
+  - Before the fix: "REVERS CANADA" and "FR / en" wrapped onto two lines at 1024–1366 px, and the header overflowed at 1024 px.
+  - After the fix: no wrapping, overflow or overlap at 1024, 1280, 1366, 1440, 1536 or 1920 px (Chromium measurement).
+  - Local checks: 22/22 Node tests, typecheck, and lint clean on the file.
+- **Next exact action:** the owner works through O-09 → O-12; then Claude does C-08 and C-09.

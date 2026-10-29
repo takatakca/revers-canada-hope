@@ -35,3 +35,5 @@
 | 2026-10-27 | Make MochaHost publication opt-in and verify the Coolify build after each CI-validated push | The MochaHost secrets were never configured, so every push failed; the reseller account is being retired and Coolify already builds `main` | `REVERS_MOCHAHOST_DEPLOY=true` re-enables automatic MochaHost runs; `confirm-coolify.yml` requires `/healthz.release` = CI SHA (`SOURCE_COMMIT` on Coolify), and `/readyz` 200 once the origin is the production domain |
 
 | 2026-10-27 | Owner moved `reverscanada.ca` to Coolify before the server secrets exist | Single host with auto-deploy; the old MochaHost build had no server secrets either | Only website records changed; mail stays at MochaHost; forms stay non-operational until the runtime secrets and migrations are in place |
+
+| 2026-10-29 | The full header menu appears only from 1280 px | At 1024–1366 px the nine header items wrapped and spilled over the hero photo | The menu button covers smaller screens; a top fade keeps the light header text readable over photos |

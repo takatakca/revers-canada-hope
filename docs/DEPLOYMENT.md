@@ -133,3 +133,6 @@ The SQL migration is committed but **not applied**; the Supabase CLI/database cl
 
 ## Production on Coolify (2026-10-27)
 `reverscanada.ca` and `www` point to Coolify vps2 (`209.145.49.63`); the application is `reverscanada`. Mail stays at MochaHost. Server secrets still missing: `SUPABASE_SERVICE_ROLE_KEY`, `REVERS_SESSION_SECRET`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `TAKATAK_API_BASE_URL`, `TAKATAK_EXPERIENCE_LAUNCH_URL`, `TAKATAK_REVERS_SERVICE_TOKEN`, `TAKATAK_REVERS_HMAC_SECRET`, `REVERS_OUTBOX_WORKER_TOKEN`, `REVERS_SUPPORT_ADMIN_IDENTITY_IDS`, `REVERS_NEWSLETTER_UNSUBSCRIBE_SECRET`. Add them in Coolify as runtime-only variables, then set `REVERS_COOLIFY_ORIGIN=https://reverscanada.ca`.
+
+## Owner checklist (2026-10-29)
+The step-by-step owner actions for the Coolify release (keys, webhook events, migrations, GitHub secrets) are in `docs/OWNER_ACTIONS.md`.

@@ -121,3 +121,6 @@ Untrusted public contact and Stripe webhook bodies now pass through a bounded st
 
 ## Hosting status (2026-10-27)
 - `reverscanada.ca` is served by Coolify (`reverscanada`, vps2), release `2f4754c` verified on `/healthz`. Server secrets and migrations are still missing, so forms, donations and sign-in are not operational and `/readyz` is 503.
+
+## 2026-10-29
+- The header layout fix for laptop widths is in review. Production still needs the owner steps in `docs/OWNER_ACTIONS.md`.
